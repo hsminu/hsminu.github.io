@@ -4,7 +4,18 @@
 
 [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) 기반 Jekyll 블로그입니다. `main`에 변경 사항을 올리면 GitHub Actions가 빌드와 링크 검사를 거쳐 GitHub Pages에 배포합니다.
 
-## 글 작성
+## 브라우저에서 글 작성
+
+[글쓰기](https://hsminu.github.io/write/)에서 제목, 카테고리, 본문을 입력하고 마크다운 미리보기를 확인할 수 있습니다. 초안은 현재 브라우저에 자동으로 임시저장됩니다.
+
+1. **원고 복사**를 누릅니다.
+2. **GitHub에서 게시**를 눌러 파일명이 지정된 새 파일 화면을 엽니다.
+3. hsminu 계정으로 로그인한 상태에서 본문에 원고를 붙여넣습니다.
+4. **Commit changes**로 `main` 브랜치에 저장합니다. 자동 배포가 끝나면 게시됩니다.
+
+긴 원고도 동일한 방법으로 게시할 수 있으며, **파일 다운로드**로 마크다운 원고를 보관할 수 있습니다. GitHub 로그인과 게시 권한 확인은 GitHub에서 처리합니다.
+
+## 파일로 글 작성
 
 `_posts/YYYY-MM-DD-slug.md` 파일을 만들고 다음과 같이 작성합니다.
 
@@ -63,5 +74,11 @@ bundle exec jekyll serve
 ## 배포
 
 저장소의 **Settings → Pages → Build and deployment → Source**는 **GitHub Actions**로 설정합니다. 배포 상태는 저장소의 **Actions → Build and Deploy**에서 확인할 수 있습니다.
+
+## 편집기 검증
+
+`node --test tools/writer.test.mjs`로 원고 생성, 분류와 태그, 날짜 검증, 파일명 처리를 검사합니다. 배포 시에도 이 검사를 실행합니다.
+
+편집기 미리보기는 로컬에 포함한 markdown-it 15.0.3을 사용합니다. 원본 HTML은 실행하지 않으며, 라이선스는 `assets/third-party/markdown-it-15.0.3/LICENSE`에 보관합니다.
 
 Chirpy Starter와 테마의 원본 라이선스는 [LICENSE](LICENSE)를 참고하세요.

@@ -1,0 +1,95 @@
+---
+title: 글쓰기
+icon: fas fa-pen
+order: 8
+permalink: /write/
+toc: false
+sitemap: false
+---
+
+<link rel="stylesheet" href="{{ '/assets/css/writer.css' | relative_url }}">
+
+<p>글을 작성한 뒤 원고를 복사하고, GitHub에 붙여넣어 게시하세요.</p>
+<p id="writer-loading" class="text-muted">편집기를 불러오는 중입니다.</p>
+<noscript>글쓰기 편집기를 사용하려면 브라우저의 JavaScript를 켜 주세요.</noscript>
+
+<section id="writer" data-repository="hsminu/hsminu.github.io" data-branch="main" hidden>
+  <form id="writer-form" novalidate>
+    <div class="writer-topline">
+      <span id="writer-draft-status" class="text-muted" role="status">초안은 이 브라우저에 임시저장됩니다.</span>
+      <button type="button" id="writer-new" class="writer-button">새 글</button>
+    </div>
+
+    <div class="writer-fields">
+      <div class="writer-field writer-full">
+        <label for="writer-title">제목</label>
+        <input id="writer-title" name="title" required maxlength="200" placeholder="어떤 내용을 기록할까요?">
+      </div>
+      <div class="writer-field">
+        <label for="writer-category">카테고리</label>
+        <select id="writer-category" name="category" required>
+          {% assign topics = site.tabs | where: 'layout', 'section' %}
+          {% for topic in topics %}
+            <option value="{{ topic.category | escape }}">{{ topic.title | escape }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="writer-field">
+        <label for="writer-subcategory">하위 분류 <span class="writer-optional">선택</span></label>
+        <input id="writer-subcategory" name="subcategory" maxlength="80" placeholder="예: Web, 프로젝트, 논문리뷰">
+      </div>
+      <div class="writer-field">
+        <label for="writer-date">작성일 <span class="writer-optional">한국 시간</span></label>
+        <input id="writer-date" name="date" type="date" required>
+      </div>
+      <div class="writer-field">
+        <label for="writer-tags">태그 <span class="writer-optional">선택</span></label>
+        <input id="writer-tags" name="tags" placeholder="쉼표로 구분: python, web, xss">
+      </div>
+      <div class="writer-field writer-full">
+        <label for="writer-description">한 줄 소개 <span class="writer-optional">선택</span></label>
+        <input id="writer-description" name="description" maxlength="300" placeholder="이 글에서 다루는 내용을 한 문장으로 소개해 주세요.">
+      </div>
+      <div class="writer-field writer-full">
+        <label for="writer-slug">글 주소 이름 <span class="writer-optional">선택</span></label>
+        <input id="writer-slug" name="slug" maxlength="80" placeholder="비워두면 제목으로 만듭니다. 예: dreamhack-xss-writeup" aria-describedby="writer-filename">
+        <small id="writer-filename" class="text-muted">제목을 입력하면 저장할 파일명이 표시됩니다.</small>
+      </div>
+    </div>
+
+    <div class="writer-editor">
+      <div class="writer-editor-bar">
+        <label for="writer-body">본문</label>
+        <div class="writer-view-switch" role="group" aria-label="본문 보기">
+          <button type="button" class="writer-button" data-writer-view="edit" aria-pressed="true">작성</button>
+          <button type="button" class="writer-button" data-writer-view="preview" aria-pressed="false">미리보기</button>
+        </div>
+      </div>
+      <div id="writer-toolbar" class="writer-toolbar" role="group" aria-label="마크다운 서식">
+        <button type="button" class="writer-button" data-writer-format="heading">제목</button>
+        <button type="button" class="writer-button" data-writer-format="bold">굵게</button>
+        <button type="button" class="writer-button" data-writer-format="code">코드</button>
+        <button type="button" class="writer-button" data-writer-format="link">링크</button>
+        <button type="button" class="writer-button" data-writer-format="image">이미지 링크</button>
+      </div>
+      <textarea id="writer-body" name="body" rows="20" required placeholder="## 개요&#10;&#10;여기에 마크다운으로 글을 작성하세요." aria-describedby="writer-body-help"></textarea>
+      <div id="writer-preview" class="writer-preview content" aria-label="본문 미리보기" hidden></div>
+      <small id="writer-body-help" class="text-muted">마크다운을 지원합니다. 이미지는 URL로 첨부할 수 있습니다.</small>
+    </div>
+
+    <div class="writer-actions">
+      <button type="submit" class="writer-button writer-primary">원고 복사</button>
+      <a id="writer-publish" class="writer-button" href="https://github.com/hsminu/hsminu.github.io/new/main" target="_blank" rel="noopener noreferrer" aria-disabled="true">GitHub에서 게시</a>
+      <button type="button" id="writer-download" class="writer-button">파일 다운로드</button>
+    </div>
+    <p id="writer-action-status" role="status" class="writer-action-status"></p>
+    <p class="text-muted writer-help">원고 복사 → GitHub에서 게시 → 본문에 붙여넣기 → <strong>Commit changes</strong>. hsminu 계정으로 로그인해 main 브랜치에 저장하면 블로그에 반영됩니다.</p>
+    <details id="writer-export-panel">
+      <summary>복사용 원고 보기</summary>
+      <label class="visually-hidden" for="writer-export">게시할 마크다운 원고</label>
+      <textarea id="writer-export" rows="12" readonly spellcheck="false"></textarea>
+    </details>
+  </form>
+</section>
+
+<script type="module" src="{{ '/assets/js/writer.mjs' | relative_url }}"></script>
