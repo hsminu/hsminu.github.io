@@ -1,6 +1,6 @@
 ---
 title: 글 제목
-categories: [개발]
+categories: [Projects]
 tags: [python]
 description: 글 내용을 한 문장으로 소개합니다.
 ---

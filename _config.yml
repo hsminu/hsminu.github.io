@@ -19,7 +19,7 @@ title: hsminu # the main title
 tagline: 개발과 보안을 기록합니다.
 
 description: >- # used by seo meta and the atom feed
-  개발, CTF와 Wargame, Bug Bounty, 기술문서, 논문과 컨퍼런스, 공모전과 자격증을 기록하는 hsminu의 블로그입니다.
+  Security Research, CTF & Wargame, Projects, Notes, Activities를 기록하는 hsminu의 개발·보안 블로그입니다.
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.

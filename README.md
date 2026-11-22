@@ -26,7 +26,7 @@
 ---
 title: 글 제목
 date: 2026-11-22 12:00:00 +0900
-categories: [CTF, Web]
+categories: ["CTF & Wargame", Web]
 tags: [dreamhack, xss]
 description: 글 내용을 소개하는 한 문장
 ---
@@ -40,14 +40,13 @@ description: 글 내용을 소개하는 한 문장
 
 | 사이드바 메뉴 | 첫 번째 카테고리 값 |
 | --- | --- |
-| 개발 | `개발` |
-| CTF / Wargame | `CTF` |
-| Bug Bounty | `Bug Bounty` |
-| 블로그 / 기술문서 | `기술문서` |
-| 논문 / 컨퍼런스 | `논문·컨퍼런스` |
-| 공모전 / 자격증 | `공모전·자격증` |
+| Security Research | `Security Research` |
+| CTF & Wargame | `CTF & Wargame` |
+| Projects | `Projects` |
+| Notes | `Notes` |
+| Activities | `Activities` |
 
-예: `categories: [Bug Bounty, Web]`, `categories: [논문·컨퍼런스, 논문리뷰]`.
+예: `categories: [Security Research, Bug Bounty]`, `categories: ["CTF & Wargame", Web]`.
 
 초안은 `_drafts/`에 둡니다. `_drafts/post-template.md`를 복사해 사용할 수 있으며, 초안은 공개 사이트에 나오지 않습니다. 발행하려면 파일을 `_posts/`로 옮기고 날짜를 포함한 파일명과 `date`를 지정합니다.
 
@@ -57,7 +56,7 @@ description: 글 내용을 소개하는 한 문장
 
 - 제목, 소개 문구, 프로필 사진: `_config.yml`
 - 소개 페이지: `_tabs/about.md`
-- 여섯 분야의 메뉴와 설명: `_tabs/`의 해당 파일
+- 다섯 분야의 메뉴와 설명: `_tabs/`의 해당 파일
 - 분야별 글 목록: `_layouts/section.html`
 - GitHub 등 프로필 링크: `_data/contact.yml`
 

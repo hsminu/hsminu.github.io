@@ -1,7 +1,7 @@
 ---
 title: 소개
 icon: fas fa-info-circle
-order: 7
+order: 6
 permalink: /about/
 ---
 
@@ -11,12 +11,11 @@ permalink: /about/
 
 ## 기록하는 주제
 
-- [개발](/development/): 프로젝트와 개발 과정
-- [CTF / Wargame](/ctf/): 문제 풀이와 대회 기록
-- [Bug Bounty](/bug-bounty/): 취약점 분석과 제보 기록
-- [블로그 / 기술문서](/documentation/): 개념 정리와 튜토리얼
-- [논문 / 컨퍼런스](/research/): 논문 리뷰와 발표·참가 기록
-- [공모전 / 자격증](/activities/): 준비 과정과 활동 후기
+- [Security Research](/security-research/): 취약점 분석, Bug Bounty, 보안 연구와 논문 리뷰
+- [CTF & Wargame](/ctf/): 문제 풀이와 대회 기록
+- [Projects](/projects/): 프로젝트와 구현 과정
+- [Notes](/notes/): 개념 정리와 학습 기록
+- [Activities](/activities/): 컨퍼런스, 공모전, 자격증과 활동 후기
 
 ## 링크
 
