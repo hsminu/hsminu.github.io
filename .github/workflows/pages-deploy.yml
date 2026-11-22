@@ -45,9 +45,6 @@ jobs:
           ruby-version: 3.4
           bundler-cache: true
 
-      - name: Test writer
-        run: node --test tools/writer.test.mjs
-
       - name: Build site
         run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}"
         env:

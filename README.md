@@ -4,16 +4,19 @@
 
 [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) 기반 Jekyll 블로그입니다. `main`에 변경 사항을 올리면 GitHub Actions가 빌드와 링크 검사를 거쳐 GitHub Pages에 배포합니다.
 
-## 브라우저에서 글 작성
+## GitHub에서 글 작성
 
-[글쓰기](https://hsminu.github.io/write/)에서 제목, 카테고리, 본문을 입력하고 마크다운 미리보기를 확인할 수 있습니다. 초안은 현재 브라우저에 자동으로 임시저장됩니다.
+추천: [github.dev 편집기](https://github.dev/hsminu/hsminu.github.io)를 열어 작성합니다. GitHub 저장소 화면에서 `.` 키를 눌러도 같은 편집기가 열립니다.
 
-1. **원고 복사**를 누릅니다.
-2. **GitHub에서 게시**를 눌러 파일명이 지정된 새 파일 화면을 엽니다.
-3. hsminu 계정으로 로그인한 상태에서 본문에 원고를 붙여넣습니다.
-4. **Commit changes**로 `main` 브랜치에 저장합니다. 자동 배포가 끝나면 게시됩니다.
+1. `_drafts/post-template.md`의 내용을 복사합니다.
+2. `_posts/`에 `2026-11-22-first-post.md`처럼 날짜와 글 주소 이름으로 새 파일을 만듭니다.
+3. 양식을 붙여넣고 제목, 날짜, 카테고리, 본문을 수정합니다. 아래 예시처럼 `date`도 지정합니다.
+4. `Cmd+Shift+V`로 마크다운 미리보기를 확인합니다. Windows와 Linux에서는 `Ctrl+Shift+V`를 사용합니다.
+5. 왼쪽 **Source Control**에서 변경 파일을 `+`로 스테이징하고, 메시지를 입력한 뒤 **Commit & Push**로 `main`에 저장합니다. 자동 배포가 끝나면 게시됩니다.
 
-긴 원고도 동일한 방법으로 게시할 수 있으며, **파일 다운로드**로 마크다운 원고를 보관할 수 있습니다. GitHub 로그인과 게시 권한 확인은 GitHub에서 처리합니다.
+짧은 글은 [GitHub의 새 글 파일 화면](https://github.com/hsminu/hsminu.github.io/new/main/_posts)에서 파일명과 내용을 입력하고 **Preview**, **Commit changes**를 이용해 작성할 수도 있습니다.
+
+미리보기는 마크다운 본문을 확인하는 용도이며, Chirpy 테마가 적용된 실제 화면은 배포 후 블로그에서 확인합니다.
 
 ## 파일로 글 작성
 
@@ -22,7 +25,7 @@
 ```markdown
 ---
 title: 글 제목
-date: 2026-11-09 12:00:00 +0900
+date: 2026-11-22 12:00:00 +0900
 categories: [CTF, Web]
 tags: [dreamhack, xss]
 description: 글 내용을 소개하는 한 문장
@@ -74,11 +77,5 @@ bundle exec jekyll serve
 ## 배포
 
 저장소의 **Settings → Pages → Build and deployment → Source**는 **GitHub Actions**로 설정합니다. 배포 상태는 저장소의 **Actions → Build and Deploy**에서 확인할 수 있습니다.
-
-## 편집기 검증
-
-`node --test tools/writer.test.mjs`로 원고 생성, 분류와 태그, 날짜 검증, 파일명 처리를 검사합니다. 배포 시에도 이 검사를 실행합니다.
-
-편집기 미리보기는 로컬에 포함한 markdown-it 15.0.3을 사용합니다. 원본 HTML은 실행하지 않으며, 라이선스는 `assets/third-party/markdown-it-15.0.3/LICENSE`에 보관합니다.
 
 Chirpy Starter와 테마의 원본 라이선스는 [LICENSE](LICENSE)를 참고하세요.
