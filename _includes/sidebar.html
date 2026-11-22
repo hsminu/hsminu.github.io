@@ -1,0 +1,36 @@
+<aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
+  <header class="profile-wrapper">
+    <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle" aria-label="{{ site.title | escape }} 홈">
+      {% if site.avatar %}
+        {% capture avatar_url %}{% include media-url.html src=site.avatar %}{% endcapture %}
+        <img src="{{ avatar_url | strip }}" width="72" height="72" alt="{{ site.title | escape }} 프로필">
+      {% endif %}
+    </a>
+    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title | escape }}</a>
+    {% assign focus_areas = site.tagline | split: ' · ' %}
+    <p class="site-subtitle mb-0">{% for focus in focus_areas %}{% unless forloop.first %} · {% endunless %}<span class="profile-focus">{{ focus | escape }}</span>{% endfor %}</p>
+
+    {% for entry in site.data.contact %}
+      {% if entry.type == 'github' and site.github.username %}
+        <a class="profile-github" href="https://github.com/{{ site.github.username }}" target="_blank" rel="noopener noreferrer">
+          <i class="{{ entry.icon }}" aria-hidden="true"></i>
+          <span>GitHub</span>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </header>
+
+  <nav class="w-100" aria-label="카테고리">
+    <ul class="nav">
+      {% assign topics = site.tabs | where: 'layout', 'section' %}
+      {% for tab in topics %}
+        <li class="nav-item{% if tab.url == page.url or page.categories contains tab.category %} active{% endif %}">
+          <a href="{{ tab.url | relative_url }}" class="nav-link"{% if tab.url == page.url %} aria-current="page"{% endif %}>
+            <i class="fa-fw {{ tab.icon }}" aria-hidden="true"></i>
+            <span>{{ tab.title | escape }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</aside>

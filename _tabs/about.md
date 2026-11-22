@@ -5,7 +5,7 @@ order: 6
 permalink: /about/
 ---
 
-개발과 보안을 공부하며 배운 내용과 활동을 기록하는 **hsminu**의 블로그입니다.
+Security Research와 Reverse Engineering을 중심으로 배운 내용과 활동을 기록하는 **hsminu**의 블로그입니다.
 
 문제를 풀며 얻은 아이디어, 프로젝트를 만들며 마주친 문제, 읽고 들으며 배운 내용을 정리합니다.
 

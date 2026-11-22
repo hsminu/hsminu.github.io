@@ -16,7 +16,7 @@ timezone: Asia/Seoul
 
 title: hsminu # the main title
 
-tagline: 개발과 보안을 기록합니다.
+tagline: Security Research · Reverse Engineering
 
 description: >- # used by seo meta and the atom feed
   Security Research, CTF & Wargame, Projects, Notes, Activities를 기록하는 hsminu의 개발·보안 블로그입니다.
@@ -88,7 +88,7 @@ pageviews:
 #     light — Use the light color scheme
 #     dark — Use the dark color scheme
 #
-theme_mode: # [light | dark]
+theme_mode: dark
 
 # The CDN endpoint for media resources.
 # Notice that once it is assigned, the CDN url

@@ -59,6 +59,9 @@ description: 글 내용을 소개하는 한 문장
 - 다섯 분야의 메뉴와 설명: `_tabs/`의 해당 파일
 - 분야별 글 목록: `_layouts/section.html`
 - GitHub 등 프로필 링크: `_data/contact.yml`
+- 사이드바 구성: `_includes/sidebar.html`
+- 하단 링크: `_includes/footer.html`
+- 다크·블루 색상과 사이드바 스타일: `_sass/custom.scss`
 
 전체 카테고리(`/categories/`), 태그(`/tags/`), 연도별 글(`/archives/`)은 소개 페이지에서 접근할 수 있습니다. 아직 글이 없는 분야도 사이드바에서 열 수 있습니다.
 
