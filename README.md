@@ -61,7 +61,9 @@ description: 글 내용을 소개하는 한 문장
 - GitHub 등 프로필 링크: `_data/contact.yml`
 - 사이드바 구성: `_includes/sidebar.html`
 - 하단 링크: `_includes/footer.html`
-- 다크·블루 색상과 사이드바 스타일: `_sass/custom.scss`
+- 라이트·다크 색상과 사이드바 스타일: `_sass/custom.scss`
+
+사이드바 하단에는 About·Archives와 테마 전환, GitHub 아이콘을 표시합니다. 테마는 기본적으로 시스템 설정을 따르며, 선택한 라이트·다크 모드는 브라우저에 저장됩니다. `_config.yml`의 `theme_mode`를 비워 두어야 전환 기능을 사용할 수 있습니다.
 
 전체 카테고리(`/categories/`), 태그(`/tags/`), 연도별 글(`/archives/`)은 소개 페이지에서 접근할 수 있습니다. 아직 글이 없는 분야도 사이드바에서 열 수 있습니다.
 

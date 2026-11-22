@@ -10,14 +10,6 @@
     {% assign focus_areas = site.tagline | split: ' · ' %}
     <p class="site-subtitle mb-0">{% for focus in focus_areas %}{% unless forloop.first %} · {% endunless %}<span class="profile-focus">{{ focus | escape }}</span>{% endfor %}</p>
 
-    {% for entry in site.data.contact %}
-      {% if entry.type == 'github' and site.github.username %}
-        <a class="profile-github" href="https://github.com/{{ site.github.username }}" target="_blank" rel="noopener noreferrer">
-          <i class="{{ entry.icon }}" aria-hidden="true"></i>
-          <span>GitHub</span>
-        </a>
-      {% endif %}
-    {% endfor %}
   </header>
 
   <nav class="w-100" aria-label="카테고리">
@@ -33,4 +25,31 @@
       {% endfor %}
     </ul>
   </nav>
+
+  <div class="sidebar-utilities w-100 mt-auto">
+    <nav class="sidebar-shortcuts" aria-label="바로가기">
+      <a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>About</a>
+      <a href="{{ '/archives/' | relative_url }}"{% if page.url == '/archives/' %} aria-current="page"{% endif %}>Archives</a>
+    </nav>
+
+    <div class="sidebar-bottom d-flex flex-wrap align-items-center">
+      <div class="btn-group dropup">
+        <button type="button" class="btn btn-link nav-link" id="mode-toggle" aria-label="테마 변경" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa-regular fa-sun" data-theme-mode="light" aria-hidden="true"></i>
+          <i class="fa-regular fa-moon" data-theme-mode="dark" aria-hidden="true"></i>
+          <i class="fa-solid fa-display" data-theme-mode="system" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu rounded-3 mb-1 p-1">
+          <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme-mode="light"><i class="fa-regular fa-sun" aria-hidden="true"></i>{{ site.data.locales[include.lang].theme.light }}</button></li>
+          <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme-mode="dark"><i class="fa-regular fa-moon" aria-hidden="true"></i>{{ site.data.locales[include.lang].theme.dark }}</button></li>
+          <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme-mode="system"><i class="fa-solid fa-display" aria-hidden="true"></i>{{ site.data.locales[include.lang].theme.system }}</button></li>
+        </ul>
+      </div>
+      {% for entry in site.data.contact %}
+        {% if entry.type == 'github' and site.github.username %}
+          <a href="https://github.com/{{ site.github.username }}" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener noreferrer"><i class="{{ entry.icon }}" aria-hidden="true"></i></a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
 </aside>
