@@ -56,7 +56,7 @@ description: 글 내용을 소개하는 한 문장
 
 - 제목, 소개 문구, 프로필 사진: `_config.yml`
 - 소개 페이지: `_tabs/about.md`
-- 다섯 분야의 메뉴와 설명: `_tabs/`의 해당 파일
+- 다섯 분야의 메뉴: `_tabs/`의 해당 파일
 - 분야별 글 목록: `_layouts/section.html`
 - GitHub 등 프로필 링크: `_data/contact.yml`
 - 사이드바 구성: `_includes/sidebar.html`

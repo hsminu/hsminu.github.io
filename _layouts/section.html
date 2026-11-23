@@ -2,25 +2,48 @@
 layout: page
 ---
 
-<p class="text-muted">{{ page.description | escape }}</p>
-
 {{ content }}
 
 {% assign section_posts = site.categories[page.category] %}
-{% if section_posts and section_posts.size > 0 %}
-  <p class="text-muted small mb-4">전체 {{ section_posts | size }}개의 글</p>
-  {% assign section_posts = section_posts | sort: 'date' | reverse %}
-  {% for post in section_posts %}
-    <article class="mb-4 pb-3 border-bottom">
-      <h2 class="h5 mt-0">
-        <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
-      </h2>
-      <p class="mb-2">{{ post.description | default: post.excerpt | strip_html | truncate: 140 }}</p>
-      <time class="text-muted small" datetime="{{ post.date | date_to_xmlschema }}">
-        {{ post.date | date: '%Y.%m.%d' }}
-      </time>
-    </article>
-  {% endfor %}
-{% else %}
-  <p class="text-muted mt-4">아직 등록된 글이 없습니다.</p>
+{% assign section_tags = '' | split: '' %}
+{% for post in section_posts %}
+  {% assign section_tags = section_tags | concat: post.tags %}
+{% endfor %}
+{% assign section_tags = section_tags | uniq | sort_natural %}
+
+<div class="section-index" data-section-index>
+  <div class="section-toolbar">
+    {% if section_tags.size > 0 %}
+      <div class="section-tags" role="group" aria-label="태그 필터" hidden>
+        <button class="section-tag" type="button" data-section-filter="" aria-pressed="true">전체</button>
+        {% for tag in section_tags %}
+          <button class="section-tag" type="button" data-section-filter="{{ tag | escape }}" aria-pressed="false">{{ tag | escape }}</button>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <span class="section-count" role="status">{{ section_posts | size }} {% if section_posts.size == 1 %}post{% else %}posts{% endif %}</span>
+  </div>
+
+  {% if section_posts and section_posts.size > 0 %}
+    {% assign section_posts = section_posts | sort: 'date' | reverse %}
+    {% for post in section_posts %}
+      <article class="section-post">
+        <div class="section-post-heading">
+          <h2><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h2>
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y.%m.%d' }}</time>
+        </div>
+        {% if post.tags.size > 0 %}
+          <div class="section-post-tags" aria-label="태그">
+            {% for tag in post.tags %}
+              <a href="{{ tag | slugify | url_encode | prepend: '/tags/' | append: '/' | relative_url }}" data-post-tag="{{ tag | escape }}">#{{ tag | escape }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </article>
+    {% endfor %}
+  {% endif %}
+</div>
+
+{% if section_tags.size > 0 %}
+  <script defer src="{{ '/assets/js/section-filter.js' | relative_url }}"></script>
 {% endif %}

@@ -1,0 +1,24 @@
+{% assign updates = '' | split: '' %}
+{% for post in site.posts %}
+  {% assign updated_at = post.last_modified_at | default: post.date %}
+  {% capture update_key %}{{ updated_at | date: '%Y%m%d%H%M%S' }}::{{ forloop.index0 }}{% endcapture %}
+  {% assign updates = updates | push: update_key %}
+{% endfor %}
+{% assign updates = updates | sort | reverse %}
+
+{% if updates.size > 0 %}
+  <section id="access-lastmod">
+    <h2 class="panel-heading">{{ site.data.locales[include.lang].panel.lastmod }}</h2>
+    <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+      {% for entry in updates limit: 5 %}
+        {% assign index = entry | split: '::' | last | plus: 0 %}
+        {% assign post = site.posts[index] %}
+        {% assign updated_at = post.last_modified_at | default: post.date %}
+        <li class="update-entry lh-lg">
+          <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+          <time datetime="{{ updated_at | date_to_xmlschema }}">{{ updated_at | date: '%Y.%m.%d' }}</time>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}
