@@ -31,9 +31,15 @@
 2. **발행 요청**을 누릅니다. GitHub Actions가 15분 간격으로 확인합니다. 바로 확인하려면 **Actions → Build and Deploy → Run workflow**에서 기본 브랜치를 고르고 **Import requested Notion posts before deploying**을 켠 채 실행합니다. 저장소 파일만 다시 배포하려면 이 옵션을 끕니다.
 3. 실행이 성공하면 글이 `/posts/주소/`에 공개됩니다. 발행된 Markdown은 `_posts/notion/`, 업로드한 사진은 `assets/img/posts/notion/주소/`에 저장됩니다. Notion에 올린 PNG, JPEG, GIF, WebP, AVIF 이미지는 내려받아 함께 게시하며, 외부 이미지는 원래 링크를 사용합니다.
 
-수정할 때는 Notion에서 글을 고친 뒤 **발행 요청**을 다시 누릅니다. 첫 발행의 날짜와 주소를 유지하며, 발행 요청 이후 저장한 수정 사항도 가져오기 시점의 본문에 반영됩니다. 이미 발행된 글을 내리려면 저장소에서 해당 글과 이미지 폴더를 제거하고 Notion의 발행 요청 시각을 비웁니다. 기존 주소를 쓰는 수동 작성 글이 있으면 새 글에 다른 주소를 지정합니다.
+수정할 때는 Notion에서 글을 고친 뒤 **발행 요청**을 다시 누릅니다. 첫 발행의 날짜와 주소를 유지하며, 발행 요청 이후 저장한 수정 사항도 가져오기 시점의 본문에 반영됩니다. 기존 주소를 쓰는 수동 작성 글이 있으면 새 글에 다른 주소를 지정합니다.
 
 오류는 **Actions → Build and Deploy → Import requested Notion posts**에서 확인할 수 있습니다. Notion 전용 블록 일부는 Jekyll에서 표시가 다를 수 있으므로 사진과 코드가 있는 테스트 글로 첫 발행을 확인합니다. 공개 저장소에 60일간 활동이 없으면 GitHub가 예약 실행을 비활성화할 수 있습니다. [예약 실행 동작](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
+
+### 글 내리기
+
+1. Notion에서 발행한 글은 먼저 Notion의 **발행 요청 시각**을 비웁니다. 동기화가 이미 삭제한 글을 다시 가져오는 일을 막을 수 있습니다.
+2. 저장소의 [_posts](_posts/)에서 해당 Markdown 파일을 삭제합니다. Notion으로 발행한 글은 [_posts/notion](_posts/notion/)에 있습니다. 글 전용 이미지도 함께 내릴 때는 해당 이미지 폴더를 삭제합니다.
+3. 변경을 커밋하고 기본 브랜치에 올립니다. 다음 배포가 끝나면 공개 사이트의 글 목록과 글 주소에 반영됩니다.
 
 ## GitHub에서 글 작성
 
