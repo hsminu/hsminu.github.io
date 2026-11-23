@@ -64,25 +64,25 @@ notion_publish_requested_at: '2026-11-23T16:14:00.000000000Z'
 
 ## 3-2. CO-SHOW
 
-<columns>
-<column ratio="50">
+<div class="notion-columns" markdown="1">
+<div class="notion-column" style="--notion-column-ratio: 50" markdown="1">
 ![](/assets/img/posts/notion/sogeding-2026-award/267723c8a1fc6f156d03456091994ac798b5b2f8771b92f760243d91cdc6c7cd.jpg)
-</column>
-<column ratio="50">
+</div>
+<div class="notion-column" style="--notion-column-ratio: 50" markdown="1">
 ![](/assets/img/posts/notion/sogeding-2026-award/476b45853884ad14fa387d7d45b71a13222820092d9bdd64e13371709af9ddd1.jpg)
-</column>
-</columns>
+</div>
+</div>
 
 11.18에 광주 김대중컨벤션센터로 갔다. 레전드로 큰 코스 마스코트가 반겨주었다.
 
-<columns>
-<column ratio="50">
+<div class="notion-columns" markdown="1">
+<div class="notion-column" style="--notion-column-ratio: 50" markdown="1">
 ![](/assets/img/posts/notion/sogeding-2026-award/04d5edd312b70484358f66ed9f5cd1356a710c7ca2a27919bd41b48d1762e050.jpg)
-</column>
-<column ratio="50">
+</div>
+<div class="notion-column" style="--notion-column-ratio: 50" markdown="1">
 ![](/assets/img/posts/notion/sogeding-2026-award/4aa2336a392601bdc151d7781bf88c00bbdd4007fd2c9bc0ffffe0ebb70c5e83.jpg)
-</column>
-</columns>
+</div>
+</div>
 
 <p>
 CO-SHOW는 coss 컨소시엄 대학들이 전부 모여 부스 운영을 한다. 소개딩은 데이터보안활용융합 사업단 대회로, 3라운드 참가자인 우리도 부스 운영을 해야 했다. 

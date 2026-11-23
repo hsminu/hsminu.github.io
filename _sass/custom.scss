@@ -415,3 +415,19 @@
     outline-offset: 4px;
   }
 }
+
+.notion-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-block: 1rem;
+
+  @include bp.md {
+    flex-direction: row;
+  }
+
+  > .notion-column {
+    flex: var(--notion-column-ratio, 1) 1 0;
+    min-width: 0;
+  }
+}

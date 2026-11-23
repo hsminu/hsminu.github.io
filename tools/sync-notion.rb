@@ -300,6 +300,7 @@ module NotionPublish
       end
 
       transform = lambda do |text|
+        text = render_columns(text)
         text = text.gsub(/^([ \t]*!\[(?:\\.|[^\]\\\n])*\]\()<?(\S+?)>?(\)[ \t]*\r?$)/) do
           match = Regexp.last_match
           "#{match[1]}#{replace.call(match[2])}#{match[3]}"
@@ -334,6 +335,16 @@ module NotionPublish
         end
       end
       result << transform.call(paragraph)
+    end
+
+    def render_columns(markdown)
+      markdown = markdown.gsub(/^([ \t]*)<columns>[ \t]*\r?$/, '\1<div class="notion-columns" markdown="1">')
+      markdown = markdown.gsub(/^([ \t]*)<column(?: ratio="(\d+(?:\.\d+)?)")?>[ \t]*\r?$/) do
+        indentation, ratio = Regexp.last_match.captures
+        width = ratio ? %( style="--notion-column-ratio: #{ratio}") : ""
+        %(#{indentation}<div class="notion-column"#{width} markdown="1">)
+      end
+      markdown.gsub(/^([ \t]*)<\/columns?>[ \t]*\r?$/, '\1</div>')
     end
 
     def write(post)
