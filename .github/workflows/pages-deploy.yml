@@ -9,35 +9,37 @@ on:
       - README.md
       - LICENSE
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      sync_notion:
+        description: "Import requested Notion posts before deploying"
+        type: boolean
+        default: true
+  schedule:
+    - cron: "7,22,37,52 * * * *"
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow one concurrent deployment
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.plan.outputs.publish }}
+      notion_changes: ${{ steps.plan.outputs.notion_changes }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          # submodules: true
-          # If using the 'assets' git submodule from Chirpy Starter, uncomment above
-          # (See: https://github.com/cotes2020/chirpy-starter/tree/main/assets)
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v6
+          persist-credentials: false
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -45,29 +47,109 @@ jobs:
           ruby-version: 3.4
           bundler-cache: true
 
+      - name: Import requested Notion posts
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch && inputs.sync_notion)
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATA_SOURCE_ID: ${{ secrets.NOTION_DATA_SOURCE_ID || vars.NOTION_DATA_SOURCE_ID }}
+        run: |
+          if [[ -z "$NOTION_TOKEN" && -z "$NOTION_DATA_SOURCE_ID" ]]; then
+            echo "::notice::Notion import is inactive. Set NOTION_TOKEN and NOTION_DATA_SOURCE_ID to enable it."
+            exit 0
+          fi
+          ruby tools/sync-notion.rb
+
+      - name: Check for work to deploy
+        id: plan
+        run: |
+          git add --all -- _posts assets
+          if git diff --cached --quiet -- _posts/notion assets/img/posts/notion; then
+            echo 'notion_changes=false' >> "$GITHUB_OUTPUT"
+            if [[ "$GITHUB_EVENT_NAME" != 'schedule' ]]; then
+              echo 'publish=true' >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo 'notion_changes=true' >> "$GITHUB_OUTPUT"
+            echo 'publish=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Pages
+        if: steps.plan.outputs.publish == 'true'
+        id: pages
+        uses: actions/configure-pages@v6
+
       - name: Build site
+        if: steps.plan.outputs.publish == 'true'
         run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: "production"
 
       - name: Test site
+        if: steps.plan.outputs.publish == 'true'
         run: |
           bundle exec htmlproofer _site \
             \-\-disable-external \
             \-\-ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
 
       - name: Upload site artifact
+        if: steps.plan.outputs.publish == 'true'
         uses: actions/upload-pages-artifact@v5
         with:
           path: "_site${{ steps.pages.outputs.base_path }}"
 
+      - name: Package imported sources
+        if: steps.plan.outputs.notion_changes == 'true'
+        run: git diff --cached --binary -- _posts/notion assets/img/posts/notion > "$RUNNER_TEMP/notion.patch"
+
+      - name: Upload imported sources
+        if: steps.plan.outputs.notion_changes == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: notion-source
+          path: ${{ runner.temp }}/notion.patch
+          if-no-files-found: error
+          retention-days: 3
+          overwrite: true
+
   deploy:
+    if: needs.build.outputs.publish == 'true'
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Checkout for source commit
+        if: needs.build.outputs.notion_changes == 'true'
+        uses: actions/checkout@v7
+
+      - name: Download imported sources
+        if: needs.build.outputs.notion_changes == 'true'
+        uses: actions/download-artifact@v8
+        with:
+          name: notion-source
+          path: ${{ runner.temp }}/notion-source
+
+      - name: Prepare source commit
+        if: needs.build.outputs.notion_changes == 'true'
+        run: |
+          if [[ "$(git ls-remote origin "$GITHUB_REF" | cut -f1)" != "$GITHUB_SHA" ]]; then
+            echo "::error::The source branch changed. Run the workflow again on its latest commit."
+            exit 1
+          fi
+          git apply --index "$RUNNER_TEMP/notion-source/notion.patch"
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -m 'Publish Notion posts'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      - name: Save published sources
+        if: needs.build.outputs.notion_changes == 'true'
+        run: git push origin "HEAD:$GITHUB_REF"

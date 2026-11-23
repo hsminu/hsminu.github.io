@@ -2,7 +2,38 @@
 
 [https://hsminu.github.io](https://hsminu.github.io)
 
-[Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) 기반 Jekyll 블로그입니다. `main`에 변경 사항을 올리면 GitHub Actions가 빌드와 링크 검사를 거쳐 GitHub Pages에 배포합니다.
+[Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) 기반 Jekyll 블로그입니다. GitHub Actions가 빌드와 링크 검사를 거쳐 GitHub Pages에 배포합니다. 글은 [Notion에서 작성해 발행](#notion에서-글-작성)하거나 Markdown 파일로 작성할 수 있습니다.
+
+## Notion에서 글 작성
+
+### 처음 한 번 설정하기
+
+1. Notion에 블로그용 데이터베이스를 만든 뒤 아래 속성을 추가합니다.
+
+   | 속성 | 유형 | 입력 예시 |
+   | --- | --- | --- |
+   | 이름 | 제목 | 2026 소개딩 참가 후기 |
+   | 주소 | 텍스트 | `activities-sogeding` |
+   | 카테고리 | 선택 | `Activities` |
+   | 태그 | 다중 선택 | `대회`, `시큐어코딩` |
+   | 소개 | 텍스트 | 검색 결과와 글 미리보기에 표시할 한 문장 |
+   | 발행 요청 시각 | 날짜 | 아래 버튼으로 입력 |
+
+   제목 속성은 이름을 자유롭게 정할 수 있습니다. 나머지 속성 이름은 표와 같아야 합니다. 태그와 소개는 값이 없어도 됩니다. 카테고리 옵션은 `Security Research`, `CTF & Wargame`, `Projects`, `Notes`, `Activities`입니다.
+2. 데이터베이스에 `발행 요청` 버튼 속성을 추가합니다. 버튼 동작을 **속성 편집 → 발행 요청 시각**으로 정하고 값을 **지금(Now)** 또는 수식 `now()`로 지정합니다. 버튼을 누르기 전에는 날짜를 비워 둡니다. [Notion 버튼 설정](https://www.notion.com/help/database-buttons)
+3. [Notion 개발자 포털](https://www.notion.so/my-integrations)에서 내부 연결을 만들고 **Read content** 권한을 켭니다. 블로그 데이터베이스의 **⋯ → 연결(Connections)**에서 해당 연결을 추가합니다. 데이터베이스 메뉴의 **Manage data sources → Copy data source ID**에서 ID를 복사합니다. [Notion 데이터 소스 ID 안내](https://developers.notion.com/guides/get-started/upgrade-guide-2025-09-03)
+4. 저장소의 **Settings → Secrets and variables → Actions → Secrets**에서 연결 토큰을 `NOTION_TOKEN`으로, 데이터 소스 ID를 `NOTION_DATA_SOURCE_ID`로 등록합니다. ID를 이미 **Variables**에 등록했다면 그 값도 사용할 수 있습니다. 두 곳에 같은 이름이 있으면 Secrets 값을 우선합니다. [저장소의 Actions 설정](https://github.com/hsminu/hsminu.github.io/settings/secrets/actions)
+5. 워크플로와 동기화 스크립트를 기본 브랜치에 반영합니다. 이 저장소에서는 `main`입니다.
+
+### 작성하고 발행하기
+
+1. Notion 페이지에 글을 쓰고 사진을 이미지 블록으로 붙여넣습니다. 주소에는 영문 소문자, 숫자와 하이픈을 사용합니다.
+2. **발행 요청**을 누릅니다. GitHub Actions가 15분 간격으로 확인합니다. 바로 확인하려면 **Actions → Build and Deploy → Run workflow**에서 기본 브랜치를 고르고 **Import requested Notion posts before deploying**을 켠 채 실행합니다. 저장소 파일만 다시 배포하려면 이 옵션을 끕니다.
+3. 실행이 성공하면 글이 `/posts/주소/`에 공개됩니다. 발행된 Markdown은 `_posts/notion/`, 업로드한 사진은 `assets/img/posts/notion/주소/`에 저장됩니다. Notion에 올린 PNG, JPEG, GIF, WebP, AVIF 이미지는 내려받아 함께 게시하며, 외부 이미지는 원래 링크를 사용합니다.
+
+수정할 때는 Notion에서 글을 고친 뒤 **발행 요청**을 다시 누릅니다. 첫 발행의 날짜와 주소를 유지하며, 발행 요청 이후 저장한 수정 사항도 가져오기 시점의 본문에 반영됩니다. 이미 발행된 글을 내리려면 저장소에서 해당 글과 이미지 폴더를 제거하고 Notion의 발행 요청 시각을 비웁니다. 기존 주소를 쓰는 수동 작성 글이 있으면 새 글에 다른 주소를 지정합니다.
+
+오류는 **Actions → Build and Deploy → Import requested Notion posts**에서 확인할 수 있습니다. Notion 전용 블록 일부는 Jekyll에서 표시가 다를 수 있으므로 사진과 코드가 있는 테스트 글로 첫 발행을 확인합니다. 공개 저장소에 60일간 활동이 없으면 GitHub가 예약 실행을 비활성화할 수 있습니다. [예약 실행 동작](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
 
 ## GitHub에서 글 작성
 
