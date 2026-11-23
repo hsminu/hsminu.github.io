@@ -63,14 +63,18 @@ module NotionPublish
       result.fetch("markdown")
     end
 
-    def notion_image?(uri)
-      host = uri.host.to_s.downcase
-      return false unless uri.is_a?(URI::HTTPS) && uri.userinfo.nil? && uri.port == 443
+    def image_download_uri(source)
+      if source.start_with?("notion-file-block://")
+        block_id = NotionPublish.normalize_uuid(source.delete_prefix("notion-file-block://").split("/", 2).first || "")
+        url = api("/blocks/#{block_id}").dig("image", "file", "url")
+        uri = URI(url) if url
+        raise Error, "Notion did not return a download URL for image block #{block_id}." unless uri && notion_image?(uri)
 
-      host == "file.notion.so" ||
-        host == "notion-static.com" || host.end_with?(".notion-static.com") ||
-        (host.match?(/\A(?:[a-z0-9-]+\.)*s3(?:[.-][a-z0-9-]+)?\.amazonaws\.com\z/) &&
-          uri.query.to_s.match?(/(?:\A|&)X-Amz-Signature=/i))
+        return uri
+      end
+
+      uri = URI(source)
+      uri if notion_image?(uri)
     end
 
     def download_image(uri, directory)
@@ -116,6 +120,16 @@ module NotionPublish
     end
 
     private
+
+    def notion_image?(uri)
+      host = uri.host.to_s.downcase
+      return false unless uri.is_a?(URI::HTTPS) && uri.userinfo.nil? && uri.port == 443
+
+      host == "file.notion.so" ||
+        host == "notion-static.com" || host.end_with?(".notion-static.com") ||
+        (host.match?(/\A(?:[a-z0-9-]+\.)*s3(?:[.-][a-z0-9-]+)?\.amazonaws\.com\z/) &&
+          uri.query.to_s.match?(/(?:\A|&)X-Amz-Signature=/i))
+    end
 
     def connection(uri, &block)
       Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: 10, read_timeout: 30, &block)
@@ -274,11 +288,13 @@ module NotionPublish
     def rewrite_images(markdown, slug, directory)
       downloaded = {}
       replace = lambda do |source|
-        uri = URI(CGI.unescapeHTML(source))
-        return source unless @client.notion_image?(uri)
+        return downloaded.fetch(source) if downloaded.key?(source)
 
-        filename = downloaded[uri.to_s] ||= @client.download_image(uri, directory)
-        "/#{IMAGES}/#{slug}/#{filename}"
+        uri = @client.image_download_uri(CGI.unescapeHTML(source))
+        return source unless uri
+
+        filename = @client.download_image(uri, directory)
+        downloaded[source] = "/#{IMAGES}/#{slug}/#{filename}"
       rescue URI::InvalidURIError
         raise Error, "A Notion image URL is malformed."
       end
@@ -288,12 +304,12 @@ module NotionPublish
           match = Regexp.last_match
           "#{match[1]}#{replace.call(match[2])}#{match[3]}"
         end
-        text.gsub(/^([ \t]*)<image\b([^>]*)>(.*?)<\/image>[ \t]*\r?$/m) do
+        text.gsub(/^([ \t]*)<image\b([^>\r\n]*?)(?:\/>|>(.*?)<\/image>)[ \t]*\r?$/m) do
           indentation, attributes, caption = Regexp.last_match.captures
-          source = attributes[/\bsource="([^"]*)"/, 1]
+          source = attributes[/(?:\A|\s)source="([^"]+)"/, 1]
           raise Error, "A Notion image is missing its source." unless source
 
-          alt = CGI.unescapeHTML(caption).gsub(/[\\\[\]]/) { |character| "\\#{character}" }.split.join(" ")
+          alt = CGI.unescapeHTML(caption.to_s).gsub(/[\\\[\]]/) { |character| "\\#{character}" }.split.join(" ")
           "#{indentation}![#{alt}](#{replace.call(source)})"
         end
       end
