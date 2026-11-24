@@ -89,22 +89,16 @@ description: 글 내용을 소개하는 한 문장
 
 이미지는 `assets/img/posts/` 아래에 넣고 `![설명](/assets/img/posts/example.png)` 형태로 첨부합니다.
 
-## 홈의 대표 글
-
-Markdown 글은 머리말에 `featured: true`를 추가하면 **Selected Work**에 표시됩니다. Notion에서 발행한 글은 [_data/featured.yml](_data/featured.yml)에 `/posts/주소/`를 키로 등록합니다. `description`과 `image.path`, `image.alt`는 선택 항목입니다. 공개된 대표 글이 없으면 **Selected Work**가 숨겨집니다.
-
 ## 수정할 위치
 
 - 제목, 소개 문구, 프로필 사진: `_config.yml`
 - 소개 페이지: `_tabs/about.md`
-- 홈의 소개와 글 목록: `_layouts/home.html`
 - 다섯 분야의 메뉴: `_tabs/`의 해당 파일
 - 분야별 글 목록: `_layouts/section.html`
 - GitHub 등 프로필 링크: `_data/contact.yml`
 - 사이드바 구성: `_includes/sidebar.html`
 - 하단 링크: `_includes/footer.html`
 - 라이트·다크 색상과 사이드바 스타일: `_sass/custom.scss`
-- 홈과 게시글의 레이아웃 및 타이포그래피: `_sass/_editorial.scss`
 
 사이드바 하단에는 About·Archives와 테마 전환, GitHub 아이콘을 표시합니다. 테마는 기본적으로 시스템 설정을 따르며, 선택한 라이트·다크 모드는 브라우저에 저장됩니다. `_config.yml`의 `theme_mode`를 비워 두어야 전환 기능을 사용할 수 있습니다.
 

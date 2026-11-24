@@ -1,13 +1,13 @@
 {% assign topbar_class = '' %}
-{% if page.layout == 'home' or page.layout == 'section' or page.layout == 'categories' or page.layout == 'category' or page.url == '/about/' %}
+{% if page.layout == 'home' or page.layout == 'section' or page.url == '/about/' %}
   {% assign topbar_class = 'topbar-compact' %}
 {% elsif page.layout == 'post' %}
   {% assign topbar_class = 'topbar-post' %}
 {% endif %}
 
-<header id="topbar-wrapper" class="flex-shrink-0 {{ topbar_class }}" aria-label="페이지 도구">
+<header id="topbar-wrapper" class="flex-shrink-0 {{ topbar_class }}" aria-label="Top Bar">
   <div id="topbar" class="d-flex align-items-center justify-content-between px-lg-3 h-100">
-    <button type="button" id="sidebar-trigger" class="btn btn-link" aria-label="메뉴 열기" aria-controls="sidebar" aria-expanded="false">
+    <button type="button" id="sidebar-trigger" class="btn btn-link" aria-label="Sidebar">
       <i class="fas fa-bars fa-fw"></i>
     </button>
 
@@ -52,7 +52,7 @@
       </nav>
     {% endunless %}
 
-    <button type="button" id="search-trigger" class="btn btn-link" aria-label="검색 열기" aria-controls="search">
+    <button type="button" id="search-trigger" class="btn btn-link" aria-label="Search">
       <i class="fas fa-search fa-fw"></i>
     </button>
 
@@ -62,7 +62,7 @@
         class="form-control"
         id="search-input"
         type="search"
-        aria-label="글 검색"
+        aria-label="search"
         autocomplete="off"
         placeholder="{{ site.data.locales[include.lang].search.hint | capitalize }}..."
       >

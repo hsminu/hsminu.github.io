@@ -1,5 +1,0 @@
-{%- for category in include.categories -%}
-  {%- assign category_tab = site.tabs | where: 'category', category | first -%}
-  {%- assign archive_url = category | slugify | url_encode | prepend: '/categories/' | append: '/' -%}
-  <a href="{{ category_tab.url | default: archive_url | relative_url }}">{{ category | escape }}</a>
-{%- endfor -%}
