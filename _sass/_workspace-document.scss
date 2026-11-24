@@ -1,0 +1,239 @@
+@use 'abstracts/breakpoints' as bp;
+
+.workspace-pane-document {
+  @include bp.xl {
+    &:has(#toc-wrapper) {
+      grid-template-columns: minmax(0, 1fr) minmax(10rem, 17%);
+      column-gap: clamp(1.4rem, 3vw, 3rem);
+    }
+  }
+}
+
+.workspace-document,
+.workspace-tail {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+.workspace #tail-wrapper.workspace-tail {
+  padding-right: 0 !important;
+}
+
+.workspace-post-header {
+  margin-bottom: 1.1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--main-border-color);
+
+  > .workspace-topic {
+    margin-bottom: 0.65rem;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--heading-color);
+    font-size: clamp(1.95rem, 1.45rem + 2vw, 3.1rem);
+    font-weight: 720;
+    line-height: 1.22;
+    letter-spacing: -0.043em;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+}
+
+.workspace-post-description {
+  margin: 0.8rem 0 0;
+  color: var(--text-muted-color);
+  font-size: 1.06rem;
+  line-height: 1.6;
+}
+
+.workspace-post-header .workspace-post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1rem;
+  margin-top: 1rem;
+  color: var(--text-muted-color);
+  font-size: 0.76rem;
+
+  time {
+    font: 0.75rem/1.5 var(--workspace-mono);
+  }
+
+  .workspace-updated::before {
+    content: none;
+  }
+}
+
+.workspace-post-cover {
+  margin: 1rem 0 0;
+
+  figcaption {
+    margin-top: 0.5rem;
+    color: var(--text-muted-color);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+}
+
+.workspace-document .content {
+  margin-top: 1.55rem;
+  font-size: clamp(0.99rem, 0.96rem + 0.18vw, 1.07rem);
+  line-height: 1.83;
+  overflow-wrap: anywhere;
+
+  :is(h2, h3, h4, h5, h6) {
+    font-weight: 690;
+    line-height: 1.35;
+    letter-spacing: -0.025em;
+    word-break: keep-all;
+  }
+
+  :is(h2, h3) {
+    margin-top: 2.1em;
+  }
+
+  :is(h2, h3, h4, h5, h6):first-child {
+    margin-top: 0;
+  }
+
+  a:not(.img-link) {
+    text-underline-offset: 0.18em;
+  }
+
+  blockquote {
+    margin-block: 1.2em;
+    padding-block: 0.35rem;
+    border-left: 2px solid var(--blockquote-border-color);
+    background: var(--card-bg);
+  }
+
+  :is(div.highlighter-rouge, figure.highlight, .table-wrapper) {
+    overflow-x: auto;
+    max-width: 100%;
+    border: 1px solid var(--main-border-color);
+    border-radius: 0.45rem;
+  }
+
+  :is(pre, code, .code-header) {
+    font-family: var(--workspace-mono);
+  }
+
+  .code-header {
+    border-bottom: 1px solid var(--main-border-color);
+    background: var(--workspace-strip);
+
+    span::before {
+      box-shadow: none;
+      background: var(--workspace-icon);
+    }
+  }
+
+  .highlight,
+  .highlight .w {
+    background-color: var(--highlight-bg-color);
+  }
+
+  .table-wrapper table {
+    margin-bottom: 0;
+  }
+
+  table thead {
+    background: var(--card-header-bg);
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 0.36rem;
+  }
+
+  .notion-columns :is(p, figure):last-child {
+    margin-bottom: 0;
+  }
+}
+
+.workspace-document .post-tail-wrapper {
+  margin-top: 3rem;
+}
+
+.workspace #panel-wrapper {
+  min-width: 0;
+}
+
+.workspace #panel-wrapper .toc-border-cover,
+.workspace #toc-wrapper::before,
+.workspace #toc-wrapper::after {
+  display: none;
+}
+
+.workspace #panel-wrapper #toc-wrapper {
+  top: 1.35rem;
+  max-height: calc(100dvh - 2.7rem);
+  margin-top: 0.35rem;
+  padding-right: 0.12rem !important;
+  animation: none;
+  transition: none;
+
+  .panel-heading {
+    color: var(--heading-color);
+    font-size: 0.82rem;
+    font-weight: 650;
+  }
+
+  .toc-link {
+    position: relative;
+    padding: 0.3rem 0.45rem 0.3rem 0.9rem;
+    color: var(--text-muted-color);
+    line-height: 1.45;
+    white-space: normal;
+    overflow-wrap: anywhere;
+
+    &:hover {
+      color: var(--link-color);
+    }
+
+    &.is-active-link {
+      background: var(--workspace-selection);
+
+      &::before {
+        position: absolute;
+        inset: 0.3rem auto 0.3rem 0;
+        height: auto;
+        width: 2px;
+      }
+    }
+  }
+}
+
+.workspace-document #toc-bar {
+  margin-inline: 0;
+}
+
+.workspace #toc-solo-trigger {
+  min-height: 2.4rem;
+}
+
+.workspace #toc-popup {
+  width: min(32rem, calc(100% - 1.5rem));
+  min-width: 0;
+
+  &::after {
+    display: none;
+  }
+
+  #toc-popup-content {
+    margin-bottom: 0;
+    overscroll-behavior: contain;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace #toc-bar {
+    transition: none;
+  }
+
+  // Chirpy completes the dialog close when its closing animation ends.
+  .workspace #toc-popup[open] {
+    animation-duration: 1ms;
+  }
+}

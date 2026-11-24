@@ -1,11 +1,4 @@
-<footer aria-label="Site Info" class="d-flex flex-column justify-content-center text-muted flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3">
-  <p>
-    © <time>{{ 'now' | date: '%Y' }}</time>
-    <a href="{{ site.social.links[0] }}">{{ site.social.name }}</a>.
-    {{ site.data.locales[include.lang].copyright.brief }}
-  </p>
-  <p>
-    Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener noreferrer">Jekyll</a>
-    &amp; <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener noreferrer">Chirpy</a>
-  </p>
+<footer class="workspace-status" aria-label="워크스페이스 정보">
+  <span><i class="fa-solid fa-folder-tree" aria-hidden="true"></i> {% if page.layout == 'home' %}workspace / overview{% elsif page.layout == 'post' %}workspace / posts{% elsif page.category %}workspace / {{ page.category | escape }}{% else %}workspace / {{ page.url | split: '/' | last | escape }}{% endif %}</span>
+  <span>UTF-8 <span aria-hidden="true">·</span> {% if page.layout == 'post' %}Markdown <span aria-hidden="true">·</span> {% endif %}<a href="https://jekyllrb.com">Jekyll</a></span>
 </footer>

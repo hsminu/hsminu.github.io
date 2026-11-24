@@ -2,7 +2,11 @@
 ---
 
 @use 'abstracts/variables' with (
-  $theme: '{{ site.theme_mode }}'
+  $theme: '{{ site.theme_mode }}',
+  $sidebar-width: 236px,
+  $sidebar-width-large: 248px,
+  $font-family-base: (system-ui, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif),
+  $font-family-heading: (system-ui, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif)
 );
 
 @use 'main
@@ -12,3 +16,4 @@
 ';
 
 @use 'custom';
+@use 'workspace';

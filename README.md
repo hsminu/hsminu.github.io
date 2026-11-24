@@ -89,18 +89,26 @@ description: 글 내용을 소개하는 한 문장
 
 이미지는 `assets/img/posts/` 아래에 넣고 `![설명](/assets/img/posts/example.png)` 형태로 첨부합니다.
 
+## Pinned 및 검색
+
+공개 Markdown 글은 머리말에 `featured: true` 또는 `pinned: true`를 추가하면 홈의 **Pinned**에 표시됩니다. Notion에서 발행한 글은 [_data/workspace-pins.yml](_data/workspace-pins.yml)에 공개 경로를 등록합니다. `title`과 `description`은 선택 항목입니다. Pinned에는 최대 3개를 표시합니다.
+
+macOS에서는 **⌘ K**, Windows와 Linux에서는 **Ctrl K**로 검색을 열 수 있습니다. 방향키로 결과를 선택하고 Enter로 엽니다. 카테고리의 이름·작성일 제목을 눌러 목록을 정렬할 수 있습니다.
+
 ## 수정할 위치
 
-- 제목, 소개 문구, 프로필 사진: `_config.yml`
+- 사이트 이름, 관심 분야, 프로필 사진: `_config.yml`
+- 홈 화면과 소개 문구: `_layouts/home.html`
 - 소개 페이지: `_tabs/about.md`
 - 다섯 분야의 메뉴: `_tabs/`의 해당 파일
 - 분야별 글 목록: `_layouts/section.html`
 - GitHub 등 프로필 링크: `_data/contact.yml`
 - 사이드바 구성: `_includes/sidebar.html`
-- 하단 링크: `_includes/footer.html`
-- 라이트·다크 색상과 사이드바 스타일: `_sass/custom.scss`
+- 워크스페이스 구조: `_layouts/default.html` 및 `_includes/workspace-*.html`
+- 라이트·다크 색상과 워크스페이스 스타일: `_sass/_workspace.scss`
+- Spotlight 검색: `assets/js/spotlight.js`와 `assets/js/data/search.json`
 
-사이드바 하단에는 About·Archives와 테마 전환, GitHub 아이콘을 표시합니다. 테마는 기본적으로 시스템 설정을 따르며, 선택한 라이트·다크 모드는 브라우저에 저장됩니다. `_config.yml`의 `theme_mode`를 비워 두어야 전환 기능을 사용할 수 있습니다.
+사이드바의 Utilities에서 검색, Archives, About을 열고 하단에서 GitHub와 테마 전환을 이용할 수 있습니다. 테마는 기본적으로 시스템 설정을 따르며, 선택한 라이트·다크 모드는 브라우저에 저장됩니다. `_config.yml`의 `theme_mode`를 비워 두어야 전환 기능을 사용할 수 있습니다.
 
 전체 카테고리(`/categories/`), 태그(`/tags/`), 연도별 글(`/archives/`)은 소개 페이지에서 접근할 수 있습니다. 아직 글이 없는 분야도 사이드바에서 열 수 있습니다.
 

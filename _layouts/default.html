@@ -1,0 +1,60 @@
+---
+layout: compress
+---
+
+<!doctype html>
+{% include origin-type.html %}
+{% include lang.html %}
+<html lang="{{ page.lang | default: site.alt_lang | default: site.lang }}"{% if site.theme_mode == 'light' or site.theme_mode == 'dark' %} data-bs-theme="{{ site.theme_mode }}"{% endif %}>
+  {% include head.html lang=lang %}
+  <body class="workspace">
+    <a class="workspace-skip" href="#main-content">본문으로 건너뛰기</a>
+    <div class="workspace-window">
+      {% include topbar.html lang=lang %}
+      {% include sidebar.html lang=lang %}
+
+      <div id="main-wrapper" class="workspace-main">
+        {% include workspace-tabs.html %}
+        <div class="workspace-pane{% if page.layout == 'post' %} workspace-pane-document{% endif %}">
+          <main id="main-content" tabindex="-1" data-layout="{{ page.layout | escape }}">
+            {% if layout.layout == 'default' %}
+              {% include refactor-content.html content=content lang=lang %}
+            {% else %}
+              {{ content }}
+            {% endif %}
+            {% if layout.tail_includes %}
+              <div id="tail-wrapper" class="workspace-tail">
+                {% for tail_include in layout.tail_includes %}
+                  {% assign tail_path = tail_include | append: '.html' %}
+                  {% include {{ tail_path }} lang=lang %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </main>
+
+          {% if layout.panel_includes %}
+            <aside id="panel-wrapper" aria-label="문서 목차">
+              {% for panel_include in layout.panel_includes %}
+                {% assign panel_path = panel_include | append: '.html' %}
+                {% include {{ panel_path }} lang=lang %}
+              {% endfor %}
+            </aside>
+          {% endif %}
+        </div>
+
+        {% include footer.html lang=lang %}
+        <button id="back-to-top" type="button" class="btn btn-box-shadow" aria-label="맨 위로"><i class="fa-solid fa-angle-up" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
+    <div id="mask" class="d-none position-fixed w-100 h-100" aria-hidden="true"></div>
+    {% include workspace-search.html %}
+    {% if site.pwa.enabled %}{% include_cached notification.html lang=lang %}{% endif %}
+
+    {% for script_include in layout.script_includes %}
+      {% assign script_path = script_include | append: '.html' %}
+      {% include {{ script_path }} %}
+    {% endfor %}
+    <script type="module" src="{{ '/assets/js/workspace.js' | relative_url }}"></script>
+  </body>
+</html>

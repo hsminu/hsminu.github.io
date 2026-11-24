@@ -1,55 +1,52 @@
-<aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
-  <header class="profile-wrapper">
-    <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle" aria-label="{{ site.title | escape }} 홈">
-      {% if site.avatar %}
-        {% capture avatar_url %}{% include media-url.html src=site.avatar %}{% endcapture %}
-        <img src="{{ avatar_url | strip }}" width="72" height="72" alt="{{ site.title | escape }} 프로필">
-      {% endif %}
+<aside id="sidebar" aria-label="워크스페이스 탐색">
+  {% assign topics = site.tabs | where: 'layout', 'section' %}
+  {% assign current_topic = page.category | default: page.categories.first %}
+  {% if page.layout == 'category' %}{% assign current_topic = page.title %}{% endif %}
+  <nav class="workspace-sidebar-group" aria-labelledby="workspace-nav-label">
+    <p id="workspace-nav-label" class="workspace-nav-label">Workspace</p>
+    <a class="workspace-nav-item" href="{{ '/' | relative_url }}"{% if page.layout == 'home' %} aria-current="{% if page.url == '/' %}page{% else %}location{% endif %}"{% endif %}>
+      <i class="fa-solid fa-table-columns" aria-hidden="true"></i><span>Overview</span>
     </a>
-    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title | escape }}</a>
-    {% assign focus_areas = site.tagline | split: ' · ' %}
-    <p class="site-subtitle mb-0">{% for focus in focus_areas %}{% unless forloop.first %} · {% endunless %}<span class="profile-focus">{{ focus | escape }}</span>{% endfor %}</p>
-
-  </header>
-
-  <nav class="w-100" aria-label="카테고리">
-    <ul class="nav">
-      {% assign topics = site.tabs | where: 'layout', 'section' %}
-      {% for tab in topics %}
-        <li class="nav-item{% if tab.url == page.url or page.categories contains tab.category %} active{% endif %}">
-          <a href="{{ tab.url | relative_url }}" class="nav-link"{% if tab.url == page.url %} aria-current="page"{% endif %}>
-            <i class="fa-fw {{ tab.icon }}" aria-hidden="true"></i>
-            <span>{{ tab.title | escape }}</span>
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+    {% for tab in topics %}
+      <a class="workspace-nav-item" href="{{ tab.url | relative_url }}"{% if tab.url == page.url %} aria-current="page"{% elsif tab.category == current_topic %} aria-current="location"{% endif %}>
+        <i class="fa-solid fa-folder" aria-hidden="true"></i><span>{{ tab.title | escape }}</span>
+      </a>
+    {% endfor %}
   </nav>
 
-  <div class="sidebar-utilities w-100">
-    <nav class="sidebar-shortcuts" aria-label="바로가기">
-      <a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>About</a>
-      <a href="{{ '/archives/' | relative_url }}"{% if page.url == '/archives/' %} aria-current="page"{% endif %}>Archives</a>
-    </nav>
+  <nav class="workspace-sidebar-group" aria-labelledby="utilities-nav-label">
+    <p id="utilities-nav-label" class="workspace-nav-label">Utilities</p>
+    <button type="button" class="workspace-nav-item" data-workspace-search aria-haspopup="dialog" aria-keyshortcuts="Meta+K Control+K">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search</span><kbd data-search-shortcut>⌘ K</kbd>
+    </button>
+    <a class="workspace-nav-item" href="{{ '/archives/' | relative_url }}"{% if page.url == '/archives/' %} aria-current="page"{% endif %}><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>Archives</span></a>
+    <a class="workspace-nav-item" href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>About</span></a>
+  </nav>
 
-    <div class="sidebar-bottom d-flex flex-wrap align-items-center">
+  <div class="workspace-profile sidebar-bottom">
+    {% if site.avatar %}
+      {% capture avatar_url %}{% include media-url.html src=site.avatar %}{% endcapture %}
+      <img class="workspace-avatar" src="{{ avatar_url | strip }}" width="36" height="36" alt="">
+    {% endif %}
+    <div class="workspace-profile-name">
+      <strong>{{ site.title | escape }}</strong>
+      {% assign github_contact = site.data.contact | where: 'type', 'github' | first %}
+      {% if github_contact and site.github.username %}<a href="https://github.com/{{ site.github.username }}" rel="me">GitHub <span aria-hidden="true">↗</span></a>{% endif %}
+    </div>
+    {% unless site.theme_mode %}
       <div class="btn-group dropup">
-        <button type="button" class="btn btn-link nav-link" id="mode-toggle" aria-label="테마 변경" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="fa-regular fa-sun" data-theme-mode="light" aria-hidden="true"></i>
-          <i class="fa-regular fa-moon" data-theme-mode="dark" aria-hidden="true"></i>
+        <button class="workspace-icon-button" type="button" id="mode-toggle" aria-label="테마 변경" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa-solid fa-sun" data-theme-mode="light" aria-hidden="true"></i>
+          <i class="fa-solid fa-moon" data-theme-mode="dark" aria-hidden="true"></i>
           <i class="fa-solid fa-display" data-theme-mode="system" aria-hidden="true"></i>
         </button>
-        <ul class="dropdown-menu rounded-3 mb-1 p-1">
-          <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme-mode="light"><i class="fa-regular fa-sun" aria-hidden="true"></i>{{ site.data.locales[include.lang].theme.light }}</button></li>
-          <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme-mode="dark"><i class="fa-regular fa-moon" aria-hidden="true"></i>{{ site.data.locales[include.lang].theme.dark }}</button></li>
-          <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme-mode="system"><i class="fa-solid fa-display" aria-hidden="true"></i>{{ site.data.locales[include.lang].theme.system }}</button></li>
+        <ul class="dropdown-menu">
+          {% assign modes = 'light,dark,system' | split: ',' %}
+          {% for mode in modes %}
+            <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme-mode="{{ mode }}">{{ site.data.locales[include.lang].theme[mode] | default: mode }}</button></li>
+          {% endfor %}
         </ul>
       </div>
-      {% for entry in site.data.contact %}
-        {% if entry.type == 'github' and site.github.username %}
-          <a href="https://github.com/{{ site.github.username }}" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener noreferrer"><i class="{{ entry.icon }}" aria-hidden="true"></i></a>
-        {% endif %}
-      {% endfor %}
-    </div>
+    {% endunless %}
   </div>
 </aside>

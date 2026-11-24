@@ -1,0 +1,44 @@
+---
+layout: compress
+swcache: true
+---
+[
+  {% assign indexed_posts = site.posts | where_exp: 'post', 'post.hidden != true' %}
+  {% for post in indexed_posts %}
+  {
+    "type": "post",
+    "title": {{ post.title | jsonify }},
+    "url": {{ post.url | relative_url | jsonify }},
+    "categories": {{ post.categories | join: ', ' | jsonify }},
+    "tags": {{ post.tags | join: ', ' | jsonify }},
+    "date": {{ post.date | date: '%Y.%m.%d' | jsonify }},
+    {% capture search_content %}{% include post-summary.html full_text=true %}{% endcapture %}
+    "content": {{ search_content | jsonify }}
+  },
+  {% endfor %}
+  {% for tab in site.tabs %}
+    {% if tab.layout == 'section' %}
+      {"type":"category", "title":{{ tab.title | jsonify }}, "url":{{ tab.url | relative_url | jsonify }}},
+    {% else %}
+      {"type":"page", "title":{{ tab.title | jsonify }}, "url":{{ tab.url | relative_url | jsonify }}, "tags":{{ tab.url | replace: '/', ' ' | jsonify }}},
+    {% endif %}
+  {% endfor %}
+  {% assign extra_pages = site.pages | where_exp: 'item', 'item.layout == "page" and item.title and item.search != false and item.url != "/404.html"' %}
+  {% for entry in extra_pages %}
+    {"type":"page", "title":{{ entry.title | jsonify }}, "url":{{ entry.url | relative_url | jsonify }}},
+  {% endfor %}
+  {% for category in site.categories %}
+    {% assign category_name = category[0] %}
+    {% assign category_tab = site.tabs | where: 'category', category_name | first %}
+    {% unless category_tab %}
+      {% assign category_url = category_name | slugify | url_encode | prepend: '/categories/' | append: '/' %}
+      {"type":"category", "title":{{ category_name | jsonify }}, "url":{{ category_url | relative_url | jsonify }}},
+    {% endunless %}
+  {% endfor %}
+  {% assign indexes = 'Archives,Categories,Tags' | split: ',' %}
+  {% for index_title in indexes %}
+    {% assign index_url = index_title | downcase | prepend: '/' | append: '/' %}
+    {"type":"page", "title":{{ index_title | jsonify }}, "url":{{ index_url | relative_url | jsonify }}},
+  {% endfor %}
+  {"type":"page", "title":"Overview", "tags":"Research Journal 홈", "url":{{ '/' | relative_url | jsonify }}}
+]

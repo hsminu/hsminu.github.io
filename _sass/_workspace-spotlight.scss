@@ -1,0 +1,131 @@
+body:has(.workspace-spotlight[open]) {
+  overflow: hidden;
+}
+
+.workspace-spotlight {
+  width: min(39rem, calc(100% - 1.5rem));
+  max-height: min(37rem, 88dvh);
+  margin: clamp(1rem, 17vh, 11rem) auto auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--menu-border-color);
+  border-radius: 0.7rem;
+  color: var(--text-color);
+  background: var(--card-bg);
+  box-shadow: 0 12px 36px rgb(0 0 0 / 24%);
+
+  &[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &::backdrop {
+    background: rgb(12 15 20 / 57%);
+  }
+
+  @media (max-width: 575px) {
+    margin-top: min(8vh, 3rem);
+  }
+}
+
+.spotlight-query {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem 0.8rem 0.65rem 1rem;
+  border-bottom: 1px solid var(--main-border-color);
+
+  > i {
+    color: var(--link-color);
+  }
+
+  input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.55rem 0.35rem;
+    border: 0;
+    border-radius: 0.28rem;
+    color: var(--heading-color);
+    background: none;
+    box-shadow: none;
+    font-size: 1.02rem;
+
+    &::placeholder {
+      color: var(--text-muted-color);
+      opacity: 1;
+    }
+
+    &:focus-visible {
+      outline-offset: -2px;
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+}
+
+.spotlight-status {
+  margin: 0;
+  padding: 0.72rem 1.25rem 0.35rem;
+  color: var(--text-muted-color);
+  font-size: 0.76rem;
+}
+
+.spotlight-results {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.25rem 0.55rem 0.65rem;
+  margin: 0;
+  list-style: none;
+
+  li {
+    border-radius: 0.35rem;
+
+    &:hover,
+    &[aria-selected='true'] {
+      background: var(--workspace-selection);
+    }
+  }
+
+  a {
+    display: grid;
+    gap: 0.14rem;
+    padding: 0.56rem 0.68rem;
+    color: var(--heading-color);
+    overflow-wrap: anywhere;
+  }
+}
+
+.spotlight-result-title {
+  font-size: 0.94rem;
+  font-weight: 620;
+}
+
+.spotlight-result-detail {
+  color: var(--text-muted-highlight-color);
+  font: 0.71rem/1.4 var(--workspace-mono);
+}
+
+.spotlight-footer {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 0.36rem 1rem;
+  padding: 0.6rem 1.2rem;
+  border-top: 1px solid var(--main-border-color);
+  color: var(--text-muted-color);
+  background: var(--workspace-strip);
+  font-size: 0.73rem;
+
+  kbd {
+    padding: 0.12rem 0.25rem;
+    border: 1px solid var(--main-border-color);
+    border-radius: 0.25rem;
+    background: none;
+    box-shadow: none;
+    color: var(--text-muted-highlight-color);
+    font-family: var(--workspace-mono);
+  }
+}

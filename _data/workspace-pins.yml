@@ -1,0 +1,4 @@
+# Public Notion post URLs survive regeneration of the Markdown source.
+/posts/sogeding-2026-award/:
+  title: MCP Runtime Guard
+  description: 소개딩에서 발표한 MCP 정보 유출 방지 프로젝트의 개발과 검증 기록
