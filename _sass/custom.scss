@@ -422,7 +422,7 @@
   gap: 1rem;
   margin-block: 1rem;
 
-  @include bp.md {
+  @include bp.sm {
     flex-direction: row;
   }
 
