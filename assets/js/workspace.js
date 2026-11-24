@@ -1,4 +1,5 @@
 import './spotlight.js';
+import './workspace-tabs.js';
 
 const sidebar = document.getElementById('sidebar');
 const toggle = document.getElementById('sidebar-trigger');

@@ -421,37 +421,67 @@ body.workspace #main-wrapper {
   min-height: 2.6rem;
   border-bottom: 1px solid var(--main-border-color);
   background: var(--workspace-strip);
+}
 
-  a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.48rem;
-    flex: 0 0 auto;
-    min-width: 7.1rem;
-    padding: 0.5rem 1.05rem;
-    border-top: 2px solid transparent;
-    border-right: 1px solid var(--workspace-row-rule);
-    color: var(--text-muted-color);
-    font: 0.78rem/1.4 var(--workspace-mono);
+.workspace-tab {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  max-width: min(26rem, 86vw);
+  border-top: 2px solid transparent;
+  border-right: 1px solid var(--workspace-row-rule);
+  color: var(--text-muted-color);
 
-    @include bp.lt(bp.get(sm)) {
-      min-width: 0;
-      padding-inline: 0.65rem;
-    }
+  &:has([aria-current]) {
+    border-top-color: var(--workspace-accent);
+    background: var(--main-bg);
+    color: var(--heading-color);
+  }
+}
 
-    &:focus-visible {
-      outline-offset: -3px;
-    }
+.workspace-tab-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  color: inherit;
+  font: 0.78rem/1.4 var(--workspace-mono);
 
-    &[aria-current] {
-      border-top-color: var(--workspace-accent);
-      background: var(--main-bg);
-      color: var(--heading-color);
-    }
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-    &:hover {
-      color: var(--link-color);
-    }
+  &:focus-visible {
+    outline-offset: -3px;
+  }
+
+  &:hover {
+    color: var(--link-color);
+  }
+}
+
+.workspace-tab-close {
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  margin-inline-end: 0.4rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.28rem;
+  color: var(--text-muted-color);
+  background: transparent;
+  font-size: 1rem;
+  line-height: 1;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--heading-color);
+    background: var(--workspace-hover);
   }
 }
 

@@ -1,12 +1,25 @@
-{% assign topic_tabs = site.tabs | where: 'layout', 'section' %}
-{% assign current_topic = page.category | default: page.categories.first %}
-{% if page.layout == 'category' %}{% assign current_topic = page.title %}{% endif %}
+{% unless page.layout == 'home' %}
+  {% assign tab_label = page.url | remove_first: '/' %}
+  {% if page.layout == 'post' %}
+    {% assign primary_category = page.categories | first %}
+    {% assign category_tab = site.tabs | where: 'category', primary_category | first %}
+    {% assign category_slug = primary_category | slugify %}
+    {% assign folder = category_tab.url | split: '/' | last | default: category_slug | default: 'posts' %}
+    {% assign file = page.url | split: '/' | last %}
+    {% assign tab_label = folder | append: '/' | append: file | append: '.md' %}
+  {% elsif page.layout == 'page' and page.url contains '/about/' %}
+    {% assign tab_label = 'about.md' %}
+  {% endif %}
+{% endunless %}
 <nav class="workspace-tabs" aria-label="워크스페이스 탭">
-  <a href="{{ '/' | relative_url }}"{% if page.layout == 'home' %} aria-current="{% if page.url == '/' %}page{% else %}location{% endif %}"{% endif %}><i class="fa-regular fa-file-lines" aria-hidden="true"></i> overview.md</a>
-  {% for tab in topic_tabs %}
-    {% if tab.category == 'Security Research' or tab.category == 'Projects' or tab.category == current_topic %}
-      {% assign tab_label = tab.url | remove_first: '/' | replace: 'security-research/', 'research/' %}
-      <a href="{{ tab.url | relative_url }}"{% if tab.url == page.url %} aria-current="page"{% elsif tab.category == current_topic %} aria-current="location"{% endif %}>{{ tab_label | escape }}</a>
-    {% endif %}
-  {% endfor %}
+  <div class="workspace-tab">
+    <a class="workspace-tab-link" href="{{ '/' | relative_url }}"{% if page.layout == 'home' %} aria-current="{% if page.url == '/' %}page{% else %}location{% endif %}"{% endif %}>
+      <i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>overview.md</span>
+    </a>
+  </div>
+  {% unless page.layout == 'home' %}
+    <div class="workspace-tab" data-open-tab>
+      <a class="workspace-tab-link" href="{{ page.url | relative_url }}" title="{{ tab_label | escape }}" aria-current="page"><span>{{ tab_label | escape }}</span></a>
+    </div>
+  {% endunless %}
 </nav>
