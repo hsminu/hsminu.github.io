@@ -1,0 +1,111 @@
+@use 'abstracts/breakpoints' as bp;
+
+.workspace-about {
+  width: min(100%, 42rem);
+  margin: clamp(0.5rem, 3vw, 2.25rem) auto 0;
+  padding: clamp(1.15rem, 3.5vw, 2.5rem);
+  border: 1px solid var(--main-border-color);
+  border-radius: 0.95rem;
+  background: var(--card-bg);
+}
+
+.workspace-about-header {
+  padding-bottom: 1.35rem;
+  text-align: center;
+
+  .workspace-about-mark {
+    width: clamp(4rem, 8vw, 5.35rem);
+    height: auto;
+    margin-inline: auto;
+  }
+
+  h1 {
+    margin: 0.65rem 0 0;
+    color: var(--heading-color);
+    font-size: clamp(1.8rem, 3.15vw, 2.45rem);
+    font-weight: 670;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+  }
+
+  p {
+    margin: 0.32rem 0 0;
+    color: var(--text-muted-color);
+    font-size: 0.87rem;
+  }
+}
+
+.workspace-about-details {
+  margin: 0;
+  border-block: 1px solid var(--main-border-color);
+
+  > div {
+    display: grid;
+    grid-template-columns: minmax(7rem, 0.59fr) minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0.55rem 1rem;
+    padding: 0.63rem 0.28rem;
+    overflow-wrap: anywhere;
+
+    & + div {
+      border-top: 1px solid var(--workspace-row-rule);
+    }
+  }
+
+  dt {
+    color: var(--text-muted-color);
+    font-weight: 560;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--text-color);
+  }
+
+  @include bp.lt(bp.get(sm)) {
+    font-size: 0.82rem;
+
+    > div {
+      grid-template-columns: minmax(5.8rem, 0.55fr) minmax(0, 1fr);
+      gap: 0.4rem 0.7rem;
+    }
+  }
+}
+
+.workspace-about-links,
+.workspace-about-indexes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.2rem;
+  font-size: 0.87rem;
+}
+
+.workspace-about-links {
+  margin-top: 1.15rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+
+  .workspace-icon {
+    width: 0.87rem;
+    height: 0.87rem;
+  }
+}
+
+.workspace-about-indexes {
+  margin-top: 0.7rem;
+  font-size: 0.74rem;
+
+  a {
+    color: var(--text-muted-color);
+
+    &:hover {
+      color: var(--link-color);
+    }
+  }
+}

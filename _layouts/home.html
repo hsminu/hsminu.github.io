@@ -2,78 +2,60 @@
 layout: default
 ---
 
-<div class="workspace-home">
-  {% if paginator.page == 1 or paginator.page == nil %}
-    <header class="workspace-intro">
-      {% include workspace-monogram.html class='workspace-monogram-large' %}
-      <div class="workspace-intro-text">
-        <h1>{{ site.title | escape }}</h1>
-        <p class="workspace-focus">{{ site.tagline | escape }}</p>
+<div class="journal-overview">
+  {% unless paginator.page > 1 %}
+    <header class="journal-cover" data-journal-cover data-timezone="{{ site.timezone | escape }}">
+      <div class="journal-edition">
+        <span>Research Journal</span>
+        <time data-journal-date datetime="{{ site.time | date: '%Y-%m' }}">{{ site.time | date: '%Y.%m' }}</time>
       </div>
-      <nav class="workspace-intro-links" aria-label="프로필 링크">
-        {% if site.github.username %}<a href="https://github.com/{{ site.github.username }}" rel="me">GitHub {% include workspace-icon.html name='outward' %}</a>{% endif %}
-        <a href="{{ '/about/' | relative_url }}">About {% include workspace-icon.html name='chevron' %}</a>
-      </nav>
+      <div class="journal-cover-main">
+        <div class="journal-cover-type">
+          <h1 data-journal-month lang="en">{{ site.time | date: '%B' }}.</h1>
+          <p lang="en">Security, systems, and reverse engineering.</p>
+        </div>
+        {% include journal-figure.html %}
+      </div>
     </header>
+    <script type="module" src="{{ '/assets/js/journal-overview.js' | relative_url }}"></script>
+  {% endunless %}
 
-    {% assign pinned_count = 0 %}
-    {% capture pinned_entries %}
-      {% for post in site.posts %}
-        {% assign pin = site.data.workspace-pins[post.url] %}
-        {% if post.hidden != true %}
-          {% if post.featured == true or post.pinned == true or post.pin == true or pin %}
-            {% assign pin_description = pin.description | default: post.description | default: post.excerpt %}
-            {% assign pin_image = nil %}
-            {% if pin.image %}{% assign pin_image = site.static_files | where: 'path', pin.image | first %}{% endif %}
-            <article class="workspace-pin">
-              <span class="workspace-pin-icon">{% include workspace-icon.html name='projects' %}</span>
-              <div class="workspace-pin-body">
-                {% if post.categories.size > 0 %}
-                  <div class="workspace-topic">{% include workspace-categories.html categories=post.categories %}</div>
-                {% endif %}
-                <h3><a href="{{ post.url | relative_url }}">{{ pin.title | default: post.title | escape }} {% include workspace-icon.html name='outward' %}</a></h3>
-                {% if pin_description %}<p>{{ pin_description | markdownify | strip_html | normalize_whitespace | truncate: 135 | escape }}</p>{% endif %}
-              </div>
-              {% if pin_image %}
-                <div class="workspace-pin-media"><img src="{{ pin_image.path | relative_url }}" alt="{{ pin.alt | escape }}" width="144" height="76" decoding="async"></div>
-              {% endif %}
-            </article>
-            {% assign pinned_count = pinned_count | plus: 1 %}
-            {% if pinned_count == 3 %}{% break %}{% endif %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-    {% endcapture %}
-    {% if pinned_count > 0 %}
-      <section class="workspace-pinned" aria-labelledby="pinned-title">
-        <h2 id="pinned-title">Pinned</h2>
-        <div class="workspace-pins">{{ pinned_entries }}</div>
-      </section>
-    {% endif %}
-  {% endif %}
-
-  <section class="workspace-recent" aria-labelledby="recent-title" data-section-index>
-    <header class="workspace-list-title">
+  <section class="journal-entries" aria-labelledby="journal-entries-title">
+    <header class="journal-entries-heading">
       {% if paginator.page > 1 %}
-        {% assign file_heading = 2 %}
-        <h1 id="recent-title">Recent Files</h1>
+        <h1 id="journal-entries-title">Journal Entries</h1>
+        {% assign journal_posts = paginator.posts %}
+        {% assign journal_limit = paginator.per_page %}
+        {% assign journal_heading = 2 %}
       {% else %}
-        {% assign file_heading = 3 %}
-        <h2 id="recent-title">Recent Files</h2>
+        <h2 id="journal-entries-title">Latest Entries</h2>
+        {% assign journal_posts = site.posts %}
+        {% assign journal_limit = 6 %}
+        {% assign journal_heading = 3 %}
       {% endif %}
-      <a href="{{ '/archives/' | relative_url }}">All posts {% include workspace-icon.html name='chevron' %}</a>
+      <a href="{{ '/archives/' | relative_url }}">View archive {% include workspace-icon.html name='outward' %}</a>
     </header>
-    {% assign recent_posts = paginator.posts | default: site.posts | where_exp: 'file', 'file.hidden != true' %}
-    {% if recent_posts.size > 0 %}
-      {% include workspace-file-columns.html %}
-      <div class="workspace-folder-files">
-        {% for post in recent_posts %}
-          {% include workspace-file.html post=post level=file_heading show_categories=true %}
-        {% endfor %}
-      </div>
+
+    {% assign journal_posts = journal_posts | where_exp: 'entry', 'entry.hidden != true' %}
+    {% assign journal_year = site.time | date: '%Y' %}
+    {% for entry in journal_posts limit: journal_limit %}
+      {% assign entry_year = entry.date | date: '%Y' %}
+      {% assign entry_category = entry.categories | slice: 0, 1 %}
+      <article class="journal-entry">
+        <time datetime="{{ entry.date | date_to_xmlschema }}" class="journal-entry-date" aria-label="{{ entry.date | date: '%Y.%m.%d' }}">
+          <span class="journal-entry-day" aria-hidden="true">{{ entry.date | date: '%d' }}</span>
+          <span class="journal-entry-month" aria-hidden="true">{{ entry.date | date: '%b' }}{% if entry_year != journal_year %} {{ entry_year }}{% endif %}</span>
+        </time>
+        <div class="journal-entry-content">
+          {% if entry_category.size > 0 %}<div class="workspace-topic">{% include workspace-categories.html categories=entry_category %}</div>{% endif %}
+          <h{{ journal_heading }}><a class="journal-entry-link" href="{{ entry.url | relative_url }}">{{ entry.title | escape }}</a></h{{ journal_heading }}>
+          {% include workspace-tags.html tags=entry.tags %}
+        </div>
+        {% include workspace-icon.html name='outward' class='journal-entry-arrow' %}
+      </article>
     {% else %}
       <p class="workspace-empty">아직 게시된 글이 없어요.</p>
-    {% endif %}
+    {% endfor %}
   </section>
-  {% if paginator.total_pages > 1 %}{% include post-paginator.html %}{% endif %}
+  {% if paginator.page > 1 and paginator.total_pages > 1 %}{% include post-paginator.html %}{% endif %}
 </div>

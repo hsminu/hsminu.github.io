@@ -7,7 +7,7 @@
     {% assign folder = category_tab.url | split: '/' | last | default: category_slug | default: 'posts' %}
     {% assign file = page.url | split: '/' | last %}
     {% assign tab_label = folder | append: '/' | append: file | append: '.md' %}
-  {% elsif page.layout == 'page' and page.url contains '/about/' %}
+  {% elsif page.url == '/about/' %}
     {% assign tab_label = 'about.md' %}
   {% endif %}
 {% endunless %}

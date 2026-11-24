@@ -10,7 +10,7 @@
 
 <section class="workspace-folder" data-section-index>
   <header class="workspace-folder-header">
-    <h1>{{ page.title | escape }}</h1>
+    <h1>{% include workspace-icon.html name='folder' %}<span>{{ page.title | escape }}</span></h1>
   </header>
 
   {% if section_tags.size > 0 %}
@@ -32,6 +32,6 @@
       {% endfor %}
     </div>
   {% else %}
-    <p class="workspace-empty">아직 이 카테고리에 게시된 글이 없어요.</p>
+    <p class="workspace-empty workspace-folder-empty">{% include workspace-icon.html name='folder' %}<span>아직 게시된 글이 없어요.</span></p>
   {% endif %}
 </section>

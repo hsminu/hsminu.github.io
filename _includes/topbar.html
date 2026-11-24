@@ -1,7 +1,10 @@
 <header class="workspace-toolbar">
-  <button id="sidebar-trigger" class="workspace-icon-button" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="사이드바 전환" title="사이드바 전환">
-    {% include workspace-icon.html name='layout' %}
-  </button>
+  <div class="workspace-toolbar-start">
+    <button id="sidebar-trigger" class="workspace-icon-button" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="사이드바 전환" title="사이드바 전환">
+      {% include workspace-icon.html name='layout' %}
+    </button>
+    <a class="workspace-toolbar-brand" href="{{ '/' | relative_url }}" aria-label="{{ site.title | escape }} 홈">{% include workspace-monogram.html %}</a>
+  </div>
   <a class="workspace-toolbar-title" href="{{ '/' | relative_url }}">
     {% if page.layout == 'home' or page.layout == 'post' %}{{ site.title | escape }}{% else %}{{ page.title | default: site.title | escape }}{% endif %}
   </a>

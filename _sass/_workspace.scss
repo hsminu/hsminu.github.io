@@ -1,5 +1,7 @@
 @use 'abstracts/breakpoints' as bp;
 @use 'abstracts/variables' as theme;
+@use 'journal-overview';
+@use 'workspace-about';
 @use 'workspace-document';
 @use 'workspace-spotlight';
 
@@ -152,23 +154,10 @@ body.workspace {
 }
 
 .workspace-monogram {
-  display: inline-grid;
+  display: block;
   flex: 0 0 auto;
-  grid-auto-flow: column;
-  place-content: center;
   width: 2rem;
   height: 2rem;
-  border: 1px solid var(--main-border-color);
-  border-radius: 0.48rem;
-  background: var(--card-bg);
-  color: var(--heading-color);
-  font-size: 1rem;
-  font-weight: 680;
-  letter-spacing: -0.05em;
-
-  span {
-    color: var(--workspace-icon);
-  }
 }
 
 .workspace-window {
@@ -212,6 +201,21 @@ body.workspace {
   padding-inline: 0.72rem;
   border-bottom: 1px solid var(--main-border-color);
   background: var(--workspace-toolbar);
+}
+
+.workspace-toolbar-start {
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.workspace-toolbar-brand {
+  border-radius: 0.38rem;
+
+  .workspace-monogram {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
 }
 
 .workspace-toolbar-title {
@@ -536,7 +540,7 @@ body.workspace #main-wrapper {
     scroll-margin-top: var(--workspace-header-height);
   }
 
-  &:has(.workspace-home, .workspace-folder) {
+  &:has(.workspace-folder) {
     max-width: 90rem;
     margin-inline: 0 auto;
   }
@@ -608,207 +612,6 @@ body.workspace #main-wrapper {
   width: clamp(2rem, 4vw, 3.8rem);
   height: 0.32rem;
   accent-color: var(--workspace-accent);
-}
-
-.workspace-intro {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.75rem 0.9rem;
-  padding-bottom: 1.2rem;
-  border-bottom: 1px solid var(--workspace-row-rule);
-
-  @include bp.lt(bp.get(sm)) {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-}
-
-.workspace-intro .workspace-monogram-large {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.74rem;
-  font-size: 1.55rem;
-}
-
-.workspace-intro h1 {
-  margin: 0;
-  color: var(--heading-color);
-  font-size: 1.68rem;
-  font-weight: 690;
-  line-height: 1.12;
-  letter-spacing: -0.046em;
-}
-
-.workspace-focus {
-  margin: 0.27rem 0 0;
-  color: var(--text-muted-color);
-  font-size: 0.84rem;
-  line-height: 1.4;
-}
-
-.workspace-intro-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem 0.85rem;
-  font-size: 0.8rem;
-
-  @include bp.lt(bp.get(sm)) {
-    grid-column: 2;
-  }
-
-  a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.15rem;
-  }
-}
-
-.workspace-intro-links .workspace-icon,
-.workspace-list-title a .workspace-icon {
-  width: 0.85rem;
-  height: 0.85rem;
-}
-
-.workspace-pinned,
-.workspace-recent {
-  margin-top: 1.4rem;
-}
-
-.workspace-home :is(h1, h2, h3) .anchor,
-.workspace-home :is(h1, h2, h3) .anchor + i {
-  display: none;
-}
-
-.workspace-home :is(#recent-title, #pinned-title) {
-  margin: 0;
-  color: var(--heading-color);
-  font-size: 1.15rem;
-  line-height: 1.3;
-  font-weight: 665;
-  letter-spacing: -0.028em;
-}
-
-.workspace-pins {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
-  gap: 0.7rem;
-  margin-top: 0.65rem;
-
-  @include bp.lt(bp.get(sm)) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.workspace-pin {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 0.6rem 0.8rem;
-  min-width: 0;
-  padding: 0.77rem 0.9rem;
-  border: 1px solid var(--main-border-color);
-  border-radius: 0.57rem;
-  background: var(--card-bg);
-  transition: background-color 150ms ease, border-color 150ms ease;
-
-  &:hover,
-  &:focus-within {
-    background: var(--card-hover-bg);
-  }
-
-  &:only-child:has(.workspace-pin-media) {
-    @include bp.sm {
-      grid-template-columns: auto minmax(0, 1fr) auto;
-    }
-  }
-
-  h3 {
-    margin: 0.16rem 0 0;
-    font-size: 1.03rem;
-    font-weight: 660;
-    line-height: 1.35;
-
-    a {
-      color: var(--heading-color);
-
-      &:hover {
-        color: var(--link-color);
-      }
-    }
-
-    .workspace-icon {
-      width: 0.82rem;
-      height: 0.82rem;
-      margin-inline-start: 0.15rem;
-      color: var(--text-muted-color);
-    }
-  }
-
-  p {
-    margin: 0.18rem 0 0;
-    color: var(--text-muted-color);
-    font-size: 0.83rem;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
-  }
-}
-
-.workspace-pin-icon {
-  display: grid;
-  place-items: center;
-  align-self: start;
-  width: 2.2rem;
-  height: 2.2rem;
-  border-radius: 0.52rem;
-  background: var(--workspace-selection);
-  color: var(--workspace-icon);
-}
-
-.workspace-pin-media {
-  display: none;
-
-  @include bp.sm {
-    .workspace-pin:only-child & {
-      display: block;
-      width: clamp(7.4rem, 12vw, 11rem);
-      height: 4.65rem;
-      overflow: hidden;
-      border: 1px solid var(--main-border-color);
-      border-radius: 0.38rem;
-    }
-
-    .preview-img,
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: 0;
-    }
-
-    img {
-      object-fit: cover;
-      object-position: center 40%;
-    }
-  }
-}
-
-.workspace-list-title {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.57rem;
-
-  a {
-    color: var(--text-muted-color);
-    font-size: 0.82rem;
-    white-space: nowrap;
-
-    &:hover {
-      color: var(--link-color);
-    }
-  }
 }
 
 .workspace-column-labels,
@@ -972,6 +775,37 @@ body.workspace #main-wrapper {
   }
 }
 
+.workspace-folder-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+
+  .workspace-icon {
+    width: 1.45rem;
+    height: 1.45rem;
+    color: var(--workspace-icon);
+  }
+}
+
+.workspace-folder[data-section-index] .workspace-file:nth-child(even) {
+  background: var(--workspace-strip);
+
+  &:hover,
+  &:focus-within {
+    background: var(--workspace-hover);
+  }
+}
+
+.workspace-folder-empty {
+  display: flex;
+  align-items: center;
+  gap: 0.48rem;
+
+  .workspace-icon {
+    color: var(--workspace-icon);
+  }
+}
+
 .workspace-filterbar,
 .workspace-filters {
   display: flex;
@@ -1020,7 +854,6 @@ body.workspace #main-wrapper {
   .workspace-tab,
   .workspace-tab-pin,
   .workspace-tab-close,
-  .workspace-pin,
   .workspace-file {
     transition: none;
   }
