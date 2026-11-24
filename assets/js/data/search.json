@@ -40,5 +40,5 @@ swcache: true
     {% assign index_url = index_title | downcase | prepend: '/' | append: '/' %}
     {"type":"page", "title":{{ index_title | jsonify }}, "url":{{ index_url | relative_url | jsonify }}},
   {% endfor %}
-  {"type":"page", "title":"Overview", "tags":"Research Journal 홈", "url":{{ '/' | relative_url | jsonify }}}
+  {"type":"page", "title":"Overview", "tags":{{ site.title | append: ' 홈' | jsonify }}, "url":{{ '/' | relative_url | jsonify }}}
 ]

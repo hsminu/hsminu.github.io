@@ -1,5 +1,6 @@
 import './spotlight.js';
 import './workspace-tabs.js';
+import './section-filter.js';
 
 const sidebar = document.getElementById('sidebar');
 const toggle = document.getElementById('sidebar-trigger');
@@ -10,28 +11,28 @@ const frame = document.querySelector('.workspace-window');
 const skip = document.querySelector('.workspace-skip');
 const spotlight = document.getElementById('workspace-spotlight');
 const isOpen = () => document.body.hasAttribute('sidebar-display');
-const isMobile = () => toggle.getClientRects().length > 0;
+const drawerMode = window.matchMedia('(max-width: 849px)');
+const isMobile = () => drawerMode.matches;
+const isCollapsed = () => frame.hasAttribute('data-sidebar-collapsed');
 
-sidebar.inert = isMobile();
-
-function fitSidebar() {
-  if (isMobile()) return;
-  const top = toolbar.getBoundingClientRect().bottom;
-  const bottom = Math.min(window.innerHeight, frame.getBoundingClientRect().bottom - frame.clientTop);
-  const height = `${Math.max(0, Math.floor(bottom - top))}px`;
-  if (sidebar.style.getPropertyValue('--workspace-sidebar-height') !== height) {
-    sidebar.style.setProperty('--workspace-sidebar-height', height);
-  }
+function syncSidebar() {
+  const expanded = isMobile() ? isOpen() : !isCollapsed();
+  toggle.setAttribute('aria-expanded', String(expanded));
+  sidebar.inert = !expanded;
 }
 
-window.addEventListener('scroll', fitSidebar, { passive: true });
-new ResizeObserver(fitSidebar).observe(frame);
-fitSidebar();
+syncSidebar();
+
+toggle.addEventListener('click', (event) => {
+  if (isMobile()) return;
+  event.stopImmediatePropagation();
+  frame.toggleAttribute('data-sidebar-collapsed');
+  syncSidebar();
+}, { capture: true });
 
 new MutationObserver(() => {
   const open = isOpen();
-  toggle.setAttribute('aria-expanded', String(open));
-  sidebar.inert = !open && isMobile();
+  syncSidebar();
   main.inert = open;
   toolbar.inert = open;
   skip.inert = open;
@@ -42,10 +43,9 @@ new MutationObserver(() => {
   });
 }).observe(document.body, { attributes: true, attributeFilter: ['sidebar-display'] });
 
-window.addEventListener('resize', () => {
+drawerMode.addEventListener('change', () => {
   if (isOpen() && !isMobile()) mask.click();
-  sidebar.inert = !isOpen() && isMobile();
-  fitSidebar();
+  syncSidebar();
 });
 
 document.addEventListener('keydown', (event) => {
@@ -89,4 +89,29 @@ if (toc) {
       toc.querySelector('.is-active-li')?.scrollIntoView({ block: 'center' });
     });
   }
+}
+
+const readingProgress = document.querySelector('[data-reading-progress]');
+const articleBody = document.querySelector('.workspace-document .content');
+if (readingProgress && articleBody?.textContent.trim()) {
+  const statusBar = readingProgress.closest('.workspace-status');
+  const percentage = statusBar.querySelector('[data-reading-percent]');
+  const tabs = document.querySelector('.workspace-tabs');
+  const updateProgress = () => {
+    const article = articleBody.getBoundingClientRect();
+    const readingTop = Math.max(toolbar.getBoundingClientRect().bottom, tabs.getBoundingClientRect().bottom);
+    const readingBottom = Math.min(window.innerHeight, statusBar.getBoundingClientRect().top);
+    const distance = article.height - (readingBottom - readingTop);
+    const value = article.bottom <= readingBottom ? 100 : distance <= 0 ? 0
+      : Math.round(100 * Math.min(1, Math.max(0, (readingTop - article.top) / distance)));
+    if (percentage.textContent === value + '%') return;
+    readingProgress.value = value;
+    percentage.textContent = value + '%';
+    readingProgress.parentElement.hidden = false;
+  };
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  new ResizeObserver(updateProgress).observe(articleBody);
+  updateProgress();
 }

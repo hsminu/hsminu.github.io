@@ -5,16 +5,15 @@ layout: default
 <div class="workspace-home">
   {% if paginator.page == 1 or paginator.page == nil %}
     <header class="workspace-intro">
-      <div>
-        <p class="workspace-path">~/workspace</p>
-        <h1>Research Journal</h1>
+      {% include workspace-monogram.html class='workspace-monogram-large' %}
+      <div class="workspace-intro-text">
+        <h1>{{ site.title | escape }}</h1>
         <p class="workspace-focus">{{ site.tagline | escape }}</p>
-        <p class="workspace-intro-summary">시스템을 분석하며 배운 보안과 개발을 기록합니다.</p>
       </div>
-      <pre class="workspace-intro-code" aria-hidden="true"><span class="workspace-code-comment">; analysis.s</span>
-  mov  eax, 1
-  add  eax, 2
-<span class="workspace-code-current">  ret</span></pre>
+      <nav class="workspace-intro-links" aria-label="프로필 링크">
+        {% if site.github.username %}<a href="https://github.com/{{ site.github.username }}" rel="me">GitHub {% include workspace-icon.html name='outward' %}</a>{% endif %}
+        <a href="{{ '/about/' | relative_url }}">About {% include workspace-icon.html name='chevron' %}</a>
+      </nav>
     </header>
 
     {% assign pinned_count = 0 %}
@@ -24,12 +23,20 @@ layout: default
         {% if post.hidden != true %}
           {% if post.featured == true or post.pinned == true or post.pin == true or pin %}
             {% assign pin_description = pin.description | default: post.description | default: post.excerpt %}
+            {% assign pin_image = nil %}
+            {% if pin.image %}{% assign pin_image = site.static_files | where: 'path', pin.image | first %}{% endif %}
             <article class="workspace-pin">
-              {% if post.categories.size > 0 %}
-                <div class="workspace-topic">{% include workspace-categories.html categories=post.categories %}</div>
+              <span class="workspace-pin-icon">{% include workspace-icon.html name='projects' %}</span>
+              <div class="workspace-pin-body">
+                {% if post.categories.size > 0 %}
+                  <div class="workspace-topic">{% include workspace-categories.html categories=post.categories %}</div>
+                {% endif %}
+                <h3><a href="{{ post.url | relative_url }}">{{ pin.title | default: post.title | escape }} {% include workspace-icon.html name='outward' %}</a></h3>
+                {% if pin_description %}<p>{{ pin_description | markdownify | strip_html | normalize_whitespace | truncate: 135 | escape }}</p>{% endif %}
+              </div>
+              {% if pin_image %}
+                <div class="workspace-pin-media"><img src="{{ pin_image.path | relative_url }}" alt="{{ pin.alt | escape }}" width="144" height="76" decoding="async"></div>
               {% endif %}
-              <h3><a href="{{ post.url | relative_url }}">{{ pin.title | default: post.title | escape }} <span aria-hidden="true">↗</span></a></h3>
-              {% if pin_description %}<p>{{ pin_description | markdownify | strip_html | normalize_whitespace | truncate: 135 | escape }}</p>{% endif %}
             </article>
             {% assign pinned_count = pinned_count | plus: 1 %}
             {% if pinned_count == 3 %}{% break %}{% endif %}
@@ -45,7 +52,7 @@ layout: default
     {% endif %}
   {% endif %}
 
-  <section class="workspace-recent" aria-labelledby="recent-title">
+  <section class="workspace-recent" aria-labelledby="recent-title" data-section-index>
     <header class="workspace-list-title">
       {% if paginator.page > 1 %}
         {% assign file_heading = 2 %}
@@ -54,15 +61,19 @@ layout: default
         {% assign file_heading = 3 %}
         <h2 id="recent-title">Recent Files</h2>
       {% endif %}
-      <a href="{{ '/archives/' | relative_url }}">All posts <span aria-hidden="true">↗</span></a>
+      <a href="{{ '/archives/' | relative_url }}">All posts {% include workspace-icon.html name='chevron' %}</a>
     </header>
-    <div class="workspace-column-labels"><span>이름</span><span>작성일</span></div>
     {% assign recent_posts = paginator.posts | default: site.posts | where_exp: 'file', 'file.hidden != true' %}
-    {% for post in recent_posts %}
-      {% include workspace-file.html post=post level=file_heading show_categories=true %}
+    {% if recent_posts.size > 0 %}
+      {% include workspace-file-columns.html %}
+      <div class="workspace-folder-files">
+        {% for post in recent_posts %}
+          {% include workspace-file.html post=post level=file_heading show_categories=true %}
+        {% endfor %}
+      </div>
     {% else %}
       <p class="workspace-empty">아직 게시된 글이 없어요.</p>
-    {% endfor %}
+    {% endif %}
   </section>
   {% if paginator.total_pages > 1 %}{% include post-paginator.html %}{% endif %}
 </div>

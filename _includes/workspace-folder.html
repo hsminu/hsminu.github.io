@@ -10,33 +10,27 @@
 
 <section class="workspace-folder" data-section-index>
   <header class="workspace-folder-header">
-    <p class="workspace-path"><a href="{{ '/' | relative_url }}">~/workspace</a> <span aria-hidden="true">/</span> {{ page.url | split: '/' | last | escape }}</p>
     <h1>{{ page.title | escape }}</h1>
   </header>
 
-  <div class="workspace-filterbar">
-    {% if section_tags.size > 0 %}
+  {% if section_tags.size > 0 %}
+    <div class="workspace-filterbar">
       <div class="workspace-filters" role="group" aria-label="태그 필터">
         <button type="button" data-section-filter="" aria-pressed="true">전체</button>
         {% for tag in section_tags %}
           <button type="button" data-section-filter="{{ tag | escape }}" aria-pressed="false">{{ tag | escape }}</button>
         {% endfor %}
       </div>
-    {% endif %}
-    <span class="workspace-file-count" role="status">{{ section_posts | size }} {% if section_posts.size == 1 %}file{% else %}files{% endif %}</span>
-  </div>
+    </div>
+  {% endif %}
 
   {% if section_posts.size > 0 %}
-    <div class="workspace-column-labels">
-      <button type="button" data-file-sort="title" aria-pressed="false">이름</button>
-      <button type="button" data-file-sort="date" data-direction="desc" aria-pressed="true" aria-label="작성일 내림차순">작성일</button>
-    </div>
+    {% include workspace-file-columns.html %}
     <div class="workspace-folder-files">
       {% for post in section_posts %}
         {% include workspace-file.html post=post level=2 %}
       {% endfor %}
     </div>
-    <script type="module" src="{{ '/assets/js/section-filter.js' | relative_url }}"></script>
   {% else %}
     <p class="workspace-empty">아직 이 카테고리에 게시된 글이 없어요.</p>
   {% endif %}

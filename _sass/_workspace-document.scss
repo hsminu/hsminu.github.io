@@ -21,23 +21,24 @@
 }
 
 .workspace-post-header {
-  margin-bottom: 1.1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--main-border-color);
+  margin-bottom: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--workspace-row-rule);
 
   > .workspace-topic {
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.52rem;
   }
 
   h1 {
     margin: 0;
     color: var(--heading-color);
-    font-size: clamp(1.95rem, 1.45rem + 2vw, 3.1rem);
-    font-weight: 720;
-    line-height: 1.22;
-    letter-spacing: -0.043em;
+    font-size: clamp(1.72rem, 1.26rem + 1.66vw, 2.72rem);
+    font-weight: 700;
+    line-height: 1.26;
+    letter-spacing: -0.036em;
     word-break: keep-all;
     overflow-wrap: anywhere;
+    text-wrap: balance;
   }
 }
 
@@ -53,7 +54,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.4rem 1rem;
-  margin-top: 1rem;
+  margin-top: 0.76rem;
   color: var(--text-muted-color);
   font-size: 0.76rem;
 
@@ -81,6 +82,7 @@
   margin-top: 1.55rem;
   font-size: clamp(0.99rem, 0.96rem + 0.18vw, 1.07rem);
   line-height: 1.83;
+  color: var(--text-color);
   overflow-wrap: anywhere;
 
   :is(h2, h3, h4, h5, h6) {
@@ -106,7 +108,7 @@
     margin-block: 1.2em;
     padding-block: 0.35rem;
     border-left: 2px solid var(--blockquote-border-color);
-    background: var(--card-bg);
+    background: var(--workspace-strip);
   }
 
   :is(div.highlighter-rouge, figure.highlight, .table-wrapper) {
@@ -127,6 +129,10 @@
     span::before {
       box-shadow: none;
       background: var(--workspace-icon);
+    }
+
+    button:hover {
+      color: var(--link-color);
     }
   }
 
@@ -185,15 +191,21 @@
   animation: none;
   transition: none;
 
+  > * {
+    border-left: 0;
+  }
+
   .panel-heading {
-    color: var(--heading-color);
-    font-size: 0.82rem;
-    font-weight: 650;
+    padding-inline-start: 0.62rem !important;
+    color: var(--text-muted-color);
+    font-size: 0.76rem;
+    font-weight: 630;
   }
 
   .toc-link {
     position: relative;
-    padding: 0.3rem 0.45rem 0.3rem 0.9rem;
+    padding: 0.3rem 0.55rem 0.3rem 0.62rem;
+    border-radius: 0.4rem;
     color: var(--text-muted-color);
     line-height: 1.45;
     white-space: normal;
@@ -207,10 +219,7 @@
       background: var(--workspace-selection);
 
       &::before {
-        position: absolute;
-        inset: 0.3rem auto 0.3rem 0;
-        height: auto;
-        width: 2px;
+        display: none;
       }
     }
   }

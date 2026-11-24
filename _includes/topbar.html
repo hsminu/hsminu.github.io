@@ -1,12 +1,11 @@
 <header class="workspace-toolbar">
-  <div class="workspace-toolbar-start">
-    <button id="sidebar-trigger" class="workspace-icon-button" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="탐색 메뉴">
-      <i class="fa-solid fa-table-columns" aria-hidden="true"></i>
-    </button>
-    <a class="workspace-mark" href="{{ '/' | relative_url }}" aria-label="{{ site.title | escape }} 홈">h<span>.</span></a>
-  </div>
-  <a class="workspace-toolbar-title" href="{{ '/' | relative_url }}">{{ site.title | escape }} <span> / </span> Research Workspace</a>
-  <button class="workspace-icon-button workspace-search-trigger" type="button" data-workspace-search aria-label="검색 열기" aria-keyshortcuts="Meta+K Control+K" aria-haspopup="dialog">
-    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+  <button id="sidebar-trigger" class="workspace-icon-button" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="사이드바 전환" title="사이드바 전환">
+    {% include workspace-icon.html name='layout' %}
+  </button>
+  <a class="workspace-toolbar-title" href="{{ '/' | relative_url }}">
+    {% if page.layout == 'home' or page.layout == 'post' %}{{ site.title | escape }}{% else %}{{ page.title | default: site.title | escape }}{% endif %}
+  </a>
+  <button class="workspace-icon-button workspace-search-trigger" type="button" data-workspace-search aria-label="검색 열기" aria-keyshortcuts="Meta+K Control+K" aria-haspopup="dialog" title="검색">
+    {% include workspace-icon.html name='search' %}
   </button>
 </header>

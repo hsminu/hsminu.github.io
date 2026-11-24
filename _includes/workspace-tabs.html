@@ -14,7 +14,7 @@
 <nav class="workspace-tabs" aria-label="워크스페이스 탭">
   <div class="workspace-tab">
     <a class="workspace-tab-link" href="{{ '/' | relative_url }}"{% if page.layout == 'home' %} aria-current="{% if page.url == '/' %}page{% else %}location{% endif %}"{% endif %}>
-      <i class="fa-regular fa-file-lines" aria-hidden="true"></i><span>overview.md</span>
+      {% include workspace-icon.html name='file' %}<span>overview.md</span>
     </a>
   </div>
   {% unless page.layout == 'home' %}

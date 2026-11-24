@@ -3,8 +3,8 @@
 
 @use 'abstracts/variables' with (
   $theme: '{{ site.theme_mode }}',
-  $sidebar-width: 236px,
-  $sidebar-width-large: 248px,
+  $sidebar-width: 208px,
+  $sidebar-width-large: 218px,
   $font-family-base: (system-ui, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif),
   $font-family-heading: (system-ui, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif)
 );

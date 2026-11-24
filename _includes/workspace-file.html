@@ -1,5 +1,5 @@
 <article class="workspace-file" data-file-date="{{ include.post.date | date: '%s' }}" data-file-title="{{ include.post.title | escape }}">
-  <i class="workspace-file-icon fa-regular fa-file-lines" aria-hidden="true"></i>
+  {% include workspace-icon.html name='file' class='workspace-file-icon' %}
   <div class="workspace-file-body">
     <h{{ include.level }}><a href="{{ include.post.url | relative_url }}">{{ include.post.title | escape }}</a></h{{ include.level }}>
     <div class="workspace-file-meta">
@@ -9,5 +9,5 @@
       {% include workspace-tags.html tags=include.post.tags %}
     </div>
   </div>
-  <time datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: '%Y.%m.%d' }}</time>
+  {% include datetime.html date=include.post.date %}
 </article>

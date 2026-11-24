@@ -1,4 +1,39 @@
-<footer class="workspace-status" aria-label="워크스페이스 정보">
-  <span><i class="fa-solid fa-folder-tree" aria-hidden="true"></i> {% if page.layout == 'home' %}workspace / overview{% elsif page.layout == 'post' %}workspace / posts{% elsif page.category %}workspace / {{ page.category | escape }}{% else %}workspace / {{ page.url | split: '/' | last | escape }}{% endif %}</span>
-  <span>UTF-8 <span aria-hidden="true">·</span> {% if page.layout == 'post' %}Markdown <span aria-hidden="true">·</span> {% endif %}<a href="https://jekyllrb.com">Jekyll</a></span>
+<footer class="workspace-status" aria-label="페이지 상태">
+  {% if page.layout == 'home' %}
+    {% assign public_posts = site.posts | where_exp: 'post', 'post.hidden != true' %}
+    {% assign latest_update = nil %}
+    {% assign latest_timestamp = 0 %}
+    {% for post in public_posts %}
+      {% assign update = post.last_modified_at | default: post.date %}
+      {% assign timestamp = update | date: '%s' | plus: 0 %}
+      {% if latest_update == nil or timestamp > latest_timestamp %}
+        {% assign latest_update = update %}
+        {% assign latest_timestamp = timestamp %}
+      {% endif %}
+    {% endfor %}
+    <span>게시글 {{ public_posts.size }}개</span>
+    {% if latest_update %}<span>최근 업데이트 {% include datetime.html date=latest_update %}</span>{% endif %}
+  {% elsif page.layout == 'section' or page.layout == 'category' %}
+    {% assign category_posts = page.posts %}
+    {% if page.layout == 'section' %}{% assign category_posts = site.categories[page.category] %}{% endif %}
+    {% assign category_posts = category_posts | where_exp: 'post', 'post.hidden != true' %}
+    <span class="workspace-status-label">{{ page.title | escape }}</span>
+    <span class="workspace-status-right" role="status">
+      <span>전체 {{ category_posts | size }}개</span>
+      <span data-filtered-status hidden>필터 결과 <span data-filtered-count></span>개</span>
+    </span>
+  {% elsif page.layout == 'post' %}
+    <span class="workspace-status-label">{% include workspace-categories.html categories=page.categories %}</span>
+    <span class="workspace-status-right">
+      {% assign reading_text = page.content | strip_html | strip %}
+      {% unless reading_text == empty %}
+        <span class="workspace-reading-time">읽기 약 {% include read-time.html content=page.content lang=include.lang %}</span>
+      {% endunless %}
+      <span class="workspace-reading-meter" hidden>
+        <progress data-reading-progress max="100" aria-label="읽기 진행률"></progress><span data-reading-percent aria-hidden="true"></span>
+      </span>
+    </span>
+  {% elsif page.title %}
+    <span class="workspace-status-label">{{ page.title | escape }}</span>
+  {% endif %}
 </footer>

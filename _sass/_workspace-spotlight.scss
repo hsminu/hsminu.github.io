@@ -3,24 +3,35 @@ body:has(.workspace-spotlight[open]) {
 }
 
 .workspace-spotlight {
-  width: min(39rem, calc(100% - 1.5rem));
+  width: min(42rem, calc(100% - 1.5rem));
   max-height: min(37rem, 88dvh);
-  margin: clamp(1rem, 17vh, 11rem) auto auto;
+  margin: clamp(1rem, 14vh, 10rem) auto auto;
   padding: 0;
   overflow: hidden;
   border: 1px solid var(--menu-border-color);
-  border-radius: 0.7rem;
+  border-radius: 0.94rem;
   color: var(--text-color);
-  background: var(--card-bg);
-  box-shadow: 0 12px 36px rgb(0 0 0 / 24%);
+  background: var(--menu-bg);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 19%);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 150ms ease, transform 150ms ease, overlay 150ms allow-discrete, display 150ms allow-discrete;
 
   &[open] {
     display: flex;
     flex-direction: column;
+    opacity: 1;
+    transform: none;
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(4px);
+    }
   }
 
   &::backdrop {
-    background: rgb(12 15 20 / 57%);
+    background: rgb(15 15 18 / 32%);
+    backdrop-filter: blur(3px);
   }
 
   @media (max-width: 575px) {
@@ -33,11 +44,13 @@ body:has(.workspace-spotlight[open]) {
   flex: 0 0 auto;
   align-items: center;
   gap: 0.7rem;
-  padding: 0.65rem 0.8rem 0.65rem 1rem;
+  padding: 0.5rem 0.7rem 0.5rem 0.94rem;
   border-bottom: 1px solid var(--main-border-color);
 
-  > i {
-    color: var(--link-color);
+  > .workspace-icon {
+    width: 1.36rem;
+    height: 1.36rem;
+    color: var(--workspace-icon);
   }
 
   input {
@@ -49,15 +62,16 @@ body:has(.workspace-spotlight[open]) {
     color: var(--heading-color);
     background: none;
     box-shadow: none;
-    font-size: 1.02rem;
+    font-size: 1.09rem;
 
     &::placeholder {
       color: var(--text-muted-color);
       opacity: 1;
     }
 
-    &:focus-visible {
-      outline-offset: -2px;
+    .workspace &:focus-visible {
+      outline: 1px solid var(--link-underline-color);
+      outline-offset: -1px;
     }
 
     &::-webkit-search-cancel-button {
@@ -68,7 +82,7 @@ body:has(.workspace-spotlight[open]) {
 
 .spotlight-status {
   margin: 0;
-  padding: 0.72rem 1.25rem 0.35rem;
+  padding: 0.57rem 1.04rem 0.27rem;
   color: var(--text-muted-color);
   font-size: 0.76rem;
 }
@@ -81,9 +95,13 @@ body:has(.workspace-spotlight[open]) {
   list-style: none;
 
   li {
-    border-radius: 0.35rem;
+    border-radius: 0.45rem;
+    transition: background-color 140ms ease;
 
-    &:hover,
+    &:hover {
+      background: var(--card-hover-bg);
+    }
+
     &[aria-selected='true'] {
       background: var(--workspace-selection);
     }
@@ -91,11 +109,24 @@ body:has(.workspace-spotlight[open]) {
 
   a {
     display: grid;
-    gap: 0.14rem;
-    padding: 0.56rem 0.68rem;
+    grid-template-columns: 1.15rem minmax(0, 1fr);
+    align-items: start;
+    gap: 0.68rem;
+    padding: 0.51rem 0.55rem;
     color: var(--heading-color);
     overflow-wrap: anywhere;
   }
+}
+
+.spotlight-result-icon {
+  margin-top: 0.16rem;
+  color: var(--workspace-icon);
+}
+
+.spotlight-result-text {
+  display: grid;
+  min-width: 0;
+  gap: 0.13rem;
 }
 
 .spotlight-result-title {
@@ -105,7 +136,8 @@ body:has(.workspace-spotlight[open]) {
 
 .spotlight-result-detail {
   color: var(--text-muted-highlight-color);
-  font: 0.71rem/1.4 var(--workspace-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .spotlight-footer {
@@ -127,5 +159,12 @@ body:has(.workspace-spotlight[open]) {
     box-shadow: none;
     color: var(--text-muted-highlight-color);
     font-family: var(--workspace-mono);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace-spotlight,
+  .spotlight-results li {
+    transition: none;
   }
 }

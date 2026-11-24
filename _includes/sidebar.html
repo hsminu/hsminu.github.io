@@ -5,11 +5,19 @@
   <nav class="workspace-sidebar-group" aria-labelledby="workspace-nav-label">
     <p id="workspace-nav-label" class="workspace-nav-label">Workspace</p>
     <a class="workspace-nav-item" href="{{ '/' | relative_url }}"{% if page.layout == 'home' %} aria-current="{% if page.url == '/' %}page{% else %}location{% endif %}"{% endif %}>
-      <i class="fa-solid fa-table-columns" aria-hidden="true"></i><span>Overview</span>
+      {% include workspace-icon.html name='layout' %}<span>Overview</span>
     </a>
     {% for tab in topics %}
       <a class="workspace-nav-item" href="{{ tab.url | relative_url }}"{% if tab.url == page.url %} aria-current="page"{% elsif tab.category == current_topic %} aria-current="location"{% endif %}>
-        <i class="fa-solid fa-folder" aria-hidden="true"></i><span>{{ tab.title | escape }}</span>
+        {% case tab.category %}
+          {% when 'Security Research' %}{% assign sidebar_icon = 'shield' %}
+          {% when 'CTF & Wargame' %}{% assign sidebar_icon = 'flag' %}
+          {% when 'Projects' %}{% assign sidebar_icon = 'projects' %}
+          {% when 'Notes' %}{% assign sidebar_icon = 'notes' %}
+          {% when 'Activities' %}{% assign sidebar_icon = 'trophy' %}
+          {% else %}{% assign sidebar_icon = 'folder' %}
+        {% endcase %}
+        {% include workspace-icon.html name=sidebar_icon %}<span>{{ tab.title | escape }}</span>
       </a>
     {% endfor %}
   </nav>
@@ -17,21 +25,18 @@
   <nav class="workspace-sidebar-group" aria-labelledby="utilities-nav-label">
     <p id="utilities-nav-label" class="workspace-nav-label">Utilities</p>
     <button type="button" class="workspace-nav-item" data-workspace-search aria-haspopup="dialog" aria-keyshortcuts="Meta+K Control+K">
-      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search</span><kbd data-search-shortcut>⌘ K</kbd>
+      {% include workspace-icon.html name='search' %}<span>Search</span><kbd data-search-shortcut>⌘ K</kbd>
     </button>
-    <a class="workspace-nav-item" href="{{ '/archives/' | relative_url }}"{% if page.url == '/archives/' %} aria-current="page"{% endif %}><i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>Archives</span></a>
-    <a class="workspace-nav-item" href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>About</span></a>
+    <a class="workspace-nav-item" href="{{ '/archives/' | relative_url }}"{% if page.url == '/archives/' %} aria-current="page"{% endif %}>{% include workspace-icon.html name='archive' %}<span>Archives</span></a>
+    <a class="workspace-nav-item" href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>{% include workspace-icon.html name='info' %}<span>About</span></a>
   </nav>
 
   <div class="workspace-profile sidebar-bottom">
-    {% if site.avatar %}
-      {% capture avatar_url %}{% include media-url.html src=site.avatar %}{% endcapture %}
-      <img class="workspace-avatar" src="{{ avatar_url | strip }}" width="36" height="36" alt="">
-    {% endif %}
+    {% include workspace-monogram.html %}
     <div class="workspace-profile-name">
       <strong>{{ site.title | escape }}</strong>
       {% assign github_contact = site.data.contact | where: 'type', 'github' | first %}
-      {% if github_contact and site.github.username %}<a href="https://github.com/{{ site.github.username }}" rel="me">GitHub <span aria-hidden="true">↗</span></a>{% endif %}
+      {% if github_contact and site.github.username %}<a href="https://github.com/{{ site.github.username }}" rel="me">GitHub {% include workspace-icon.html name='outward' %}</a>{% endif %}
     </div>
     {% unless site.theme_mode %}
       <div class="btn-group dropup">
