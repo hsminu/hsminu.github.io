@@ -262,7 +262,7 @@ body.workspace {
   flex-direction: column;
   gap: 1.4rem;
   width: 100%;
-  height: max(25rem, calc(100dvh - var(--workspace-toolbar-height) - 2 * var(--workspace-frame) - 2px));
+  height: var(--workspace-sidebar-height, calc(100dvh - var(--workspace-toolbar-height) - 2 * var(--workspace-frame) - 2px));
   padding: 1.35rem 0.78rem 0.8rem;
   border-right: 1px solid var(--main-border-color);
   border-bottom-left-radius: 0.7rem;
@@ -279,6 +279,7 @@ body.workspace {
 
   .workspace-profile.sidebar-bottom {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     gap: 0.6rem;
     margin: auto 0 0;

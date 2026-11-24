@@ -6,12 +6,27 @@ const toggle = document.getElementById('sidebar-trigger');
 const mask = document.getElementById('mask');
 const main = document.getElementById('main-wrapper');
 const toolbar = document.querySelector('.workspace-toolbar');
+const frame = document.querySelector('.workspace-window');
 const skip = document.querySelector('.workspace-skip');
 const spotlight = document.getElementById('workspace-spotlight');
 const isOpen = () => document.body.hasAttribute('sidebar-display');
 const isMobile = () => toggle.getClientRects().length > 0;
 
 sidebar.inert = isMobile();
+
+function fitSidebar() {
+  if (isMobile()) return;
+  const top = toolbar.getBoundingClientRect().bottom;
+  const bottom = Math.min(window.innerHeight, frame.getBoundingClientRect().bottom - frame.clientTop);
+  const height = `${Math.max(0, Math.floor(bottom - top))}px`;
+  if (sidebar.style.getPropertyValue('--workspace-sidebar-height') !== height) {
+    sidebar.style.setProperty('--workspace-sidebar-height', height);
+  }
+}
+
+window.addEventListener('scroll', fitSidebar, { passive: true });
+new ResizeObserver(fitSidebar).observe(frame);
+fitSidebar();
 
 new MutationObserver(() => {
   const open = isOpen();
@@ -30,6 +45,7 @@ new MutationObserver(() => {
 window.addEventListener('resize', () => {
   if (isOpen() && !isMobile()) mask.click();
   sidebar.inert = !isOpen() && isMobile();
+  fitSidebar();
 });
 
 document.addEventListener('keydown', (event) => {
