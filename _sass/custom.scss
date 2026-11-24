@@ -287,6 +287,13 @@
   }
 }
 
+article > header .post-meta {
+  > .d-flex.justify-content-between > span,
+  .readtime {
+    display: none;
+  }
+}
+
 .post-tags .post-tag::before {
   content: '#';
 }
