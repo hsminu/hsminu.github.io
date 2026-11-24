@@ -463,13 +463,17 @@ body.workspace #main-wrapper {
   }
 }
 
+.workspace-tab[data-preview] .workspace-tab-link {
+  font-style: italic;
+}
+
+.workspace-tab-pin,
 .workspace-tab-close {
   display: inline-grid;
   flex-shrink: 0;
   place-items: center;
   width: 1.55rem;
   height: 1.55rem;
-  margin-inline-end: 0.4rem;
   padding: 0;
   border: 0;
   border-radius: 0.28rem;
@@ -483,6 +487,18 @@ body.workspace #main-wrapper {
     color: var(--heading-color);
     background: var(--workspace-hover);
   }
+}
+
+.workspace-tab-pin {
+  font-size: 0.7rem;
+
+  &[aria-pressed='true'] {
+    color: var(--link-color);
+  }
+}
+
+.workspace-tab-close {
+  margin-inline-end: 0.4rem;
 }
 
 .workspace-pane {

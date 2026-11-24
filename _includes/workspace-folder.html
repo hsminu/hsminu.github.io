@@ -33,7 +33,7 @@
     </div>
     <div class="workspace-folder-files">
       {% for post in section_posts %}
-        {% include workspace-file.html post=post level=2 open_in_current_tab=true %}
+        {% include workspace-file.html post=post level=2 %}
       {% endfor %}
     </div>
     <script type="module" src="{{ '/assets/js/section-filter.js' | relative_url }}"></script>
