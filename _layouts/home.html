@@ -1,0 +1,82 @@
+---
+layout: default
+---
+
+<div class="journal-home">
+  {% if paginator.page == 1 or paginator.page == nil %}
+    <header class="journal-intro">
+      <h1>{{ site.title | escape }}</h1>
+      <p class="journal-focus">Security Research <span aria-hidden="true">/</span> Reverse Engineering <span aria-hidden="true">/</span> Development</p>
+      <p class="journal-intro-text">보안 연구와 리버스 엔지니어링을 공부하며, 분석 과정과 개발에서 마주친 문제를 기록합니다.</p>
+      <a class="journal-text-link" href="{{ '/about/' | relative_url }}">소개 더 보기 <span aria-hidden="true">↗</span></a>
+    </header>
+
+    {% capture selected_work %}
+      {% for post in site.posts %}
+        {% assign selection = site.data.featured[post.url] %}
+        {% if post.hidden != true %}
+          {% if selection or post.featured == true %}
+            {% assign feature_summary = selection.description | default: post.description | default: post.excerpt %}
+            {% assign feature_image = site.static_files | where: 'path', selection.image.path | first %}
+            <article class="journal-work{% if feature_image %} journal-work-with-image{% endif %}">
+              <div class="journal-work-text">
+                {% if post.categories.size > 0 %}
+                  <div class="journal-topic">{% include journal-categories.html categories=post.categories %}</div>
+                {% endif %}
+                <h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
+                {% if feature_summary %}
+                  <p>{{ feature_summary | markdownify | strip_html | normalize_whitespace | truncate: 155 | escape }}</p>
+                {% endif %}
+              </div>
+              {% if feature_image %}
+                <img src="{{ feature_image.path | relative_url }}" alt="{{ selection.image.alt | escape }}" class="journal-work-image" width="176" height="132" decoding="async">
+              {% endif %}
+            </article>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endcapture %}
+    {% assign selected_work = selected_work | strip %}
+    {% unless selected_work == empty %}
+      <section class="journal-home-section" aria-labelledby="selected-work-title">
+        <div class="journal-section-heading"><h2 id="selected-work-title">Selected Work</h2></div>
+        {{ selected_work }}
+      </section>
+    {% endunless %}
+  {% endif %}
+
+  <section class="journal-home-section" aria-labelledby="latest-writing-title">
+    <div class="journal-section-heading">
+      {% if paginator.page > 1 %}
+        {% assign writing_title = 'h2' %}
+        <h1 id="latest-writing-title">Latest Writing</h1>
+      {% else %}
+        {% assign writing_title = 'h3' %}
+        <h2 id="latest-writing-title">Latest Writing</h2>
+      {% endif %}
+      <a class="journal-text-link" href="{{ '/archives/' | relative_url }}">전체 글 <span aria-hidden="true">↗</span></a>
+    </div>
+
+    {% assign latest_posts = paginator.posts | default: site.posts | where_exp: 'post', 'post.hidden != true' %}
+    {% for post in latest_posts %}
+      <article class="journal-writing">
+        <div>
+          <{{ writing_title }}><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></{{ writing_title }}>
+          <div class="journal-writing-meta">
+            {% if post.categories.size > 0 %}
+              <div class="journal-topic">{% include journal-categories.html categories=post.categories %}</div>
+            {% endif %}
+            {% include journal-tags.html tags=post.tags %}
+          </div>
+        </div>
+        <time class="journal-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y.%m.%d' }}</time>
+      </article>
+    {% else %}
+      <p class="text-muted mt-3">아직 게시된 글이 없어요.</p>
+    {% endfor %}
+  </section>
+
+  {% if paginator.total_pages > 1 %}
+    {% include post-paginator.html %}
+  {% endif %}
+</div>

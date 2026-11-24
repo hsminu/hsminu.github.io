@@ -1,0 +1,6 @@
+# Featured entries use published post URLs so Notion can regenerate the Markdown.
+/posts/sogeding-2026-award/:
+  description: MCP를 통한 정보 유출을 줄이기 위한 서비스를 만들고, 개발과 보안 검증, 심사 과정에서 배운 점을 정리했습니다.
+  image:
+    path: /assets/img/posts/notion/sogeding-2026-award/4aa2336a392601bdc151d7781bf88c00bbdd4007fd2c9bc0ffffe0ebb70c5e83.jpg
+    alt: 대회에서 발표한 MCP Runtime Guard 포스터

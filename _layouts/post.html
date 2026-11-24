@@ -1,0 +1,112 @@
+---
+layout: default
+panel_includes:
+  - toc
+tail_includes:
+  - related-posts
+  - post-nav
+script_includes:
+  - comment
+---
+
+{% include lang.html %}
+
+{% include toc-status.html %}
+
+<article class="journal-article" data-toc="{{ enable_toc }}">
+  <header class="journal-post-header">
+    {% if page.categories.size > 0 %}
+      <div class="journal-topic">{% include journal-categories.html categories=page.categories %}</div>
+    {% endif %}
+
+    <h1 data-toc-skip>{{ page.title | escape }}</h1>
+    {% if page.description %}
+      <p class="journal-post-description">{{ page.description | escape }}</p>
+    {% endif %}
+
+    <div class="journal-post-meta post-meta">
+      <span>{% include datetime.html date=page.date tooltip=true lang=lang %}</span>
+      {% assign published_day = page.date | date: '%F' %}
+      {% assign updated_day = page.last_modified_at | date: '%F' %}
+      {% if updated_day and updated_day != published_day %}
+        <span class="journal-updated">
+          {{ site.data.locales[lang].post.updated }}
+          {% include datetime.html date=page.last_modified_at tooltip=true lang=lang %}
+        </span>
+      {% endif %}
+      {% if site.pageviews.provider and site.analytics[site.pageviews.provider].id %}
+        <span>
+          <em id="pageviews"><i class="fas fa-spinner fa-spin small"></i></em>
+          {{ site.data.locales[lang].post.pageview_measure }}
+        </span>
+      {% endif %}
+      {% include journal-tags.html tags=page.tags %}
+    </div>
+
+    {% if page.image %}
+      {% capture src %}src="{{ page.image.path | default: page.image }}"{% endcapture %}
+      {% capture class %}class="preview-img{% if page.image.no_bg %}{{ ' no-bg' }}{% endif %}"{% endcapture %}
+      {% capture alt %}alt="{{ page.image.alt | xml_escape | default: 'Preview Image' }}"{% endcapture %}
+      {% if page.image.lqip %}
+        {%- capture lqip -%}lqip="{{ page.image.lqip }}"{%- endcapture -%}
+      {% endif %}
+      <figure class="journal-post-cover">
+        <img {{ src }} {{ class }} {{ alt }} w="1200" h="630" {{ lqip }}>
+        {% if page.image.alt %}<figcaption>{{ page.image.alt | escape }}</figcaption>{% endif %}
+      </figure>
+    {% endif %}
+  </header>
+
+  {% if enable_toc %}
+    <div id="toc-bar" class="d-flex align-items-center justify-content-between invisible">
+      <span class="label text-truncate">{{ page.title }}</span>
+      <button type="button" class="btn me-1" data-journal-toc-trigger aria-label="목차 열기" aria-haspopup="dialog" aria-controls="toc-popup">
+        <i class="fa-solid fa-list-ul fa-fw"></i>
+      </button>
+    </div>
+
+    <button id="toc-solo-trigger" type="button" class="btn btn-outline-secondary btn-sm" data-journal-toc-trigger aria-haspopup="dialog" aria-controls="toc-popup">
+      <span class="label ps-2 pe-1">{{- site.data.locales[lang].panel.toc -}}</span>
+      <i class="fa-solid fa-angle-right fa-fw"></i>
+    </button>
+
+    <dialog id="toc-popup" class="p-0" aria-label="목차">
+      <div class="header d-flex flex-row align-items-center justify-content-between">
+        <div class="label text-truncate py-2 ms-4">{{- page.title -}}</div>
+        <button id="toc-popup-close" type="button" class="btn-close btn-sm mx-3" aria-label="목차 닫기" autofocus></button>
+      </div>
+      <div id="toc-popup-content" class="px-4 py-3 pb-4"></div>
+    </dialog>
+  {% endif %}
+
+  <div class="content">
+    {{ content }}
+  </div>
+
+  <div class="post-tail-wrapper text-muted">
+    {% include post-edit.html lang=lang %}
+
+    <div
+      class="
+        post-tail-bottom
+        d-flex justify-content-between align-items-center mt-5 pb-2
+      "
+    >
+      <div class="license-wrapper">
+        {% if site.data.locales[lang].copyright.license.template %}
+          {% capture _replacement %}
+        <a href="{{ site.data.locales[lang].copyright.license.link }}">
+          {{ site.data.locales[lang].copyright.license.name }}
+        </a>
+        {% endcapture %}
+
+          {{ site.data.locales[lang].copyright.license.template | replace: ':LICENSE_NAME', _replacement }}
+        {% endif %}
+      </div>
+
+      {% include post-sharing.html lang=lang %}
+    </div>
+    <!-- .post-tail-bottom -->
+  </div>
+  <!-- div.post-tail-wrapper -->
+</article>

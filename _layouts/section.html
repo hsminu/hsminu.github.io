@@ -24,7 +24,7 @@ layout: page
     <span class="section-count" role="status">{{ section_posts | size }} {% if section_posts.size == 1 %}post{% else %}posts{% endif %}</span>
   </div>
 
-  {% if section_posts and section_posts.size > 0 %}
+  {% if section_posts.size > 0 %}
     {% assign section_posts = section_posts | sort: 'date' | reverse %}
     {% for post in section_posts %}
       <article class="section-post">
@@ -41,6 +41,8 @@ layout: page
         {% endif %}
       </article>
     {% endfor %}
+  {% else %}
+    <p class="text-muted mt-3">아직 이 카테고리에 게시된 글이 없어요.</p>
   {% endif %}
 </div>
 

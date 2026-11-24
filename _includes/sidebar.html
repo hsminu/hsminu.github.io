@@ -1,15 +1,13 @@
-<aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
+<aside aria-label="사이트 탐색" id="sidebar" class="d-flex flex-column">
   <header class="profile-wrapper">
-    <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle" aria-label="{{ site.title | escape }} 홈">
+    <a class="sidebar-brand" href="{{ '/' | relative_url }}"{% if page.url == '/' %} aria-current="page"{% endif %}>
       {% if site.avatar %}
         {% capture avatar_url %}{% include media-url.html src=site.avatar %}{% endcapture %}
-        <img src="{{ avatar_url | strip }}" width="72" height="72" alt="{{ site.title | escape }} 프로필">
+        <span id="avatar" class="rounded-circle"><img src="{{ avatar_url | strip }}" width="40" height="40" alt=""></span>
       {% endif %}
+      <span class="site-title">{{ site.title | escape }}</span>
     </a>
-    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title | escape }}</a>
-    {% assign focus_areas = site.tagline | split: ' · ' %}
-    <p class="site-subtitle mb-0">{% for focus in focus_areas %}{% unless forloop.first %} · {% endunless %}<span class="profile-focus">{{ focus | escape }}</span>{% endfor %}</p>
-
+    <p class="site-subtitle mb-0">보안 연구와 개발 기록</p>
   </header>
 
   <nav class="w-100" aria-label="카테고리">
@@ -26,13 +24,13 @@
     </ul>
   </nav>
 
-  <div class="sidebar-utilities w-100">
+  <div class="sidebar-utilities">
     <nav class="sidebar-shortcuts" aria-label="바로가기">
       <a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>About</a>
       <a href="{{ '/archives/' | relative_url }}"{% if page.url == '/archives/' %} aria-current="page"{% endif %}>Archives</a>
     </nav>
 
-    <div class="sidebar-bottom d-flex flex-wrap align-items-center">
+    <div class="sidebar-bottom d-flex align-items-center">
       <div class="btn-group dropup">
         <button type="button" class="btn btn-link nav-link" id="mode-toggle" aria-label="테마 변경" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="fa-regular fa-sun" data-theme-mode="light" aria-hidden="true"></i>
@@ -47,7 +45,9 @@
       </div>
       {% for entry in site.data.contact %}
         {% if entry.type == 'github' and site.github.username %}
-          <a href="https://github.com/{{ site.github.username }}" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener noreferrer"><i class="{{ entry.icon }}" aria-hidden="true"></i></a>
+          <a class="sidebar-external" href="https://github.com/{{ site.github.username }}" target="_blank" rel="me noopener noreferrer">
+            <i class="{{ entry.icon }}" aria-hidden="true"></i> GitHub <span aria-hidden="true">↗</span>
+          </a>
         {% endif %}
       {% endfor %}
     </div>
