@@ -1,4 +1,5 @@
 @use 'abstracts/breakpoints' as bp;
+@use 'abstracts/variables' as theme;
 
 .workspace-pane-document {
   @include bp.xl {
@@ -152,6 +153,16 @@
   }
 }
 
+.workspace-document .content :is(h2, h3, h4)[id] {
+  scroll-margin-top: calc(var(--workspace-header-height) + 1rem);
+}
+
+@include bp.lt(bp.get(xl)) {
+  .workspace-document[data-toc='true'] .content :is(h2, h3, h4)[id] {
+    scroll-margin-top: calc(var(--workspace-header-height) + #{theme.$topbar-height} + 1rem);
+  }
+}
+
 .workspace-document .post-tail-wrapper {
   margin-top: 3rem;
 }
@@ -167,8 +178,8 @@
 }
 
 .workspace #panel-wrapper #toc-wrapper {
-  top: 1.35rem;
-  max-height: calc(100dvh - 2.7rem);
+  top: calc(var(--workspace-header-height) + 1.35rem);
+  max-height: calc(100dvh - var(--workspace-header-height) - 2.7rem);
   margin-top: 0.35rem;
   padding-right: 0.12rem !important;
   animation: none;
@@ -206,7 +217,12 @@
 }
 
 .workspace-document #toc-bar {
+  top: var(--workspace-header-height);
   margin-inline: 0;
+
+  &.invisible {
+    top: calc(var(--workspace-header-height) - #{theme.$topbar-height});
+  }
 }
 
 .workspace #toc-solo-trigger {

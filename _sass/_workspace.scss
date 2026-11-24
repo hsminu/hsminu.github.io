@@ -6,6 +6,8 @@
 :root {
   --workspace-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Apple SD Gothic Neo', 'Malgun Gothic', monospace;
   --workspace-toolbar-height: 3.2rem;
+  --workspace-tabs-height: 2.6rem;
+  --workspace-header-height: calc(var(--workspace-toolbar-height) + var(--workspace-tabs-height));
   --workspace-frame: clamp(0.6rem, 1.1vw, 1.2rem);
   --workspace-gutter: clamp(1.25rem, 4vw, 4.25rem);
   --workspace-sidebar-width: #{theme.$sidebar-width};
@@ -162,10 +164,13 @@ body.workspace {
 
 .workspace-toolbar {
   grid-area: toolbar;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
   display: grid;
   grid-template-columns: minmax(3.75rem, 1fr) auto minmax(3.75rem, 1fr);
   align-items: center;
-  min-height: var(--workspace-toolbar-height);
+  height: var(--workspace-toolbar-height);
   padding-inline: 0.7rem;
   border-bottom: 1px solid var(--main-border-color);
   border-radius: 0.7rem 0.7rem 0 0;
@@ -251,7 +256,7 @@ body.workspace {
 .workspace #sidebar {
   grid-area: sidebar;
   position: sticky;
-  top: 0;
+  top: var(--workspace-toolbar-height);
   align-self: start;
   display: flex;
   flex-direction: column;
@@ -265,6 +270,7 @@ body.workspace {
 
   @include bp.lt(bp.get(lg)) {
     position: fixed;
+    top: 0;
     z-index: 1041 !important;
     width: var(--workspace-sidebar-width);
     height: 100dvh;
@@ -414,11 +420,15 @@ body.workspace #main-wrapper {
 }
 
 .workspace-tabs {
+  position: sticky;
+  top: var(--workspace-toolbar-height);
+  z-index: 1020;
   display: flex;
+  flex-shrink: 0;
   align-items: stretch;
   overflow-x: auto;
   scrollbar-width: thin;
-  min-height: 2.6rem;
+  height: var(--workspace-tabs-height);
   border-bottom: 1px solid var(--main-border-color);
   background: var(--workspace-strip);
 }
@@ -511,6 +521,7 @@ body.workspace #main-wrapper {
 
   main {
     min-width: 0;
+    scroll-margin-top: var(--workspace-header-height);
   }
 
   article > h1.dynamic-title,

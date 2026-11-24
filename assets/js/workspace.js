@@ -39,6 +39,32 @@ document.addEventListener('keydown', (event) => {
 // Chirpy renders and closes the mobile TOC. Its opener assumes an active entry.
 const toc = document.getElementById('toc-popup');
 if (toc) {
+  const desktopToc = window.matchMedia('(min-width: 1200px)');
+  const heading = document.querySelector('.workspace-document .content :is(h2, h3, h4)[id]');
+  const refreshToc = () => {
+    if (!heading) return;
+    const anchorOffset = parseFloat(getComputedStyle(heading).scrollMarginTop);
+    window.tocbot?.refresh({
+      tocSelector: desktopToc.matches ? '#toc' : '#toc-popup-content',
+      contentSelector: '.workspace-document .content',
+      headingSelector: 'h2, h3, h4',
+      ignoreSelector: '[data-toc-skip]',
+      orderedList: false,
+      scrollSmooth: false,
+      collapseDepth: desktopToc.matches ? 0 : 4,
+      headingsOffset: Math.ceil(anchorOffset) + 2,
+    });
+  };
+  refreshToc();
+  desktopToc.addEventListener('change', refreshToc);
+
+  // The regenerated links still use Chirpy's dialog close handler.
+  toc.addEventListener('click', (event) => {
+    if (event.target.closest('.toc-link') && !toc.hasAttribute('closing')) {
+      toc.querySelector('#toc-popup-close').click();
+    }
+  });
+
   for (const button of document.querySelectorAll('[data-workspace-toc-trigger]')) {
     button.addEventListener('click', () => {
       document.documentElement.classList.add('overflow-hidden');
