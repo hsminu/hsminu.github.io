@@ -4,7 +4,7 @@ layout: default
 
 <section class="workspace-folder workspace-archive" aria-labelledby="archives">
   <h1 id="archives">{{ page.ui_title | default: page.title | escape }}</h1>
-  {% assign public_posts = site.posts | where_exp: 'post', 'post.hidden != true' %}
+  {% assign public_posts = site.data.workspace_public_posts %}
   {% assign years = public_posts | group_by_exp: 'post', "post.date | date: '%Y'" %}
   {% for year in years %}
     <h2>{{ year.name }}</h2>

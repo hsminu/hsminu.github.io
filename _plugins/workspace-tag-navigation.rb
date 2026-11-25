@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "digest"
+require "set"
 
 class WorkspaceTagNavigation < Jekyll::Generator
   safe true
@@ -9,13 +10,21 @@ class WorkspaceTagNavigation < Jekyll::Generator
   COLORS = %w[red orange yellow green blue purple gray].freeze
 
   def generate(site)
+    public_posts = site.posts.docs.select do |post|
+      post.published? && !post.draft? && post.date <= site.time &&
+        post.data["hidden"] != true && post.data["private"] != true
+    end.sort.reverse.uniq(&:url)
+    site.data["workspace_public_posts"] = public_posts
+    public_lookup = public_posts.to_set
+    # Keep generated archive URLs while sharing the published set with Chirpy's category lists.
+    site.categories.transform_values! { |posts| posts.select { |post| public_lookup.include?(post) }.uniq }
+    site.categories.delete_if { |_, posts| posts.empty? }
+
     overrides = site.data["tag_colors"] || {}
     tags = Array(site.config["archives"]).filter_map do |archive|
       next unless archive.type == "tag"
 
-      posts = archive.posts.select do |post|
-        post.published? && !post.draft? && post.data["hidden"] != true && post.date <= site.time
-      end.uniq
+      posts = archive.posts.select { |post| public_lookup.include?(post) }.uniq
       archive.data["workspace_tag_posts"] = posts
 
       name = archive.title

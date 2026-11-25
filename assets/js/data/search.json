@@ -1,44 +1,71 @@
 ---
 layout: compress
-swcache: true
 ---
 [
-  {% assign indexed_posts = site.posts | where_exp: 'post', 'post.hidden != true' %}
-  {% for post in indexed_posts %}
+  {% assign indexed_urls = '/' | split: '|' %}
+  {% for post in site.data.workspace_public_posts %}
   {
     "type": "post",
     "title": {{ post.title | jsonify }},
     "url": {{ post.url | relative_url | jsonify }},
-    "categories": {{ post.categories | join: ', ' | jsonify }},
-    "tags": {{ post.tags | join: ', ' | jsonify }},
+    "categories": {{ post.categories | jsonify }},
+    "tags": {{ post.tags | jsonify }},
     "date": {{ post.date | date: '%Y.%m.%d' | jsonify }},
+    "timestamp": {{ post.date | date: '%s' | plus: 0 }},
     {% capture search_content %}{% include post-summary.html full_text=true %}{% endcapture %}
-    "content": {{ search_content | jsonify }}
+    "content": {{ search_content | normalize_whitespace | jsonify }}
   },
+    {% assign indexed_urls = indexed_urls | push: post.url %}
   {% endfor %}
+
   {% for tab in site.tabs %}
-    {% if tab.layout == 'section' %}
-      {"type":"category", "title":{{ tab.title | jsonify }}, "url":{{ tab.url | relative_url | jsonify }}},
-    {% else %}
-      {"type":"page", "title":{{ tab.ui_title | default: tab.title | jsonify }}, "url":{{ tab.url | relative_url | jsonify }}, "tags":{{ tab.url | replace: '/', ' ' | append: tab.title | jsonify }}},
-    {% endif %}
-  {% endfor %}
-  {% assign extra_pages = site.pages | where_exp: 'item', 'item.layout == "page" or item.search == true' | where_exp: 'item', 'item.title and item.search != false and item.url != "/404.html"' %}
-  {% for entry in extra_pages %}
-    {"type":"page", "title":{{ entry.title | jsonify }}, "url":{{ entry.url | relative_url | jsonify }}},
-  {% endfor %}
-  {% for category in site.categories %}
-    {% assign category_name = category[0] %}
-    {% assign category_tab = site.tabs | where: 'category', category_name | first %}
-    {% unless category_tab %}
-      {% assign category_url = category_name | slugify | url_encode | prepend: '/categories/' | append: '/' %}
-      {"type":"category", "title":{{ category_name | jsonify }}, "url":{{ category_url | relative_url | jsonify }}},
+    {% unless tab.search == false or indexed_urls contains tab.url %}
+      {
+        "type": "{% if tab.layout == 'section' %}category{% else %}page{% endif %}",
+        "title": {{ tab.ui_title | default: tab.title | jsonify }},
+        "url": {{ tab.url | relative_url | jsonify }},
+        "keywords": {{ tab.title | jsonify }},
+        "content": {{ tab.description | default: '' | strip_html | normalize_whitespace | jsonify }}
+      },
+      {% assign indexed_urls = indexed_urls | push: tab.url %}
     {% endunless %}
   {% endfor %}
-  {% assign indexes = 'Archives,Categories,Tags' | split: ',' %}
-  {% for index_title in indexes %}
-    {% assign index_url = index_title | downcase | prepend: '/' | append: '/' %}
-    {"type":"page", "title":{{ index_title | jsonify }}, "url":{{ index_url | relative_url | jsonify }}},
+
+  {% assign category_pages = site.pages | where: 'layout', 'category' %}
+  {% for category in category_pages %}
+    {% assign category_tab = site.tabs | where: 'category', category.title | first %}
+    {% assign public_count = site.categories[category.title] | size %}
+    {% if public_count > 0 and category_tab == nil %}
+      {% unless indexed_urls contains category.url %}
+        {"type":"category", "title":{{ category.title | jsonify }}, "url":{{ category.url | relative_url | jsonify }}},
+        {% assign indexed_urls = indexed_urls | push: category.url %}
+      {% endunless %}
+    {% endif %}
   {% endfor %}
-  {"type":"page", "title":"Overview", "tags":{{ site.title | append: ' 홈' | jsonify }}, "url":{{ '/' | relative_url | jsonify }}}
+
+  {% for tag in site.data.workspace_tags %}
+    {% unless indexed_urls contains tag.url %}
+      {"type":"tag", "title":{{ tag.name | jsonify }}, "url":{{ tag.url | relative_url | jsonify }}, "count":{{ tag.count }}},
+      {% assign indexed_urls = indexed_urls | push: tag.url %}
+    {% endunless %}
+  {% endfor %}
+
+  {% assign page_layouts = 'page,archives,categories,tags' | split: ',' %}
+  {% for entry in site.pages %}
+    {% if page_layouts contains entry.layout or entry.search == true %}
+      {% unless indexed_urls contains entry.url or entry.search == false or entry.title == nil or entry.url == '/404.html' %}
+        {
+          "type":"page",
+          "title":{{ entry.ui_title | default: entry.title | jsonify }},
+          "url":{{ entry.url | relative_url | jsonify }},
+          "keywords":{{ entry.title | jsonify }},
+          {% if entry.layout == 'tags' %}"quickOrder":2, "quickTitle":"All Tags", "icon":"all-tags",{% endif %}
+          "content":{{ entry.description | default: '' | strip_html | normalize_whitespace | jsonify }}
+        },
+        {% assign indexed_urls = indexed_urls | push: entry.url %}
+      {% endunless %}
+    {% endif %}
+  {% endfor %}
+
+  {"type":"page", "title":"Overview", "keywords":{{ site.title | append: ' 홈' | jsonify }}, "url":{{ '/' | relative_url | jsonify }}}
 ]

@@ -4,10 +4,9 @@ const page = bar.querySelector('[data-open-tab] a');
 const current = page && {
   path: page.pathname,
   label: page.textContent.trim(),
-  post: page.hasAttribute('data-post-tab'),
 };
 const storageKey = `workspace-tabs:${home.pathname}`;
-let pinnedTabs = [];
+let retainedTabs = [];
 let preview = null;
 
 function isWorkspaceTab(tab) {
@@ -21,31 +20,35 @@ function isWorkspaceTab(tab) {
 function restoreTabs() {
   try {
     const stored = JSON.parse(sessionStorage.getItem(storageKey));
+    const oldPins = Array.isArray(stored?.pinned) ? stored.pinned : [];
+    const retained = Array.isArray(stored?.retained)
+      ? stored.retained.filter(isWorkspaceTab)
+      : oldPins.filter(isWorkspaceTab).map(tab => ({ ...tab, pinned: true }));
     return {
-      pinned: Array.isArray(stored?.pinned) ? stored.pinned.filter((tab) => isWorkspaceTab(tab) && tab.post) : [],
-      preview: isWorkspaceTab(stored?.preview) ? stored.preview : null,
+      retained,
+      preview: isWorkspaceTab(stored?.preview) && !retained.some(tab => tab.path === stored.preview.path) ? stored.preview : null,
     };
   } catch {
-    return { pinned: [], preview: null };
+    return { retained: [], preview: null };
   }
 }
 
 function saveTabs() {
   try {
-    sessionStorage.setItem(storageKey, JSON.stringify({ pinned: pinnedTabs, preview }));
+    sessionStorage.setItem(storageKey, JSON.stringify({ retained: retainedTabs, preview }));
   } catch {
     // The current page still works when the browser blocks session storage.
   }
 }
 
 function visibleTabs() {
-  return preview ? [...pinnedTabs, preview] : pinnedTabs;
+  return preview ? [...retainedTabs, preview] : retainedTabs;
 }
 
 function closeTab(path) {
   const previous = visibleTabs();
   const index = previous.findIndex((tab) => tab.path === path);
-  pinnedTabs = pinnedTabs.filter((tab) => tab.path !== path);
+  retainedTabs = retainedTabs.filter((tab) => tab.path !== path);
   if (preview?.path === path) preview = null;
   saveTabs();
 
@@ -57,13 +60,12 @@ function closeTab(path) {
   }
 }
 
-function togglePin(tab, pinned) {
-  if (pinned) {
-    pinnedTabs = pinnedTabs.filter((entry) => entry.path !== tab.path);
-    if (tab.path === current?.path) preview = tab;
-  } else {
-    pinnedTabs.push(tab);
+function togglePin(tab) {
+  if (tab === preview) {
+    retainedTabs.push({ ...tab, pinned: true });
     preview = null;
+  } else {
+    tab.pinned = !tab.pinned;
   }
   saveTabs();
   const active = renderTabs();
@@ -83,7 +85,7 @@ function createPinButton(tab, pinned) {
   icon.className = 'fa-solid fa-thumbtack';
   icon.setAttribute('aria-hidden', 'true');
   pin.append(icon);
-  pin.addEventListener('click', () => togglePin(tab, pinned));
+  pin.addEventListener('click', () => togglePin(tab));
   return pin;
 }
 
@@ -92,12 +94,12 @@ function renderTabs() {
   let active = home;
 
   for (const tab of visibleTabs()) {
-    const { path, label, post } = tab;
-    const pinned = tab !== preview;
+    const { path, label } = tab;
+    const pinned = tab !== preview && tab.pinned === true;
     const item = document.createElement('div');
     item.className = 'workspace-tab';
     item.setAttribute('data-open-tab', '');
-    item.toggleAttribute('data-preview', !pinned);
+    item.toggleAttribute('data-preview', tab === preview);
     const link = document.createElement('a');
     link.className = 'workspace-tab-link';
     link.href = path;
@@ -117,9 +119,7 @@ function renderTabs() {
       active = link;
     }
 
-    item.append(link);
-    if (post) item.append(createPinButton(tab, pinned));
-    item.append(close);
+    item.append(link, createPinButton(tab, pinned), close);
     bar.append(item);
   }
 
@@ -132,9 +132,9 @@ function renderTabs() {
 
 function syncTabs() {
   const stored = restoreTabs();
-  pinnedTabs = stored.pinned;
+  retainedTabs = stored.retained;
   preview = stored.preview;
-  if (current && !pinnedTabs.some((tab) => tab.path === current.path)) preview = current;
+  if (current && !retainedTabs.some((tab) => tab.path === current.path)) preview = current;
   saveTabs();
   renderTabs();
 }

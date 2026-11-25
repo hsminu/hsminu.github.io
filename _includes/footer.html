@@ -1,6 +1,6 @@
 <footer class="workspace-status" aria-label="Page status">
   {% if page.layout == 'home' %}
-    {% assign public_posts = site.posts | where_exp: 'post', 'post.hidden != true' %}
+    {% assign public_posts = site.data.workspace_public_posts %}
     {% assign post_count = public_posts | size %}
     {% assign latest_update = nil %}
     {% assign latest_timestamp = 0 %}
@@ -15,9 +15,8 @@
     <span>{{ post_count }} post{% unless post_count == 1 %}s{% endunless %}</span>
     {% if latest_update %}<span>Last updated {% include datetime.html date=latest_update %}</span>{% endif %}
   {% elsif page.layout == 'section' or page.layout == 'category' %}
-    {% assign category_posts = page.posts %}
-    {% if page.layout == 'section' %}{% assign category_posts = site.categories[page.category] %}{% endif %}
-    {% assign category_posts = category_posts | where_exp: 'post', 'post.hidden != true' %}
+    {% assign category_name = page.category | default: page.title %}
+    {% assign category_posts = site.categories[category_name] %}
     {% assign post_count = category_posts | size %}
     <span class="workspace-status-label">{{ page.title | escape }}</span>
     <span class="workspace-status-right" role="status">

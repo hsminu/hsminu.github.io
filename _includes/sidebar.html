@@ -4,11 +4,11 @@
   {% if page.layout == 'category' %}{% assign current_topic = page.title %}{% endif %}
   <nav class="workspace-sidebar-group" aria-labelledby="workspace-nav-label">
     <p id="workspace-nav-label" class="workspace-nav-label">Workspace</p>
-    <a class="workspace-nav-item" href="{{ '/' | relative_url }}"{% if page.layout == 'home' %} aria-current="{% if page.url == '/' %}page{% else %}location{% endif %}"{% endif %}>
-      {% include workspace-icon.html name='layout' %}<span>Overview</span>
+    <a class="workspace-nav-item" href="{{ '/' | relative_url }}" data-spotlight-nav="0"{% if page.layout == 'home' %} aria-current="{% if page.url == '/' %}page{% else %}location{% endif %}"{% endif %}>
+      <i class="workspace-icon fa-solid fa-display" aria-hidden="true"></i><span>Overview</span>
     </a>
     {% for tab in topics %}
-      <a class="workspace-nav-item" href="{{ tab.url | relative_url }}"{% if tab.url == page.url %} aria-current="page"{% elsif tab.category == current_topic %} aria-current="location"{% endif %}>
+      <a class="workspace-nav-item" href="{{ tab.url | relative_url }}" data-spotlight-nav="0"{% if tab.url == page.url %} aria-current="page"{% elsif tab.category == current_topic %} aria-current="location"{% endif %}>
         {% case tab.category %}
           {% when 'Security Research' %}{% assign sidebar_icon = 'shield' %}
           {% when 'CTF & Wargame' %}{% assign sidebar_icon = 'flag' %}
@@ -22,13 +22,13 @@
     {% endfor %}
   </nav>
 
-  <nav class="workspace-sidebar-group" aria-labelledby="utilities-nav-label">
-    <p id="utilities-nav-label" class="workspace-nav-label">Utilities</p>
-    <button type="button" class="workspace-nav-item" data-workspace-search aria-haspopup="dialog">
+  <nav class="workspace-sidebar-group" aria-labelledby="general-nav-label">
+    <p id="general-nav-label" class="workspace-nav-label">General</p>
+    <button type="button" class="workspace-nav-item" data-workspace-search aria-haspopup="dialog" aria-keyshortcuts="Meta+K Control+K">
       {% include workspace-icon.html name='search' %}<span>Search</span>
     </button>
-    <a class="workspace-nav-item" href="{{ '/archives/' | relative_url }}"{% if page.url == '/archives/' %} aria-current="page"{% endif %}>{% include workspace-icon.html name='archive' %}<span>Archives</span></a>
-    <a class="workspace-nav-item" href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% elsif page.layout == 'history' %} aria-current="location"{% endif %}>{% include workspace-icon.html name='info' %}<span>About</span></a>
+    <a class="workspace-nav-item" href="{{ '/archives/' | relative_url }}" data-spotlight-nav="1"{% if page.url == '/archives/' %} aria-current="page"{% endif %}>{% include workspace-icon.html name='archive' %}<span>Archives</span></a>
+    <a class="workspace-nav-item" href="{{ '/about/' | relative_url }}" data-spotlight-nav="3"{% if page.url == '/about/' %} aria-current="page"{% elsif page.layout == 'history' %} aria-current="location"{% endif %}>{% include workspace-icon.html name='info' %}<span>About</span></a>
   </nav>
 
   {% if site.data.workspace_tags.size > 0 %}
@@ -37,11 +37,14 @@
       {% for tag in site.data.workspace_tags limit: 4 %}
         <a class="workspace-nav-item" href="{{ tag.url | relative_url }}" title="{{ tag.name | escape }}"{% if page.layout == 'tag' and page.title == tag.name %} aria-current="page"{% endif %}>
           {% include workspace-tag-dot.html %}
-          <span class="workspace-sidebar-tag-name">{{ tag.name | escape }}</span>
+          <span class="workspace-sidebar-tag-label">
+            <span class="workspace-sidebar-tag-name">{{ tag.name | escape }}</span>
+            <span class="workspace-sidebar-tag-count">{{ tag.count }}<span class="visually-hidden"> post{% unless tag.count == 1 %}s{% endunless %}</span></span>
+          </span>
         </a>
       {% endfor %}
-      <a class="workspace-nav-item" href="{{ '/tags/' | relative_url }}" aria-label="All tags"{% if page.url == '/tags/' %} aria-current="page"{% endif %}>
-        {% include workspace-icon.html name='all-tags' class='workspace-all-tags-icon' %}<span>All</span>
+      <a class="workspace-nav-item" href="{{ '/tags/' | relative_url }}" data-spotlight-nav="2" data-spotlight-title="All Tags"{% if page.url == '/tags/' %} aria-current="page"{% endif %}>
+        {% include workspace-icon.html name='all-tags' class='workspace-all-tags-icon' %}<span>All Tags...</span>
       </a>
     </nav>
   {% endif %}

@@ -42,6 +42,23 @@ $finder-tag-colors: #ff685d, #fff62a, #57fc70, #2ba5ff;
   }
 }
 
+.workspace-sidebar-tag-label {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.workspace-sidebar-tag-count {
+  flex: none;
+  color: var(--text-muted-color);
+  font-size: 0.72rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
 .workspace-sidebar-tag-name,
 .workspace-tag-name {
   min-width: 0;

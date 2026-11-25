@@ -25,14 +25,17 @@ layout: default
         {% assign journal_heading = 2 %}
       {% else %}
         <h2 id="journal-entries-title">Latest Entries</h2>
-        {% assign journal_posts = site.posts %}
+        {% assign journal_posts = site.data.workspace_public_posts %}
         {% assign journal_limit = 6 %}
         {% assign journal_heading = 3 %}
       {% endif %}
       <a href="{{ '/archives/' | relative_url }}">View archive {% include workspace-icon.html name='chevron' %}</a>
     </header>
 
-    {% assign journal_posts = journal_posts | where_exp: 'entry', 'entry.hidden != true' %}
+    {% if paginator.page > 1 %}
+      {% assign public_urls = site.data.workspace_public_posts | map: 'url' %}
+      {% assign journal_posts = journal_posts | where_exp: 'entry', 'public_urls contains entry.url' %}
+    {% endif %}
     {% assign journal_year = site.time | date: '%Y' %}
     {% for entry in journal_posts limit: journal_limit %}
       {% assign entry_year = entry.date | date: '%Y' %}

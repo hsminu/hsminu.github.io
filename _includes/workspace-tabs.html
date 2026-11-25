@@ -18,7 +18,7 @@
   </div>
   {% unless page.layout == 'home' %}
     <div class="workspace-tab" data-open-tab data-preview>
-      <a class="workspace-tab-link" href="{{ page.url | relative_url }}" title="{{ tab_label | escape }}" aria-current="page"{% if page.layout == 'post' %} data-post-tab{% endif %}><span>{{ tab_label | escape }}</span></a>
+      <a class="workspace-tab-link" href="{{ page.url | relative_url }}" title="{{ tab_label | escape }}" aria-current="page"><span>{{ tab_label | escape }}</span></a>
     </div>
   {% endunless %}
 </nav>
