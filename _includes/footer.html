@@ -14,22 +14,24 @@
     {% endfor %}
     <span>{{ post_count }} post{% unless post_count == 1 %}s{% endunless %}</span>
     {% if latest_update %}<span>Last updated {% include datetime.html date=latest_update %}</span>{% endif %}
-  {% elsif page.layout == 'section' or page.layout == 'category' %}
-    {% assign category_name = page.category | default: page.title %}
-    {% assign category_posts = site.categories[category_name] %}
-    {% assign post_count = category_posts | size %}
-    <span class="workspace-status-label">{{ page.title | escape }}</span>
+  {% elsif page.layout == 'section' or page.layout == 'category' or page.layout == 'tag' %}
+    {% if page.layout == 'tag' %}
+      {% assign listed_posts = page.workspace_tag_posts %}
+    {% else %}
+      {% assign category_name = page.category | default: page.title %}
+      {% assign listed_posts = site.categories[category_name] %}
+    {% endif %}
+    {% assign post_count = listed_posts | size %}
+    <span class="workspace-status-label">{{ page.ui_title | default: page.title | escape }}</span>
     <span class="workspace-status-right" role="status">
       <span>{{ post_count }} post{% unless post_count == 1 %}s{% endunless %}</span>
-      <span data-filtered-status hidden><span data-filtered-count></span> shown</span>
+      {% unless page.layout == 'tag' %}
+        <span data-filtered-status hidden><span data-filtered-count></span> shown</span>
+      {% endunless %}
     </span>
   {% elsif page.layout == 'post' %}
     <span class="workspace-status-label">{% include workspace-categories.html categories=page.categories %}</span>
     <span class="workspace-status-right">
-      {% assign reading_text = page.content | strip_html | strip %}
-      {% unless reading_text == empty %}
-        <span class="workspace-reading-time">{% include read-time.html content=page.content lang=include.lang prompt=true %}</span>
-      {% endunless %}
       <span class="workspace-reading-meter" hidden>
         <progress data-reading-progress max="100" aria-label="Reading progress"></progress><span data-reading-percent aria-hidden="true"></span>
       </span>

@@ -74,25 +74,8 @@ $finder-tag-colors: #ff685d, #fff62a, #57fc70, #2ba5ff;
   color: var(--tags-secondary, var(--text-muted-color));
 }
 
-.workspace-tag-folder .workspace-folder-header h1 {
-  margin-bottom: 0.25rem;
-  overflow-wrap: anywhere;
-}
-
 .workspace-tag-folder .workspace-parent-link {
   margin-bottom: 0.75rem;
-}
-
-.workspace-tag-post-count,
-.workspace-tags-count {
-  margin: 0;
-  color: var(--tags-secondary, var(--text-muted-color));
-  font-size: 0.82rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.workspace-tag-post-count {
-  margin-bottom: 0.9rem;
 }
 
 :root[data-bs-theme='light'] :is(.workspace-tags-index, .workspace-tag-folder) {
@@ -116,7 +99,7 @@ $finder-tag-colors: #ff685d, #fff62a, #57fc70, #2ba5ff;
     inset-block-start: var(--workspace-header-height);
     z-index: 4;
     display: grid;
-    grid-template: 'title filter' 2.5rem 'count filter' 1.25rem / minmax(0, 1fr) minmax(12rem, 16rem);
+    grid-template: 'title filter' 2.5rem '. filter' 1.25rem / minmax(0, 1fr) minmax(12rem, 16rem);
     align-items: center;
     gap: 0.25rem 0.75rem;
     block-size: var(--tags-tools-height);
@@ -124,17 +107,13 @@ $finder-tag-colors: #ff685d, #fff62a, #57fc70, #2ba5ff;
     background: var(--main-bg);
 
     @include bp.lt(bp.get(sm)) {
-      grid-template: 'title' 2.5rem 'count' 1.25rem 'filter' 2.25rem / minmax(0, 1fr);
+      grid-template: 'title' 2.5rem '.' 1.25rem 'filter' 2.25rem / minmax(0, 1fr);
     }
 
-    h1 {
+    .workspace-heading {
       grid-area: title;
-      margin: 0;
+      margin-bottom: 0;
     }
-  }
-
-  .workspace-tags-count {
-    grid-area: count;
   }
 }
 

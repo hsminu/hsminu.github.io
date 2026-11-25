@@ -584,10 +584,6 @@ body.workspace #main-wrapper {
   margin-inline-start: auto;
 }
 
-.workspace-reading-time em {
-  font-style: normal;
-}
-
 .workspace-reading-meter:not([hidden]) {
   display: inline-flex;
   align-items: center;
@@ -746,6 +742,29 @@ body.workspace #main-wrapper {
   letter-spacing: -0.035em;
 }
 
+.workspace-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.875rem;
+  margin-bottom: 0.85rem;
+
+  h1 {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+.workspace-heading-count {
+  margin: 0;
+  color: var(--tags-secondary, var(--text-muted-color));
+  font-size: 0.8125rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .workspace-archive {
   #archives {
     margin-top: 0;
@@ -766,10 +785,11 @@ body.workspace #main-wrapper {
 
 .workspace-folder-header h1 {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.55rem;
 
   .workspace-icon {
+    align-self: center;
     width: 1.45rem;
     height: 1.45rem;
     color: var(--workspace-icon);

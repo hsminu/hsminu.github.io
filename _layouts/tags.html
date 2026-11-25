@@ -7,8 +7,10 @@ refactor_content: false
 {% assign tag_count = tags | size %}
 <section class="workspace-folder workspace-tags-index" data-tags-index>
   <header class="workspace-tags-tools">
-    <h1 id="tags-title">Tags</h1>
-    <p class="workspace-tags-count" data-tag-count role="status">{{ tag_count }} tag{% unless tag_count == 1 %}s{% endunless %}</p>
+    <div class="workspace-heading">
+      <h1 id="tags-title">Tags</h1>
+      <p class="workspace-heading-count" data-tag-count role="status">{{ tag_count }} tag{% unless tag_count == 1 %}s{% endunless %}</p>
+    </div>
     <div class="workspace-tag-search" role="search" aria-label="Filter tags">
       {% include workspace-icon.html name='search' %}
       <input type="search" aria-label="Filter tags" placeholder="Filter tags..." autocomplete="off" disabled>

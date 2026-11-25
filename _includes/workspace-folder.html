@@ -15,18 +15,18 @@
     {% if include.show_post_count %}
       {% include workspace-parent.html %}
     {% endif %}
-    <h1>
-      {% if include.show_post_count %}
-        {% include workspace-icon.html name='tag' class='workspace-tag-outline' %}
-      {% else %}
-        {% include workspace-icon.html name='folder' %}
-      {% endif %}
-      <span>{{ page.title | escape }}</span>
-    </h1>
-    {% if include.show_post_count %}
-      {% assign tag_post_count = section_posts | size %}
-      <p class="workspace-tag-post-count">{{ tag_post_count }} post{% unless tag_post_count == 1 %}s{% endunless %}</p>
-    {% endif %}
+    <div class="workspace-heading">
+      <h1>
+        {% if include.show_post_count %}
+          {% include workspace-icon.html name='tag' class='workspace-tag-outline' %}
+        {% else %}
+          {% include workspace-icon.html name='folder' %}
+        {% endif %}
+        <span>{{ page.title | escape }}</span>
+      </h1>
+      {% assign section_post_count = section_posts | size %}
+      <p class="workspace-heading-count" data-section-post-count>{{ section_post_count }} post{% unless section_post_count == 1 %}s{% endunless %}</p>
+    </div>
   </header>
 
   {% if section_tags.size > 0 %}

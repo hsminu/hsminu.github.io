@@ -6,6 +6,8 @@ if (list) {
   const sorters = Array.from(section.querySelectorAll('[data-file-sort]'));
   const filterStatus = document.querySelector('[data-filtered-status]');
   const count = document.querySelector('[data-filtered-count]');
+  const headingCount = section.querySelector('[data-section-post-count]');
+  const total = headingCount?.textContent.trim();
   const collator = new Intl.Collator(['ko', 'en'], { numeric: true, sensitivity: 'base' });
   const files = Array.from(list.children, (element) => ({
     element,
@@ -24,6 +26,7 @@ if (list) {
         visible += Number(matches);
       }
       for (const button of filters) button.setAttribute('aria-pressed', String(button === filter));
+      if (headingCount) headingCount.textContent = tag ? `${visible} of ${total}` : total;
       if (filterStatus && count) {
         count.textContent = String(visible);
         filterStatus.hidden = !tag;
