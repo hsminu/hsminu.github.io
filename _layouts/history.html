@@ -1,0 +1,34 @@
+---
+layout: default
+---
+
+<section class="workspace-history" aria-labelledby="history-title">
+  <a class="workspace-history-back" href="{{ '/about/' | relative_url }}">
+    {% include workspace-icon.html name='chevron' %} About
+  </a>
+  <h1 id="history-title">{{ page.title | escape }}</h1>
+
+  {% assign starts = site.data.history | map: 'start' | uniq | sort | reverse %}
+  <ol class="workspace-history-list" role="list">
+    {% for start in starts %}
+      {% assign entries = site.data.history | where: 'start', start %}
+      {% for entry in entries %}
+        {% assign description = entry.description | strip %}
+        <li>
+          <p class="workspace-history-period">
+            <time datetime="{{ start | escape }}">{{ start | replace: '-', '.' | escape }}</time> —
+            {% if entry.end and entry.end != empty %}
+              <time datetime="{{ entry.end | escape }}">{{ entry.end | replace: '-', '.' | escape }}</time>
+            {% else %}
+              Present
+            {% endif %}
+          </p>
+          <div>
+            <h2>{{ entry.organization | escape }}</h2>
+            {% if description != empty %}<p class="workspace-history-description">{{ description | escape }}</p>{% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    {% endfor %}
+  </ol>
+</section>

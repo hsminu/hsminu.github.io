@@ -21,9 +21,7 @@ layout: default
     {% if site.github.username %}<a href="https://github.com/{{ site.github.username }}" rel="me">GitHub {% include workspace-icon.html name='outward' %}</a>{% endif %}
     <a href="{{ '/activities/' | relative_url }}">Activities {% include workspace-icon.html name='chevron' %}</a>
   </nav>
-  <nav class="workspace-about-indexes" aria-label="Journal indexes">
-    <a href="{{ '/categories/' | relative_url }}">Categories</a>
-    <a href="{{ '/tags/' | relative_url }}">Tags</a>
-    <a href="{{ '/archives/' | relative_url }}">Archives</a>
-  </nav>
+  <a class="workspace-about-history" href="{{ '/about/history/' | relative_url }}">
+    View History {% include workspace-icon.html name='chevron' %}
+  </a>
 </section>

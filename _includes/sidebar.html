@@ -28,8 +28,20 @@
       {% include workspace-icon.html name='search' %}<span>Search</span><kbd data-search-shortcut>⌘ K</kbd>
     </button>
     <a class="workspace-nav-item" href="{{ '/archives/' | relative_url }}"{% if page.url == '/archives/' %} aria-current="page"{% endif %}>{% include workspace-icon.html name='archive' %}<span>Archives</span></a>
-    <a class="workspace-nav-item" href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>{% include workspace-icon.html name='info' %}<span>About</span></a>
+    <a class="workspace-nav-item" href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% elsif page.layout == 'history' %} aria-current="location"{% endif %}>{% include workspace-icon.html name='info' %}<span>About</span></a>
   </nav>
+
+  {% if site.data.workspace_frequent_tags.size > 0 %}
+    <nav class="workspace-sidebar-group workspace-sidebar-tags" aria-labelledby="workspace-tags-label">
+      <p id="workspace-tags-label" class="workspace-nav-label">Tags</p>
+      {% for tag in site.data.workspace_frequent_tags %}
+        <a class="workspace-nav-item" href="{{ tag.url | relative_url }}" title="{{ tag.name | escape }}"{% if page.layout == 'tag' and page.title == tag.name %} aria-current="page"{% endif %}>
+          <span class="workspace-tag-dot" aria-hidden="true"></span>
+          <span class="workspace-sidebar-tag-name">{{ tag.name | escape }}</span>
+        </a>
+      {% endfor %}
+    </nav>
+  {% endif %}
 
   <div class="workspace-profile sidebar-bottom">
     {% include workspace-avatar.html %}

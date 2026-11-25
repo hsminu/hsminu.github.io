@@ -3,14 +3,22 @@
   {% assign section_posts = section_posts | sort: 'date' | reverse %}
 {% endif %}
 {% assign section_tags = '' | split: '' %}
-{% for post in section_posts %}
-  {% assign section_tags = section_tags | concat: post.tags %}
-{% endfor %}
-{% assign section_tags = section_tags | uniq | sort_natural %}
+{% unless include.hide_filters %}
+  {% for post in section_posts %}
+    {% assign section_tags = section_tags | concat: post.tags %}
+  {% endfor %}
+  {% assign section_tags = section_tags | uniq | sort_natural %}
+{% endunless %}
 
-<section class="workspace-folder" data-section-index>
+<section class="workspace-folder{% if include.show_post_count %} workspace-tag-folder{% endif %}" data-section-index>
   <header class="workspace-folder-header">
-    <h1>{% include workspace-icon.html name='folder' %}<span>{{ page.title | escape }}</span></h1>
+    <h1>
+      {% include workspace-icon.html name='folder' %}<span>{{ page.title | escape }}</span>
+      {% if include.show_post_count %}
+        {% assign tag_post_count = section_posts | size %}
+        <span class="workspace-tag-post-count">{{ tag_post_count }} post{% unless tag_post_count == 1 %}s{% endunless %}</span>
+      {% endif %}
+    </h1>
   </header>
 
   {% if section_tags.size > 0 %}

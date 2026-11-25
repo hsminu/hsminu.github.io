@@ -1,5 +1,6 @@
 {% unless page.layout == 'home' %}
-  {% assign tab_label = page.url | remove_first: '/' %}
+  {% assign default_tab_label = page.url | remove_first: '/' %}
+  {% assign tab_label = page.tab_label | default: default_tab_label %}
   {% if page.layout == 'post' %}
     {% assign primary_category = page.categories | first %}
     {% assign category_tab = site.tabs | where: 'category', primary_category | first %}
@@ -7,8 +8,6 @@
     {% assign folder = category_tab.url | split: '/' | last | default: category_slug | default: 'posts' %}
     {% assign file = page.url | split: '/' | last %}
     {% assign tab_label = folder | append: '/' | append: file | append: '.md' %}
-  {% elsif page.url == '/about/' %}
-    {% assign tab_label = 'about.md' %}
   {% endif %}
 {% endunless %}
 <nav class="workspace-tabs" aria-label="Workspace tabs">

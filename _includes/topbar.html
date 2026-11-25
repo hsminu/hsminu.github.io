@@ -1,7 +1,31 @@
+{% assign workspace_parent = nil %}
+{% if page.layout == 'tag' %}
+  {% assign workspace_parent = '/tags/' %}
+  {% assign workspace_parent_label = 'Tags' %}
+{% elsif page.layout == 'post' %}
+  {% assign primary_category = page.categories | first %}
+  {% if primary_category %}
+    {% assign parent_tab = site.tabs | where: 'category', primary_category | first %}
+    {% assign parent_archive = primary_category | slugify | url_encode | prepend: '/categories/' | append: '/' %}
+    {% assign workspace_parent = parent_tab.url | default: parent_archive %}
+    {% assign workspace_parent_label = primary_category %}
+  {% else %}
+    {% assign workspace_parent = '/archives/' %}
+    {% assign workspace_parent_label = 'Archives' %}
+  {% endif %}
+{% endif %}
+
 <header class="workspace-toolbar">
-  <button id="sidebar-trigger" class="workspace-icon-button" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar" title="Toggle sidebar">
-    {% include workspace-icon.html name='layout' %}
-  </button>
+  <div class="workspace-toolbar-start">
+    <button id="sidebar-trigger" class="workspace-icon-button" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar" title="Toggle sidebar">
+      {% include workspace-icon.html name='layout' %}
+    </button>
+    {% if workspace_parent %}
+      <a class="workspace-icon-button workspace-back" href="{{ workspace_parent | relative_url }}" aria-label="Back to {{ workspace_parent_label | escape }}" title="Back to {{ workspace_parent_label | escape }}">
+        {% include workspace-icon.html name='chevron' %}
+      </a>
+    {% endif %}
+  </div>
   <a class="workspace-toolbar-title" href="{{ '/' | relative_url }}">
     {% if page.layout == 'home' or page.layout == 'post' %}{{ site.title | escape }}{% else %}{{ page.ui_title | default: page.title | default: site.title | escape }}{% endif %}
   </a>
