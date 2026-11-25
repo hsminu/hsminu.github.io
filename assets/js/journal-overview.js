@@ -1,7 +1,7 @@
 const lockscreen = document.querySelector('[data-overview-lockscreen]');
 const date = lockscreen.querySelector('[data-overview-date]');
 const clock = lockscreen.querySelector('[data-overview-clock]');
-const dateFormat = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+const dateFormat = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' });
 const clockFormat = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const minute = 60_000;
 let minuteTimer;
