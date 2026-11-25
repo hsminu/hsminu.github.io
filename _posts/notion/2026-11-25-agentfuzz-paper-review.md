@@ -1,17 +1,18 @@
 ---
-title: "[Paper Review] Make Agent Defeat Agent — LLM Agent의 취약점을 AI로 탐지할 수 있을까?"
+title: "[Paper Review] Make Agent Defeat Agent"
 date: '2026-11-25T14:41:00+09:00'
-last_modified_at: '2026-11-25T14:41:00+09:00'
+last_modified_at: '2026-11-25T15:42:00+09:00'
 categories:
 - Notes
 tags:
 - paper
 - fuzzing
 - AI agent
+- Knight Frontier
 slug: agentfuzz-paper-review
 render_with_liquid: false
 notion_page_id: 422ffcd8-6341-806f-93fa-ccc9f1296dc9
-notion_publish_requested_at: '2026-11-25T05:41:00.000000000Z'
+notion_publish_requested_at: '2026-11-25T06:42:00.000000000Z'
 ---
 
 ## 0. Paper Information
