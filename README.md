@@ -91,7 +91,7 @@ description: 글 내용을 소개하는 한 문장
 
 ## Overview 및 검색
 
-Overview는 현재 월과 최근 공개 글 6개를 자동으로 표시합니다. 전체 기록은 Archives에서 볼 수 있습니다.
+Overview는 브라우저의 현지 시각과 최근 공개 글 6개를 표시합니다. 전체 기록은 Archives에서 볼 수 있습니다. 배경 이미지와 시계 폰트의 출처는 [Overview 에셋 기록](assets/img/overview/README.md)에 있습니다.
 
 macOS에서는 **⌘ K**, Windows와 Linux에서는 **Ctrl K**로 검색을 열 수 있습니다. 방향키로 결과를 선택하고 Enter로 엽니다. 카테고리의 이름·작성일 제목을 눌러 목록을 정렬할 수 있습니다.
 

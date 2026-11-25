@@ -4,17 +4,16 @@ layout: default
 
 <div class="journal-overview">
   {% unless paginator.page > 1 %}
-    <header class="journal-cover" data-journal-cover data-timezone="{{ site.timezone | escape }}">
-      <div class="journal-edition">
-        <span>Research Journal</span>
-        <time data-journal-date datetime="{{ site.time | date: '%Y-%m' }}">{{ site.time | date: '%Y.%m' }}</time>
-      </div>
-      <div class="journal-cover-main">
-        <div class="journal-cover-type">
-          <h1 data-journal-month lang="en">{{ site.time | date: '%B' }}.</h1>
-          <p lang="en">Security, systems, and reverse engineering.</p>
-        </div>
-        {% include journal-figure.html %}
+    {% assign wallpaper_dark = '/assets/img/overview/wallpaper-dark.webp' | relative_url %}
+    {% assign wallpaper_light = '/assets/img/overview/wallpaper-light.webp' | relative_url %}
+    <header class="overview-lockscreen" data-overview-lockscreen
+      data-wallpaper-dark="{{ wallpaper_dark }}"
+      data-wallpaper-light="{{ wallpaper_light }}"
+      style="--overview-wallpaper-dark: url('{{ wallpaper_dark }}'); --overview-wallpaper-light: url('{{ wallpaper_light }}');">
+      <h1 class="overview-heading">Overview</h1>
+      <div class="overview-clock-display" lang="en">
+        <time class="overview-clock-date" data-overview-date></time>
+        <time class="overview-clock" data-overview-clock></time>
       </div>
     </header>
     <script type="module" src="{{ '/assets/js/journal-overview.js' | relative_url }}"></script>

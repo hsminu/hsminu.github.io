@@ -1,55 +1,59 @@
-const cover = document.querySelector('[data-journal-cover]');
-const month = cover.querySelector('[data-journal-month]');
-const date = cover.querySelector('[data-journal-date]');
-const timeZone = cover.dataset.timezone || undefined;
-const monthFormat = new Intl.DateTimeFormat('en-US', { timeZone, month: 'long' });
-const dateFormat = new Intl.DateTimeFormat('en-US', { timeZone, year: 'numeric', month: '2-digit' });
+const lockscreen = document.querySelector('[data-overview-lockscreen]');
+const date = lockscreen.querySelector('[data-overview-date]');
+const clock = lockscreen.querySelector('[data-overview-clock]');
+const dateFormat = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+const clockFormat = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+const minute = 60_000;
+let minuteTimer;
 
-function updateEdition() {
+function updateClock() {
+  clearTimeout(minuteTimer);
   const now = new Date();
-  const parts = dateFormat.formatToParts(now);
-  const year = parts.find((part) => part.type === 'year').value;
-  const number = parts.find((part) => part.type === 'month').value;
-  month.textContent = monthFormat.format(now) + '.';
-  date.dateTime = year + '-' + number;
-  date.textContent = year + '.' + number;
+  const localMonth = String(now.getMonth() + 1).padStart(2, '0');
+  const localDay = String(now.getDate()).padStart(2, '0');
+  date.dateTime = `${now.getFullYear()}-${localMonth}-${localDay}`;
+  date.textContent = dateFormat.format(now);
+  clock.dateTime = clockFormat.format(now);
+  clock.textContent = clock.dateTime;
+
+  if (!document.hidden) minuteTimer = setTimeout(updateClock, minute - (Date.now() % minute));
 }
 
-updateEdition();
-window.addEventListener('pageshow', updateEdition);
+updateClock();
+window.addEventListener('pageshow', updateClock);
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) updateEdition();
+  if (document.hidden) clearTimeout(minuteTimer);
+  else updateClock();
 });
 
-const figure = cover.querySelector('.journal-figure');
-const motion = window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
-let pending;
-let point;
+const root = document.documentElement;
+const theme = () => root.dataset.bsTheme === 'light' ? 'light' : 'dark';
+const wallpapers = { dark: lockscreen.dataset.wallpaperDark, light: lockscreen.dataset.wallpaperLight };
+const decoded = new Map();
 
-function positionField() {
-  pending = undefined;
-  if (!point) {
-    figure.style.removeProperty('--journal-flow-x');
-    figure.style.removeProperty('--journal-flow-y');
-    return;
+function loadWallpaper(mode) {
+  if (!decoded.has(mode)) {
+    const image = new Image();
+    image.src = wallpapers[mode];
+    decoded.set(mode, image.decode().then(() => image, () => {
+      decoded.delete(mode);
+      return null;
+    }));
   }
-  const bounds = figure.getBoundingClientRect();
-  const x = ((point.clientX - bounds.left) / bounds.width - 0.5) * 8;
-  const y = ((point.clientY - bounds.top) / bounds.height - 0.5) * 6;
-  figure.style.setProperty('--journal-flow-x', x.toFixed(2) + 'px');
-  figure.style.setProperty('--journal-flow-y', y.toFixed(2) + 'px');
+  return decoded.get(mode);
 }
 
-function resetField() {
-  point = undefined;
-  if (pending !== undefined) cancelAnimationFrame(pending);
-  positionField();
+lockscreen.dataset.wallpaperTheme = theme();
+new MutationObserver(async () => {
+  const mode = theme();
+  if (mode === lockscreen.dataset.wallpaperTheme) return;
+  const image = await loadWallpaper(mode);
+  if (image && theme() === mode) lockscreen.dataset.wallpaperTheme = mode;
+}).observe(root, { attributeFilter: ['data-bs-theme'] });
+
+function warmOtherWallpaper() {
+  loadWallpaper(theme() === 'light' ? 'dark' : 'light');
 }
 
-figure.addEventListener('pointermove', (event) => {
-  if (!motion.matches) return;
-  point = event;
-  if (pending === undefined) pending = requestAnimationFrame(positionField);
-}, { passive: true });
-figure.addEventListener('pointerleave', resetField);
-motion.addEventListener('change', resetField);
+if (document.readyState === 'complete') warmOtherWallpaper();
+else window.addEventListener('load', warmOtherWallpaper, { once: true });

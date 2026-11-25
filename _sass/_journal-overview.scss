@@ -8,16 +8,12 @@
   --journal-paper: #1b1c1e;
   --journal-ink: #ece6dc;
   --journal-line: #38383d;
-  --journal-art-line: #a9b3c4;
-  --journal-art-accent: #91b7ef;
 }
 
 :root[data-bs-theme='light'] {
   --journal-paper: #faf8f5;
   --journal-ink: #302d2a;
   --journal-line: #dad8d5;
-  --journal-art-line: #657385;
-  --journal-art-accent: #386bb0;
 }
 
 .workspace-main:has(.journal-overview) {
@@ -30,107 +26,153 @@
   padding-top: clamp(1.25rem, 3.2vw, 3.35rem);
 }
 
-.journal-edition {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.4rem 1rem;
-  padding-bottom: 0.72rem;
-  border-bottom: 1px solid var(--journal-line);
-  color: var(--text-muted-color);
-  font: 0.71rem/1.45 var(--workspace-mono);
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
+@font-face {
+  font-family: 'Manrope Clock';
+  src: url('../fonts/overview/manrope-clock.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0030-003A;
 }
 
-.journal-cover-main {
+.overview-lockscreen {
+  --overview-wallpaper: var(--overview-wallpaper-dark);
+  --overview-wallpaper-focus: 53% 32%;
+  --overview-side-fade: 16%;
+  --overview-top-fade: 29%;
+  --overview-bottom-fade-start: 64%;
+  --overview-clock-ink: #e9dfee;
+  --overview-clock-highlight: rgb(248 239 247 / 97%);
+  --overview-clock-shade: rgb(226 209 236 / 92%);
+  --overview-date-ink: #e9deed;
+  --overview-clock-tint: rgb(15 10 19 / 32%);
+
+  position: relative;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
-  align-items: center;
-  gap: clamp(0.75rem, 2vw, 2rem);
-  min-height: clamp(13.5rem, 23vw, 19.5rem);
-  padding-block: 1.25rem;
-  border-bottom: 1px solid var(--journal-line);
+  justify-items: center;
+  align-content: start;
+  height: clamp(18.75rem, 24vw, 22rem);
+  padding: clamp(2.95rem, 4.2vw, 4.25rem) 1rem 0;
+  background-color: var(--journal-paper);
+
+  &::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    content: '';
+    background:
+      radial-gradient(ellipse 36% 54% at 50% 34%, var(--overview-clock-tint), transparent),
+      var(--overview-wallpaper) var(--overview-wallpaper-focus) / cover no-repeat;
+    mask-image:
+      linear-gradient(to right,
+        transparent,
+        #0005 calc(var(--overview-side-fade) * 0.42),
+        #000 var(--overview-side-fade) calc(100% - var(--overview-side-fade)),
+        #0005 calc(100% - var(--overview-side-fade) * 0.42),
+        transparent),
+      linear-gradient(to bottom,
+        transparent,
+        #0006 calc(var(--overview-top-fade) * 0.46),
+        #000 var(--overview-top-fade) var(--overview-bottom-fade-start),
+        #0005 85%,
+        transparent);
+    mask-composite: intersect;
+  }
+
+  @include bp.lt(bp.get(lg)) {
+    height: clamp(16.25rem, 38vw, 18rem);
+    padding-top: 2.9rem;
+  }
 
   @include bp.lt(bp.get(sm)) {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.5rem;
-    min-height: 0;
-    padding-block: 1.7rem 0.35rem;
+    --overview-wallpaper-focus: 52% 10%;
+    --overview-side-fade: 13%;
+    --overview-top-fade: 40%;
+    --overview-clock-tint: rgb(15 10 19 / 58%);
+
+    height: clamp(12.5rem, 55vw, 15rem);
+    padding-top: 2.05rem;
+  }
+
+  @media (forced-colors: active) {
+    &::before {
+      content: none;
+    }
   }
 }
 
-.journal-cover-type {
-  min-width: 0;
-
-  h1 {
-    margin: 0;
-    color: var(--journal-ink);
-    font: italic 500 clamp(3.1rem, 6.9vw, 7.15rem)/0.98 var(--workspace-serif);
-    letter-spacing: -0.065em;
-    overflow-wrap: anywhere;
-  }
-
-  p {
-    margin: 0.65rem 0 0;
-    color: var(--text-muted-color);
-    font: clamp(0.98rem, 1.35vw, 1.22rem)/1.42 var(--workspace-serif);
-  }
+:root[data-bs-theme='light'] .overview-lockscreen:not([data-wallpaper-theme]),
+.overview-lockscreen[data-wallpaper-theme='light'] {
+  --overview-wallpaper: var(--overview-wallpaper-light);
+  --overview-wallpaper-focus: 57% 54%;
+  --overview-side-fade: 19%;
+  --overview-top-fade: 33%;
+  --overview-bottom-fade-start: 58%;
+  --overview-clock-ink: #35343a;
+  --overview-clock-highlight: rgb(67 66 72 / 95%);
+  --overview-clock-shade: rgb(39 38 45 / 96%);
+  --overview-date-ink: #514e56;
+  --overview-clock-tint: transparent;
 }
 
-.journal-figure {
-  min-width: 0;
+.overview-clock-display {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  text-align: center;
+}
+
+.overview-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
   overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
-  svg {
-    display: block;
-    width: 100%;
-    height: auto;
-    overflow: hidden;
+.overview-clock-date {
+  color: var(--overview-date-ink);
+  font-size: clamp(1rem, 1.45vw, 1.18rem);
+  font-weight: 530;
+  line-height: 1.4;
+}
+
+.overview-clock {
+  min-width: 4ch;
+  color: var(--overview-clock-ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'Manrope Clock', system-ui, sans-serif;
+  font-size: clamp(4.25rem, 8.1vw, 8rem);
+  font-weight: 680;
+  font-optical-sizing: auto;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.98;
+  letter-spacing: -0.057em;
+  white-space: nowrap;
+
+  @supports ((background-clip: text) or (-webkit-background-clip: text)) {
+    background-image: linear-gradient(to bottom, var(--overview-clock-highlight) 12%, var(--overview-clock-shade) 94%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  @media (forced-colors: active) {
+    background-image: none;
+    color: CanvasText;
+    -webkit-text-fill-color: currentColor;
   }
 }
-
-.journal-curve-field {
-  transform: translate(var(--journal-flow-x, 0px), var(--journal-flow-y, 0px));
-  transition: transform 160ms ease-out;
-}
-
-.journal-curve-primary,
-.journal-curve-secondary,
-.journal-curve-accent,
-.journal-curve-ring {
-  fill: none;
-}
-
-.journal-curve-primary,
-.journal-curve-secondary {
-  stroke: var(--journal-art-line);
-  stroke-width: 0.62;
-}
-
-.journal-curve-primary { opacity: 0.33; }
-.journal-curve-secondary { opacity: 0.24; }
-
-.journal-curve-accent {
-  stroke: url(#journal-accent-visibility);
-  stroke-width: 1.25;
-}
-
-.journal-curve-ring {
-  opacity: 0.56;
-  stroke: var(--journal-art-accent);
-  stroke-width: 0.9;
-}
-
-.journal-curve-node { fill: var(--journal-art-accent); }
 
 .journal-entries {
   margin-top: clamp(1.2rem, 2.15vw, 1.85rem);
   padding-bottom: 0.4rem;
 }
 
-.journal-overview:not(:has(.journal-cover)) .journal-entries {
+.journal-overview:not(:has(.overview-lockscreen)) .journal-entries {
   margin-top: 0;
 }
 
@@ -257,12 +299,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .journal-curve-field,
   .journal-entry {
     transition: none;
-  }
-
-  .journal-curve-field {
-    transform: none;
   }
 }
