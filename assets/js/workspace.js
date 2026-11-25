@@ -1,6 +1,3 @@
-import './workspace-tabs.js';
-import './section-filter.js';
-
 const sidebar = document.getElementById('sidebar');
 const toggle = document.getElementById('sidebar-trigger');
 const mask = document.getElementById('mask');
