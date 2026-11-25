@@ -1,7 +1,7 @@
 ---
 title: 2026 SW 개발보안 경진대회(소개딩) 참가 및 수상 후기
 date: '2026-11-24T01:14:00+09:00'
-last_modified_at: '2026-11-25T16:21:00+09:00'
+last_modified_at: '2026-11-25T16:26:00+09:00'
 categories:
 - Activities
 tags:
@@ -10,7 +10,7 @@ tags:
 slug: sogeding-2026-award
 render_with_liquid: false
 notion_page_id: 421ffcd8-6341-8079-be56-d91e4a8c18f7
-notion_publish_requested_at: '2026-11-25T07:21:00.000000000Z'
+notion_publish_requested_at: '2026-11-25T07:26:00.000000000Z'
 ---
 
 ![](/assets/img/posts/notion/sogeding-2026-award/0978cbd24d5de8e260e718ae54694502265bc4fba1790e9d96164021505e9b80.png)
@@ -148,6 +148,4 @@ CO-SHOW는 coss 컨소시엄 대학들이 전부 모여 부스 운영을 한다.
 
 보안이 처음이라도, 개발이 처음이라도 누구나 도전해보길 바란다 ㅎㅎ
 
-<div class="notion-preview"><a class="notion-preview-link" href="https://app.notion.com/p/421ffcd863418079be56d91e4a8c18f7" rel="noopener noreferrer"><small>External link</small><strong>app.notion.com</strong></a></div>
-
-<p />
+[https://github.com/hsminu/MCP-Runtime-Guard](https://github.com/hsminu/MCP-Runtime-Guard)
