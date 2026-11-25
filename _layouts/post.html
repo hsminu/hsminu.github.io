@@ -90,7 +90,8 @@ script_includes:
     </dialog>
   {% endif %}
 
-  <div class="content" lang="{{ post_language | escape }}">
+  {% assign notion_block_links = site.data.notion_block_links[page.notion_page_id] %}
+  <div class="content" lang="{{ post_language | escape }}"{% if notion_block_links %} data-notion-block-links="{{ notion_block_links | jsonify | escape }}"{% endif %}>
     {{ content }}
   </div>
 

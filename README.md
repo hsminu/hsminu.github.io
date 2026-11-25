@@ -35,6 +35,8 @@
 
 오류는 **Actions → Build and Deploy → Import requested Notion posts**에서 확인할 수 있습니다. Notion 전용 블록 일부는 Jekyll에서 표시가 다를 수 있으므로 사진과 코드가 있는 테스트 글로 첫 발행을 확인합니다. 공개 저장소에 60일간 활동이 없으면 GitHub가 예약 실행을 비활성화할 수 있습니다. [예약 실행 동작](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
 
+Notion 전용 블록의 변환 규칙과 진단 명령은 [Notion 하이브리드 발행](docs/notion-hybrid.md)에 정리했습니다.
+
 ### 글 내리기
 
 1. Notion에서 발행한 글은 먼저 Notion의 **발행 요청 시각**을 비웁니다. 동기화가 이미 삭제한 글을 다시 가져오는 일을 막을 수 있습니다.

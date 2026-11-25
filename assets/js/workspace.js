@@ -93,6 +93,34 @@ if (toc) {
 
 const readingProgress = document.querySelector('[data-reading-progress]');
 const articleBody = document.querySelector('.workspace-document .content');
+const notionBlockLinks = new Map(Object.entries(JSON.parse(articleBody?.dataset.notionBlockLinks || '{}')));
+
+for (const block of articleBody?.querySelectorAll('unknown[url]') ?? []) {
+  const url = block.getAttribute('url');
+  if (!/^https:\/\/(?:app\.notion\.com|(?:www\.)?notion\.so)\//i.test(url)) continue;
+
+  const blockId = new URL(url).hash.slice(1).replaceAll('-', '');
+  const destination = notionBlockLinks.get(blockId);
+  const link = document.createElement('a');
+  link.href = destination?.url || url;
+  link.textContent = destination?.label || 'View block in Notion';
+  if (destination?.url?.startsWith('https://github.com/')) {
+    const provider = document.createElement('small');
+    provider.textContent = ['GitHub', destination.language].filter(Boolean).join(' · ');
+    const title = document.createElement('strong');
+    title.textContent = destination.label;
+    link.className = 'notion-preview-link';
+    link.rel = 'noopener noreferrer';
+    link.replaceChildren(provider, title);
+    if (destination.description) {
+      const summary = document.createElement('span');
+      summary.textContent = destination.description;
+      link.append(summary);
+    }
+  }
+  block.replaceWith(link, ...block.childNodes);
+}
+
 if (readingProgress && articleBody?.textContent.trim()) {
   const statusBar = readingProgress.closest('.workspace-status');
   const percentage = statusBar.querySelector('[data-reading-percent]');

@@ -9,6 +9,7 @@ require "pathname"
 require "time"
 require "tmpdir"
 require "yaml"
+require_relative "notion_blocks"
 
 module NotionPublish
   class Error < StandardError; end
@@ -33,6 +34,7 @@ module NotionPublish
 
     def initialize(token)
       @token = token
+      @blocks = {}
     end
 
     def requested_pages(data_source)
@@ -55,7 +57,7 @@ module NotionPublish
     end
 
     def markdown(page_id)
-      result = api("/pages/#{page_id}/markdown?markdown_version=v2")
+      result = markdown_response(page_id, version: "v2")
       if result["truncated"] || !result.fetch("unknown_block_ids", []).empty?
         raise Error, "Notion omitted blocks from page #{page_id}. Check page access and unsupported blocks."
       end
@@ -63,10 +65,21 @@ module NotionPublish
       result.fetch("markdown")
     end
 
+    def markdown_response(page_id, version:)
+      raise Error, "Expected Markdown version v1 or v2." unless %w[v1 v2].include?(version)
+
+      api("/pages/#{NotionPublish.normalize_uuid(page_id)}/markdown?markdown_version=#{version}")
+    end
+
+    def block(id)
+      id = NotionPublish.normalize_uuid(id)
+      @blocks.fetch(id) { @blocks[id] = api("/blocks/#{id}") }
+    end
+
     def image_download_uri(source)
       if source.start_with?("notion-file-block://")
         block_id = NotionPublish.normalize_uuid(source.delete_prefix("notion-file-block://").split("/", 2).first || "")
-        url = api("/blocks/#{block_id}").dig("image", "file", "url")
+        url = block(block_id).dig("image", "file", "url")
         uri = URI(url) if url
         raise Error, "Notion did not return a download URL for image block #{block_id}." unless uri && notion_image?(uri)
 
@@ -132,7 +145,7 @@ module NotionPublish
     end
 
     def connection(uri, &block)
-      Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: 10, read_timeout: 30, &block)
+      Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: 10, read_timeout: 30, write_timeout: 10, max_retries: 0, &block)
     end
 
     def api(path, body = nil)
@@ -165,6 +178,9 @@ module NotionPublish
     def initialize(client, root: Pathname.pwd)
       @client = client
       @root = root
+      path = @root.join("_data/notion_block_links.yml")
+      links = path.file? ? YAML.safe_load(path.read(encoding: "UTF-8")) || {} : {}
+      @block_renderer = BlockRenderer.new(client, links: links)
     end
 
     def run(data_source)
@@ -281,11 +297,11 @@ module NotionPublish
 
       images = temporary.join(slug)
       images.mkdir
-      body = rewrite_images(@client.markdown(page_id), slug, images)
+      body = rewrite_blocks(@client.markdown(page_id), page_id, slug, images)
       PreparedPost.new(path, "#{YAML.dump(metadata)}---\n\n#{body.strip}\n", slug, images)
     end
 
-    def rewrite_images(markdown, slug, directory)
+    def rewrite_blocks(markdown, page_id, slug, directory)
       downloaded = {}
       replace = lambda do |source|
         return downloaded.fetch(source) if downloaded.key?(source)
@@ -300,7 +316,7 @@ module NotionPublish
       end
 
       transform = lambda do |text|
-        text = render_columns(text)
+        text = @block_renderer.render(render_columns(text), page_id)
         text = text.gsub(/^([ \t]*!\[(?:\\.|[^\]\\\n])*\]\()<?(\S+?)>?(\)[ \t]*\r?$)/) do
           match = Regexp.last_match
           "#{match[1]}#{replace.call(match[2])}#{match[3]}"
