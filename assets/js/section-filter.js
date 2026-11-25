@@ -45,7 +45,7 @@ if (list) {
         button.setAttribute('aria-pressed', String(button === sorter));
       }
       sorter.dataset.direction = direction;
-      sorter.setAttribute('aria-label', `${sorter.textContent.trim()} ${direction === 'asc' ? '오름차순' : '내림차순'}`);
+      sorter.setAttribute('aria-label', `${sorter.textContent.trim()}, ${direction === 'asc' ? 'ascending' : 'descending'}`);
     });
   }
 }

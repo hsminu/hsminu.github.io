@@ -1,0 +1,3 @@
+<span class="workspace-avatar{% if include.class %} {{ include.class | escape }}{% endif %}" aria-hidden="true"{% if site.avatar %} style="--workspace-avatar-image: url('{{ site.avatar | escape }}')"{% endif %}>
+  {% include workspace-monogram.html class=false %}
+</span>

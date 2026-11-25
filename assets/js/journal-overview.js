@@ -25,35 +25,3 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) clearTimeout(minuteTimer);
   else updateClock();
 });
-
-const root = document.documentElement;
-const theme = () => root.dataset.bsTheme === 'light' ? 'light' : 'dark';
-const wallpapers = { dark: lockscreen.dataset.wallpaperDark, light: lockscreen.dataset.wallpaperLight };
-const decoded = new Map();
-
-function loadWallpaper(mode) {
-  if (!decoded.has(mode)) {
-    const image = new Image();
-    image.src = wallpapers[mode];
-    decoded.set(mode, image.decode().then(() => image, () => {
-      decoded.delete(mode);
-      return null;
-    }));
-  }
-  return decoded.get(mode);
-}
-
-lockscreen.dataset.wallpaperTheme = theme();
-new MutationObserver(async () => {
-  const mode = theme();
-  if (mode === lockscreen.dataset.wallpaperTheme) return;
-  const image = await loadWallpaper(mode);
-  if (image && theme() === mode) lockscreen.dataset.wallpaperTheme = mode;
-}).observe(root, { attributeFilter: ['data-bs-theme'] });
-
-function warmOtherWallpaper() {
-  loadWallpaper(theme() === 'light' ? 'dark' : 'light');
-}
-
-if (document.readyState === 'complete') warmOtherWallpaper();
-else window.addEventListener('load', warmOtherWallpaper, { once: true });

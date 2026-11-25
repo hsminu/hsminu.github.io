@@ -8,6 +8,6 @@
 | `wallpaper-graphite.webp` | [Andrew Kliatskyi · Graphite Curves](https://unsplash.com/photos/abstract-dark-curved-lines-with-subtle-highlights-NYtHU9TLkPE) | 2560×1440 | 39,708 bytes |
 | `wallpaper-light.webp` | [Mansy Graphics · White Soft Curves](https://unsplash.com/photos/abstract-white-background-with-soft-curves-GKXuFCd2fYo) | 2560×1440 | 14,434 bytes |
 
-Overview는 다크 모드에 Purple Abstract Curves, 라이트 모드에 White Soft Curves를 사용합니다. Graphite Curves는 비교용 대체 에셋입니다.
+Overview는 Purple Abstract Curves를 사용합니다. White Soft Curves와 Graphite Curves는 이전 시안과 비교에 사용한 에셋입니다.
 
 시계는 macOS 시스템 폰트를 우선 사용합니다. 대체 폰트는 숫자와 콜론만 담은 Manrope 700 WOFF2입니다. [Google Fonts](https://fonts.google.com/specimen/Manrope) · [SIL Open Font License 1.1](../../fonts/overview/OFL.txt)

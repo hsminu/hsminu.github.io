@@ -1,6 +1,7 @@
-<footer class="workspace-status" aria-label="페이지 상태">
+<footer class="workspace-status" aria-label="Page status">
   {% if page.layout == 'home' %}
     {% assign public_posts = site.posts | where_exp: 'post', 'post.hidden != true' %}
+    {% assign post_count = public_posts | size %}
     {% assign latest_update = nil %}
     {% assign latest_timestamp = 0 %}
     {% for post in public_posts %}
@@ -11,29 +12,30 @@
         {% assign latest_timestamp = timestamp %}
       {% endif %}
     {% endfor %}
-    <span>게시글 {{ public_posts.size }}개</span>
-    {% if latest_update %}<span>최근 업데이트 {% include datetime.html date=latest_update %}</span>{% endif %}
+    <span>{{ post_count }} post{% unless post_count == 1 %}s{% endunless %}</span>
+    {% if latest_update %}<span>Last updated {% include datetime.html date=latest_update %}</span>{% endif %}
   {% elsif page.layout == 'section' or page.layout == 'category' %}
     {% assign category_posts = page.posts %}
     {% if page.layout == 'section' %}{% assign category_posts = site.categories[page.category] %}{% endif %}
     {% assign category_posts = category_posts | where_exp: 'post', 'post.hidden != true' %}
+    {% assign post_count = category_posts | size %}
     <span class="workspace-status-label">{{ page.title | escape }}</span>
     <span class="workspace-status-right" role="status">
-      <span>전체 {{ category_posts | size }}개</span>
-      <span data-filtered-status hidden>필터 결과 <span data-filtered-count></span>개</span>
+      <span>{{ post_count }} post{% unless post_count == 1 %}s{% endunless %}</span>
+      <span data-filtered-status hidden><span data-filtered-count></span> shown</span>
     </span>
   {% elsif page.layout == 'post' %}
     <span class="workspace-status-label">{% include workspace-categories.html categories=page.categories %}</span>
     <span class="workspace-status-right">
       {% assign reading_text = page.content | strip_html | strip %}
       {% unless reading_text == empty %}
-        <span class="workspace-reading-time">읽기 약 {% include read-time.html content=page.content lang=include.lang %}</span>
+        <span class="workspace-reading-time">{% include read-time.html content=page.content lang=include.lang prompt=true %}</span>
       {% endunless %}
       <span class="workspace-reading-meter" hidden>
-        <progress data-reading-progress max="100" aria-label="읽기 진행률"></progress><span data-reading-percent aria-hidden="true"></span>
+        <progress data-reading-progress max="100" aria-label="Reading progress"></progress><span data-reading-percent aria-hidden="true"></span>
       </span>
     </span>
   {% elsif page.title %}
-    <span class="workspace-status-label">{{ page.title | escape }}</span>
+    <span class="workspace-status-label">{{ page.ui_title | default: page.title | escape }}</span>
   {% endif %}
 </footer>

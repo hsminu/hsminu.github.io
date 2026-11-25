@@ -13,18 +13,6 @@
   --doc-danger: #eda39c;
 }
 
-:root[data-bs-theme='light'] {
-  --doc-keyword: #78376f;
-  --doc-comment: #5c626b;
-  --doc-string: #a03240;
-  --doc-number: #89591f;
-  --doc-symbol: #215c9b;
-  --doc-tip: #2d7051;
-  --doc-warning: #805c1b;
-  --doc-important: #67478f;
-  --doc-danger: #9d3d3d;
-}
-
 .workspace-pane-document {
   @include bp.xl {
     &:has(#toc-wrapper) {
@@ -46,7 +34,7 @@
 
 .workspace-post-header {
   margin-bottom: 1rem;
-  padding-bottom: 0.9rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--workspace-row-rule);
 
   > .workspace-topic {
@@ -55,21 +43,29 @@
 
   h1 {
     margin: 0;
-    color: var(--journal-ink);
-    font-family: var(--workspace-serif);
-    font-size: clamp(1.72rem, 1.26rem + 1.66vw, 2.72rem);
-    font-weight: 640;
-    line-height: 1.26;
-    letter-spacing: -0.038em;
+    color: var(--heading-color);
+    font-family: var(--workspace-sans);
+    font-size: clamp(2rem, 1.5rem + 1.3vw, 2.5rem);
+    font-weight: 690;
+    line-height: 1.4;
+    letter-spacing: -0.03em;
+    line-break: strict;
     word-break: keep-all;
     overflow-wrap: anywhere;
     text-wrap: balance;
+  }
+
+  .workspace-title-phrase {
+    display: inline-block;
+    max-inline-size: 100%;
+    text-wrap: wrap;
   }
 }
 
 .workspace-post-description {
   margin: 0.8rem 0 0;
   color: var(--text-muted-color);
+  font-family: var(--workspace-sans);
   font-size: 1.06rem;
   line-height: 1.6;
 }
@@ -79,7 +75,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.4rem 1rem;
-  margin-top: 0.76rem;
+  margin-top: 0.6rem;
   color: var(--text-muted-color);
   font-size: 0.76rem;
 
@@ -105,8 +101,9 @@
 
 .workspace-document .content {
   margin-top: 1.55rem;
-  font-size: clamp(0.99rem, 0.96rem + 0.18vw, 1.07rem);
-  line-height: 1.83;
+  font-family: var(--workspace-sans);
+  font-size: clamp(1rem, 0.97rem + 0.14vw, 1.0625rem);
+  line-height: 1.78;
   color: var(--text-color);
   overflow-wrap: anywhere;
 
@@ -114,24 +111,27 @@
     margin-bottom: 1.13em;
   }
 
-  :is(h2, h3, h4, h5, h6) {
-    font-weight: 690;
-    line-height: 1.35;
+  :is(h1, h2, h3, h4, h5, h6) {
+    color: var(--heading-color);
+    font-family: inherit;
+    font-weight: 670;
+    line-height: 1.4;
     letter-spacing: -0.025em;
     word-break: keep-all;
   }
 
-  :is(h2, h3) {
-    margin-top: 2.1em;
+  :is(h1, h2, h3) {
+    margin-top: 1.85em;
   }
 
-  h2 {
-    color: var(--journal-ink);
-    font-family: var(--workspace-serif);
-    font-weight: 640;
-  }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: clamp(1.35rem, 1.22rem + 0.46vw, 1.57rem); }
+  h3 { font-size: 1.22rem; }
+  h4 { font-size: 1.1rem; }
+  h5 { font-size: 1rem; }
+  h6 { font-size: 0.94rem; }
 
-  :is(h2, h3, h4, h5, h6):first-child {
+  :is(h1, h2, h3, h4, h5, h6):first-child {
     margin-top: 0;
   }
 
@@ -280,6 +280,7 @@
   max-height: calc(100dvh - var(--workspace-header-height) - 2.7rem);
   margin-top: 0.35rem;
   padding-right: 0.12rem !important;
+  font-family: var(--workspace-sans);
   animation: none;
   transition: none;
 
@@ -289,18 +290,24 @@
 
   .panel-heading {
     padding-inline-start: 0.62rem !important;
-    color: var(--text-muted-color);
-    font-size: 0.76rem;
+    color: var(--text-muted-highlight-color);
+    font-family: inherit;
+    font-size: 0.8rem;
     font-weight: 630;
+  }
+
+  ul ul {
+    padding-inline-start: 0.62rem;
   }
 
   .toc-link {
     position: relative;
     padding: 0.3rem 0.55rem 0.3rem 0.62rem;
     border-radius: 0.4rem;
-    color: var(--text-muted-color);
-    line-height: 1.45;
+    color: var(--text-muted-highlight-color);
+    line-height: 1.5;
     white-space: normal;
+    word-break: keep-all;
     overflow-wrap: anywhere;
 
     &:hover {
@@ -320,10 +327,16 @@
 .workspace-document #toc-bar {
   top: var(--workspace-header-height);
   margin-inline: 0;
+  margin-block-end: -#{theme.$topbar-height};
 
   &.invisible {
     top: calc(var(--workspace-header-height) - #{theme.$topbar-height});
   }
+}
+
+.workspace-document :is(#toc-bar, #toc-solo-trigger) .label,
+.workspace #toc-popup .header .label {
+  font-family: var(--workspace-sans);
 }
 
 .workspace #toc-solo-trigger {
@@ -333,6 +346,7 @@
 .workspace #toc-popup {
   width: min(32rem, calc(100% - 1.5rem));
   min-width: 0;
+  font-family: var(--workspace-sans);
 
   &::after {
     display: none;
@@ -341,6 +355,16 @@
   #toc-popup-content {
     margin-bottom: 0;
     overscroll-behavior: contain;
+
+    .toc-link {
+      color: var(--text-muted-highlight-color);
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+
+      &:hover {
+        color: var(--toc-highlight);
+      }
+    }
   }
 }
 

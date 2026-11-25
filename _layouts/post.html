@@ -10,6 +10,7 @@ script_includes:
 ---
 
 {% include lang.html %}
+{% assign post_language = page.lang | default: site.alt_lang | default: site.lang %}
 
 {% include toc-status.html %}
 
@@ -19,9 +20,19 @@ script_includes:
       <div class="workspace-topic">{% include workspace-categories.html categories=page.categories %}</div>
     {% endif %}
 
-    <h1 data-toc-skip>{{ page.title | escape }}</h1>
+    <h1 data-toc-skip lang="{{ post_language | escape }}">
+      {%- assign title_words = page.title | split: ' ' -%}
+      {%- for word in title_words -%}
+        {%- unless forloop.first -%}{{ ' ' }}{%- endunless -%}
+        {%- if word contains '(' and word contains ')' -%}
+          <span class="workspace-title-phrase">{{ word | escape }}</span>
+        {%- else -%}
+          {{- word | escape -}}
+        {%- endif -%}
+      {%- endfor -%}
+    </h1>
     {% if page.description %}
-      <p class="workspace-post-description">{{ page.description | escape }}</p>
+      <p class="workspace-post-description" lang="{{ post_language | escape }}">{{ page.description | escape }}</p>
     {% endif %}
 
     <div class="workspace-post-meta post-meta">
@@ -59,27 +70,27 @@ script_includes:
 
   {% if enable_toc %}
     <div id="toc-bar" class="d-flex align-items-center justify-content-between invisible">
-      <span class="label text-truncate">{{ page.title }}</span>
-      <button type="button" class="btn me-1" data-workspace-toc-trigger aria-label="목차 열기" aria-haspopup="dialog" aria-controls="toc-popup">
+      <span class="label text-truncate" lang="{{ post_language | escape }}">{{ page.title }}</span>
+      <button type="button" class="btn me-1" data-workspace-toc-trigger aria-label="Open outline" aria-haspopup="dialog" aria-controls="toc-popup">
         <i class="fa-solid fa-list-ul fa-fw"></i>
       </button>
     </div>
 
     <button id="toc-solo-trigger" type="button" class="btn btn-outline-secondary btn-sm" data-workspace-toc-trigger aria-haspopup="dialog" aria-controls="toc-popup">
-      <span class="label ps-2 pe-1">{{- site.data.locales[lang].panel.toc -}}</span>
+      <span class="label ps-2 pe-1">Outline</span>
       <i class="fa-solid fa-angle-right fa-fw"></i>
     </button>
 
-    <dialog id="toc-popup" class="p-0" aria-label="목차">
+    <dialog id="toc-popup" class="p-0" aria-label="Outline">
       <div class="header d-flex flex-row align-items-center justify-content-between">
-        <div class="label text-truncate py-2 ms-4">{{- page.title -}}</div>
-        <button id="toc-popup-close" type="button" class="btn-close btn-sm mx-3" aria-label="목차 닫기" autofocus></button>
+        <div class="label text-truncate py-2 ms-4" lang="{{ post_language | escape }}">{{- page.title -}}</div>
+        <button id="toc-popup-close" type="button" class="btn-close btn-sm mx-3" aria-label="Close outline" autofocus></button>
       </div>
-      <div id="toc-popup-content" class="px-4 py-3 pb-4"></div>
+      <div id="toc-popup-content" class="px-4 py-3 pb-4" lang="{{ post_language | escape }}"></div>
     </dialog>
   {% endif %}
 
-  <div class="content">
+  <div class="content" lang="{{ post_language | escape }}">
     {{ content }}
   </div>
 

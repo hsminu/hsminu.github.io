@@ -1,5 +1,5 @@
 {%- if include.tags.size > 0 -%}
-  <ul class="workspace-tags" aria-label="태그" role="list">
+  <ul class="workspace-tags" aria-label="Tags" role="list">
     {%- for tag in include.tags -%}
       <li><a href="{{ tag | slugify | url_encode | prepend: '/tags/' | append: '/' | relative_url }}" data-file-tag="{{ tag | escape }}">#{{ tag | escape }}</a></li>
     {%- endfor -%}

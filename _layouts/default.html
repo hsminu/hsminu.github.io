@@ -7,9 +7,9 @@ layout: compress
 {% include lang.html %}
 <html lang="{{ page.lang | default: site.alt_lang | default: site.lang }}"{% if site.theme_mode == 'light' or site.theme_mode == 'dark' %} data-bs-theme="{{ site.theme_mode }}"{% endif %}>
   {% include head.html lang=lang %}
-  <body class="workspace">
+  <body class="workspace" lang="en">
     {% include workspace-icons.html %}
-    <a class="workspace-skip" href="#main-content">본문으로 건너뛰기</a>
+    <a class="workspace-skip" href="#main-content">Skip to content</a>
     <div class="workspace-window">
       {% include topbar.html lang=lang %}
       {% include sidebar.html lang=lang %}
@@ -34,7 +34,7 @@ layout: compress
           </main>
 
           {% if layout.panel_includes %}
-            <aside id="panel-wrapper" aria-label="문서 목차">
+            <aside id="panel-wrapper" aria-label="Article outline">
               {% for panel_include in layout.panel_includes %}
                 {% assign panel_path = panel_include | append: '.html' %}
                 {% include {{ panel_path }} lang=lang %}
@@ -44,7 +44,7 @@ layout: compress
         </div>
 
         {% include footer.html lang=lang %}
-        <button id="back-to-top" type="button" class="btn btn-box-shadow" aria-label="맨 위로"><i class="fa-solid fa-angle-up" aria-hidden="true"></i></button>
+        <button id="back-to-top" type="button" class="btn btn-box-shadow" aria-label="Back to top"><i class="fa-solid fa-angle-up" aria-hidden="true"></i></button>
       </div>
     </div>
 

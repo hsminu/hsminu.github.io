@@ -1,12 +1,12 @@
-<dialog class="workspace-spotlight" id="workspace-spotlight" aria-label="워크스페이스 검색" data-index="{{ '/assets/js/data/search.json' | relative_url }}">
+<dialog class="workspace-spotlight" id="workspace-spotlight" aria-label="Workspace search" data-index="{{ '/assets/js/data/search.json' | relative_url }}">
   <div class="spotlight-query">
     {% include workspace-icon.html name='search' %}
-    <input type="search" id="workspace-query" role="combobox" aria-label="게시글, 카테고리, 페이지 검색" aria-autocomplete="list" aria-expanded="false" aria-controls="workspace-results" placeholder="게시글, 카테고리, 페이지 검색" autocomplete="off" spellcheck="false" autofocus>
-    <button type="button" class="workspace-icon-button" data-close-search aria-label="검색 닫기">{% include workspace-icon.html name='close' %}</button>
+    <input type="search" id="workspace-query" role="combobox" aria-label="Search posts, categories, and pages" aria-autocomplete="list" aria-expanded="false" aria-controls="workspace-results" placeholder="Search posts, categories, and pages" autocomplete="off" spellcheck="false" autofocus>
+    <button type="button" class="workspace-icon-button" data-close-search aria-label="Close search">{% include workspace-icon.html name='close' %}</button>
   </div>
   <p class="spotlight-status" role="status"></p>
-  <ul id="workspace-results" class="spotlight-results" role="listbox" aria-label="검색 결과"></ul>
-  <div class="spotlight-footer" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 선택</span><span><kbd>↵</kbd> 열기</span><span><kbd>esc</kbd> 닫기</span></div>
+  <ul id="workspace-results" class="spotlight-results" role="listbox" aria-label="Search results"></ul>
+  <div class="spotlight-footer" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> Select</span><span><kbd>↵</kbd> Open</span><span><kbd>Esc</kbd> Close</span></div>
 </dialog>
 {% comment %} Chirpy bundles the legacy search controller with theme and document features. Keep its DOM hooks isolated from Spotlight. {% endcomment %}
 <div hidden inert>

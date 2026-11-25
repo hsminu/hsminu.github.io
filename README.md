@@ -99,16 +99,17 @@ macOS에서는 **⌘ K**, Windows와 Linux에서는 **Ctrl K**로 검색을 열 
 
 - 사이트 이름과 관심 분야: `_config.yml`
 - Overview와 저널 그래픽: `_layouts/home.html`, `_sass/_journal-overview.scss`
-- 소개 페이지의 프로필 정보: `_tabs/about.md`
+- GitHub 계정과 프로필 사진: `_config.yml`의 `github.username`, `avatar`
+- 소개 페이지의 상세 프로필 정보: `_tabs/about.md`
 - 다섯 분야의 메뉴: `_tabs/`의 해당 파일
 - 분야별 글 목록: `_layouts/section.html`
 - GitHub 등 프로필 링크: `_data/contact.yml`
 - 사이드바 구성: `_includes/sidebar.html`
 - 워크스페이스 구조: `_layouts/default.html` 및 `_includes/workspace-*.html`
-- 라이트·다크 색상과 워크스페이스 스타일: `_sass/_workspace.scss`
+- 다크 테마와 워크스페이스 스타일: `_sass/_workspace.scss`
 - Spotlight 검색: `assets/js/spotlight.js`와 `assets/js/data/search.json`
 
-사이드바의 Utilities에서 검색, Archives, About을 열고 하단에서 GitHub와 테마 전환을 이용할 수 있습니다. 테마는 기본적으로 시스템 설정을 따르며, 선택한 라이트·다크 모드는 브라우저에 저장됩니다. `_config.yml`의 `theme_mode`를 비워 두어야 전환 기능을 사용할 수 있습니다.
+사이드바의 Utilities에서 검색, Archives, About을 열 수 있습니다. 사이드바 하단과 About의 프로필 사진은 공개 GitHub 사진을 사용합니다. 워크스페이스는 `_config.yml`의 `theme_mode: dark`로 고정되어 있습니다.
 
 전체 카테고리(`/categories/`), 태그(`/tags/`), 연도별 글(`/archives/`)은 소개 페이지에서 접근할 수 있습니다. 아직 글이 없는 분야도 사이드바에서 열 수 있습니다.
 

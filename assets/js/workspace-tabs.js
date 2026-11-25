@@ -76,8 +76,8 @@ function createPinButton(tab, pinned) {
   const pin = document.createElement('button');
   pin.className = 'workspace-tab-pin';
   pin.type = 'button';
-  pin.title = pinned ? '탭 고정 해제' : '탭 고정';
-  pin.setAttribute('aria-label', `${tab.label} 탭 고정`);
+  pin.title = pinned ? 'Unpin tab' : 'Pin tab';
+  pin.setAttribute('aria-label', `Pin ${tab.label}`);
   pin.setAttribute('aria-pressed', String(pinned));
   const icon = document.createElement('i');
   icon.className = 'fa-solid fa-thumbtack';
@@ -108,8 +108,8 @@ function renderTabs() {
     const close = document.createElement('button');
     close.className = 'workspace-tab-close';
     close.type = 'button';
-    close.textContent = '×';
-    close.setAttribute('aria-label', `${label} 탭 닫기`);
+    close.innerHTML = '<svg class="workspace-icon" aria-hidden="true"><use href="#workspace-icon-close"></use></svg>';
+    close.setAttribute('aria-label', `Close ${label}`);
     close.addEventListener('click', () => closeTab(path));
 
     if (path === current?.path) {

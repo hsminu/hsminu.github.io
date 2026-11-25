@@ -1,4 +1,4 @@
-<aside id="sidebar" aria-label="워크스페이스 탐색">
+<aside id="sidebar" aria-label="Workspace navigation">
   {% assign topics = site.tabs | where: 'layout', 'section' %}
   {% assign current_topic = page.category | default: page.categories.first %}
   {% if page.layout == 'category' %}{% assign current_topic = page.title %}{% endif %}
@@ -32,26 +32,11 @@
   </nav>
 
   <div class="workspace-profile sidebar-bottom">
-    {% include workspace-monogram.html %}
+    {% include workspace-avatar.html %}
     <div class="workspace-profile-name">
-      <strong>{{ site.title | escape }}</strong>
+      <strong>{{ site.github.username | default: site.title | escape }}</strong>
       {% assign github_contact = site.data.contact | where: 'type', 'github' | first %}
       {% if github_contact and site.github.username %}<a href="https://github.com/{{ site.github.username }}" rel="me">GitHub {% include workspace-icon.html name='outward' %}</a>{% endif %}
     </div>
-    {% unless site.theme_mode %}
-      <div class="btn-group dropup">
-        <button class="workspace-icon-button" type="button" id="mode-toggle" aria-label="테마 변경" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="fa-solid fa-sun" data-theme-mode="light" aria-hidden="true"></i>
-          <i class="fa-solid fa-moon" data-theme-mode="dark" aria-hidden="true"></i>
-          <i class="fa-solid fa-display" data-theme-mode="system" aria-hidden="true"></i>
-        </button>
-        <ul class="dropdown-menu">
-          {% assign modes = 'light,dark,system' | split: ',' %}
-          {% for mode in modes %}
-            <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme-mode="{{ mode }}">{{ site.data.locales[include.lang].theme[mode] | default: mode }}</button></li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endunless %}
   </div>
 </aside>

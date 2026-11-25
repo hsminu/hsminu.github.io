@@ -2,7 +2,7 @@ const panel = document.getElementById('workspace-spotlight');
 const query = document.getElementById('workspace-query');
 const results = document.getElementById('workspace-results');
 const status = panel.querySelector('[role="status"]');
-const kinds = { post: '게시글', category: '카테고리', page: '페이지' };
+const kinds = { post: 'Post', category: 'Category', page: 'Page' };
 const resultIcons = { post: 'file', category: 'folder', page: 'info' };
 const iconTemplate = panel.querySelector('.spotlight-query > .workspace-icon');
 const isApple = /mac|iphone|ipad/i.test(navigator.userAgentData?.platform || navigator.platform);
@@ -94,7 +94,9 @@ function render(items) {
   results.replaceChildren(...options);
   results.scrollTop = 0;
   query.setAttribute('aria-expanded', String(choices.length > 0));
-  status.textContent = choices.length ? (query.value.trim() ? `${choices.length}개 결과` : '빠른 탐색') : '일치하는 결과가 없어요.';
+  status.textContent = choices.length
+    ? (query.value.trim() ? `${choices.length} result${choices.length === 1 ? '' : 's'}` : 'Quick navigation')
+    : 'No results';
   select(choices.length ? 0 : -1);
 }
 
@@ -103,7 +105,7 @@ async function update() {
     const items = await loadIndex();
     if (panel.open) render(items);
   } catch {
-    if (panel.open) status.textContent = '검색 목록을 불러오지 못했습니다. 다시 검색해 주세요.';
+    if (panel.open) status.textContent = 'Could not load search. Try again.';
   }
 }
 
@@ -111,7 +113,7 @@ function open(trigger) {
   if (panel.open) return;
   source = trigger;
   query.value = '';
-  status.textContent = '검색 목록을 불러오는 중…';
+  status.textContent = 'Loading search…';
   panel.showModal();
   query.focus();
   update();

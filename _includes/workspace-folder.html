@@ -15,8 +15,8 @@
 
   {% if section_tags.size > 0 %}
     <div class="workspace-filterbar">
-      <div class="workspace-filters" role="group" aria-label="태그 필터">
-        <button type="button" data-section-filter="" aria-pressed="true">전체</button>
+      <div class="workspace-filters" role="group" aria-label="Filter by tag">
+        <button type="button" data-section-filter="" aria-pressed="true">All</button>
         {% for tag in section_tags %}
           <button type="button" data-section-filter="{{ tag | escape }}" aria-pressed="false">{{ tag | escape }}</button>
         {% endfor %}
@@ -32,6 +32,6 @@
       {% endfor %}
     </div>
   {% else %}
-    <p class="workspace-empty workspace-folder-empty">{% include workspace-icon.html name='folder' %}<span>아직 게시된 글이 없어요.</span></p>
+    <p class="workspace-empty workspace-folder-empty">{% include workspace-icon.html name='folder' %}<span>No posts yet</span></p>
   {% endif %}
 </section>

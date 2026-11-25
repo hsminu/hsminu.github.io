@@ -48,9 +48,9 @@ drawerMode.addEventListener('change', () => {
   syncSidebar();
 });
 
-document.addEventListener('keydown', (event) => {
+window.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && !event.defaultPrevented && isOpen() && !spotlight.open) mask.click();
-});
+}, { capture: true });
 
 // Chirpy renders and closes the mobile TOC. Its opener assumes an active entry.
 const toc = document.getElementById('toc-popup');

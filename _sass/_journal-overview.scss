@@ -10,12 +10,6 @@
   --journal-line: #38383d;
 }
 
-:root[data-bs-theme='light'] {
-  --journal-paper: #faf8f5;
-  --journal-ink: #302d2a;
-  --journal-line: #dad8d5;
-}
-
 .workspace-main:has(.journal-overview) {
   background: var(--journal-paper);
 }
@@ -36,7 +30,6 @@
 }
 
 .overview-lockscreen {
-  --overview-wallpaper: var(--overview-wallpaper-dark);
   --overview-wallpaper-focus: 53% 32%;
   --overview-side-fade: 16%;
   --overview-top-fade: 29%;
@@ -52,7 +45,7 @@
   display: grid;
   justify-items: center;
   align-content: start;
-  height: clamp(18.75rem, 24vw, 22rem);
+  height: clamp(17.75rem, 22.6vw, 20.625rem);
   padding: clamp(2.95rem, 4.2vw, 4.25rem) 1rem 0;
   background-color: var(--journal-paper);
 
@@ -81,7 +74,7 @@
   }
 
   @include bp.lt(bp.get(lg)) {
-    height: clamp(16.25rem, 38vw, 18rem);
+    height: clamp(15.3rem, 35.75vw, 16.9rem);
     padding-top: 2.9rem;
   }
 
@@ -91,7 +84,7 @@
     --overview-top-fade: 40%;
     --overview-clock-tint: rgb(15 10 19 / 58%);
 
-    height: clamp(12.5rem, 55vw, 15rem);
+    height: clamp(12.5rem, 52vw, 14.1rem);
     padding-top: 2.05rem;
   }
 
@@ -102,24 +95,10 @@
   }
 }
 
-:root[data-bs-theme='light'] .overview-lockscreen:not([data-wallpaper-theme]),
-.overview-lockscreen[data-wallpaper-theme='light'] {
-  --overview-wallpaper: var(--overview-wallpaper-light);
-  --overview-wallpaper-focus: 57% 54%;
-  --overview-side-fade: 19%;
-  --overview-top-fade: 33%;
-  --overview-bottom-fade-start: 58%;
-  --overview-clock-ink: #35343a;
-  --overview-clock-highlight: rgb(67 66 72 / 95%);
-  --overview-clock-shade: rgb(39 38 45 / 96%);
-  --overview-date-ink: #514e56;
-  --overview-clock-tint: transparent;
-}
-
 .overview-clock-display {
   display: grid;
   justify-items: center;
-  gap: 0.35rem;
+  gap: 0.22rem;
   text-align: center;
 }
 
@@ -229,6 +208,10 @@
     font: 550 0.69rem/1.4 var(--workspace-mono);
     letter-spacing: 0.09em;
     text-transform: uppercase;
+  }
+
+  .workspace-tags a:not(:hover) {
+    color: color-mix(in srgb, var(--text-muted-color) 72%, var(--heading-color));
   }
 
   :is(h2, h3) {

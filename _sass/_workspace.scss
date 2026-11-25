@@ -6,6 +6,7 @@
 @use 'workspace-spotlight';
 
 :root {
+  --workspace-sans: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Apple SD Gothic Neo', system-ui, 'Noto Sans KR', 'Malgun Gothic', sans-serif;
   --workspace-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Apple SD Gothic Neo', 'Malgun Gothic', monospace;
   --workspace-toolbar-height: 2.875rem;
   --workspace-tabs-height: 2.65rem;
@@ -62,54 +63,6 @@
   --workspace-row-rule: #343437;
 }
 
-:root[data-bs-theme='light'] {
-  --main-bg: #fdfdfe;
-  --main-border-color: #dfdfe3;
-  --text-color: #29292f;
-  --heading-color: #212126;
-  --text-muted-color: #595961;
-  --text-muted-highlight-color: #43434b;
-  --link-color: #1e5ca3;
-  --link-underline-color: #92a9c7;
-  --sidebar-bg: #f1f1f3;
-  --sidebar-border-color: #dfdfe3;
-  --sidebar-muted-color: #3d3d46;
-  --sidebar-btn-color: #50505b;
-  --sidebar-hover-bg: #e8e8ed;
-  --menu-bg: #fafafb;
-  --menu-border-color: #d4d4da;
-  --menu-active-color: #222229;
-  --menu-highlight-bg: #e6edf7;
-  --card-bg: #f5f5f7;
-  --card-header-bg: #ececef;
-  --card-shadow: 0 0 0 1px #dfdfe3;
-  --card-hover-bg: #eeeef2;
-  --label-color: #595961;
-  --blockquote-border-color: #91a2b9;
-  --blockquote-text-color: #46464e;
-  --inline-code-bg: #ededf1;
-  --highlight-bg-color: #f5f5f7;
-  --language-border-color: #dfdfe3;
-  --code-header-text-color: #55555f;
-  --code-header-icon-color: #666670;
-  --code-color: #254575;
-  --tb-border-color: #dfdfe3;
-  --tb-odd-bg: #f5f5f7;
-  --tb-even-bg: #fdfdfe;
-  --btn-border-color: #d5d5da;
-  --btn-backtotop-border-color: #d5d5da;
-  --toc-popup-border-color: #d5d5da;
-  --toc-highlight: #1e5ca3;
-  --workspace-canvas: #fdfdfe;
-  --workspace-toolbar: #f0f0f2;
-  --workspace-strip: #f7f7f9;
-  --workspace-hover: #f1f1f4;
-  --workspace-selection: #e1eaf8;
-  --workspace-accent: #0071df;
-  --workspace-icon: #256ab4;
-  --workspace-row-rule: #e8e8ec;
-}
-
 body.workspace {
   background: var(--workspace-canvas);
   color: var(--text-color);
@@ -160,6 +113,27 @@ body.workspace {
   height: 2rem;
 }
 
+.workspace-avatar {
+  position: relative;
+  display: block;
+  width: 2rem;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 0.4rem;
+
+  .workspace-monogram {
+    width: 100%;
+    height: 100%;
+  }
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    background: var(--workspace-avatar-image, none) center / cover no-repeat;
+    content: '';
+  }
+}
+
 .workspace-window {
   display: grid;
   grid-template:
@@ -201,21 +175,7 @@ body.workspace {
   padding-inline: 0.72rem;
   border-bottom: 1px solid var(--main-border-color);
   background: var(--workspace-toolbar);
-}
-
-.workspace-toolbar-start {
-  display: flex;
-  align-items: center;
-  gap: 0.38rem;
-}
-
-.workspace-toolbar-brand {
-  border-radius: 0.38rem;
-
-  .workspace-monogram {
-    width: 1.6rem;
-    height: 1.6rem;
-  }
+  font-family: var(--workspace-sans);
 }
 
 .workspace-toolbar-title {
@@ -273,6 +233,7 @@ body.workspace {
   height: calc(100dvh - var(--workspace-toolbar-height));
   padding: 1.05rem 0.62rem 0.72rem;
   border-right: 1px solid var(--main-border-color);
+  font-family: var(--workspace-sans);
   overscroll-behavior: contain;
 
   @include bp.lt(bp.get(lg)) {
@@ -285,35 +246,14 @@ body.workspace {
   }
 
   .workspace-profile.sidebar-bottom {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
     flex-shrink: 0;
     align-items: center;
     gap: 0.6rem;
     margin: auto 0 0;
     padding: 0.8rem 0.3rem 0;
     border-top: 1px solid var(--main-border-color);
-
-    #mode-toggle {
-      width: 2.1rem;
-      height: 2.1rem;
-      margin: 0;
-      border-radius: 0.4rem;
-      box-shadow: none;
-      background: transparent;
-
-      &:hover {
-        background: var(--workspace-hover);
-      }
-    }
-
-    #mode-toggle + .dropdown-menu.show {
-      margin-left: -5rem !important;
-      animation: none;
-    }
-
-    .btn-group {
-      margin-inline-start: auto;
-    }
   }
 }
 
@@ -375,7 +315,8 @@ body.workspace {
 .workspace-profile-name {
   display: grid;
   min-width: 0;
-  line-height: 1.35;
+  gap: 0.12rem;
+  line-height: 1.25;
 
   strong {
     color: var(--heading-color);
@@ -383,6 +324,10 @@ body.workspace {
   }
 
   a {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: 0.16rem;
     color: var(--text-muted-color);
     font-size: 0.72rem;
 
@@ -437,9 +382,9 @@ body.workspace #main-wrapper {
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  max-width: min(23rem, 76vw);
+  max-width: min(23rem, 70vw);
   border-radius: 0.42rem;
-  color: var(--text-muted-color);
+  color: var(--text-muted-highlight-color);
   transition: background-color 150ms ease, color 150ms ease;
 
   &:hover {
@@ -454,10 +399,11 @@ body.workspace #main-wrapper {
 
 .workspace-tab-link {
   display: inline-flex;
+  align-self: stretch;
   align-items: center;
   gap: 0.37rem;
   min-width: 0;
-  padding: 0.38rem 0.62rem;
+  padding: 0 0.56rem;
   border-radius: 0.42rem;
   color: inherit;
   font: 0.75rem/1.35 var(--workspace-mono);
@@ -478,10 +424,6 @@ body.workspace #main-wrapper {
   }
 }
 
-.workspace-tab[data-preview] .workspace-tab-link {
-  font-style: italic;
-}
-
 .workspace-tab-pin,
 .workspace-tab-close {
   display: inline-grid;
@@ -494,8 +436,7 @@ body.workspace #main-wrapper {
   border-radius: 0.3rem;
   color: var(--text-muted-color);
   background: transparent;
-  font-size: 1rem;
-  line-height: 1;
+  font: 1rem/1 var(--workspace-sans);
   transition: opacity 150ms ease, background-color 150ms ease;
 
   &:hover,
@@ -515,6 +456,11 @@ body.workspace #main-wrapper {
 
 .workspace-tab-close {
   margin-inline-end: 0.28rem;
+
+  .workspace-icon {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
 
   @media (hover: hover) and (pointer: fine) {
     opacity: 0;
@@ -751,6 +697,7 @@ body.workspace #main-wrapper {
 .workspace-folder h1 {
   margin: 0 0 0.85rem;
   color: var(--heading-color);
+  font-family: var(--workspace-sans);
   font-size: clamp(1.57rem, 1.32rem + 0.92vw, 2.05rem);
   font-weight: 685;
   line-height: 1.2;

@@ -3,7 +3,7 @@ layout: default
 ---
 
 <section class="workspace-folder workspace-archive" aria-labelledby="archives">
-  <h1 id="archives">{{ page.title | escape }}</h1>
+  <h1 id="archives">{{ page.ui_title | default: page.title | escape }}</h1>
   {% assign public_posts = site.posts | where_exp: 'post', 'post.hidden != true' %}
   {% assign years = public_posts | group_by_exp: 'post', "post.date | date: '%Y'" %}
   {% for year in years %}
@@ -14,6 +14,6 @@ layout: default
       {% endfor %}
     </div>
   {% else %}
-    <p class="workspace-empty">아직 게시된 글이 없어요.</p>
+    <p class="workspace-empty">No posts yet</p>
   {% endfor %}
 </section>

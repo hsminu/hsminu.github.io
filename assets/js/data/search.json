@@ -20,7 +20,7 @@ swcache: true
     {% if tab.layout == 'section' %}
       {"type":"category", "title":{{ tab.title | jsonify }}, "url":{{ tab.url | relative_url | jsonify }}},
     {% else %}
-      {"type":"page", "title":{{ tab.title | jsonify }}, "url":{{ tab.url | relative_url | jsonify }}, "tags":{{ tab.url | replace: '/', ' ' | jsonify }}},
+      {"type":"page", "title":{{ tab.ui_title | default: tab.title | jsonify }}, "url":{{ tab.url | relative_url | jsonify }}, "tags":{{ tab.url | replace: '/', ' ' | append: tab.title | jsonify }}},
     {% endif %}
   {% endfor %}
   {% assign extra_pages = site.pages | where_exp: 'item', 'item.layout == "page" and item.title and item.search != false and item.url != "/404.html"' %}

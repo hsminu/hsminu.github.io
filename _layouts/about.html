@@ -4,8 +4,8 @@ layout: default
 
 <section class="workspace-about" aria-labelledby="profile-title">
   <header class="workspace-about-header">
-    {% include workspace-monogram.html class='workspace-about-mark' %}
-    <h1 id="profile-title">{{ site.title | escape }}</h1>
+    {% include workspace-avatar.html class='workspace-about-mark' %}
+    <h1 id="profile-title">{{ site.github.username | default: site.title | escape }}</h1>
     {% if page.profile.subtitle %}<p>{{ page.profile.subtitle | escape }}</p>{% endif %}
   </header>
 
@@ -17,13 +17,13 @@ layout: default
     {% endfor %}
   </dl>
 
-  <nav class="workspace-about-links" aria-label="프로필 링크">
+  <nav class="workspace-about-links" aria-label="Profile links">
     {% if site.github.username %}<a href="https://github.com/{{ site.github.username }}" rel="me">GitHub {% include workspace-icon.html name='outward' %}</a>{% endif %}
     <a href="{{ '/activities/' | relative_url }}">Activities {% include workspace-icon.html name='chevron' %}</a>
   </nav>
-  <nav class="workspace-about-indexes" aria-label="저널 탐색">
-    <a href="{{ '/categories/' | relative_url }}">카테고리</a>
-    <a href="{{ '/tags/' | relative_url }}">태그</a>
-    <a href="{{ '/archives/' | relative_url }}">아카이브</a>
+  <nav class="workspace-about-indexes" aria-label="Journal indexes">
+    <a href="{{ '/categories/' | relative_url }}">Categories</a>
+    <a href="{{ '/tags/' | relative_url }}">Tags</a>
+    <a href="{{ '/archives/' | relative_url }}">Archives</a>
   </nav>
 </section>
