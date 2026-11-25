@@ -13,7 +13,7 @@ layout: default
         <time class="overview-clock" data-overview-clock></time>
       </div>
     </header>
-    <script type="module" src="{{ '/assets/js/journal-overview.js' | relative_url }}"></script>
+    <script type="module" src="{{ '/assets/js/journal-overview.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
   {% endunless %}
 
   <section class="journal-entries" aria-labelledby="journal-entries-title">
