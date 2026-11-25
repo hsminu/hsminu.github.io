@@ -1,0 +1,24 @@
+{%- assign parent_path = nil -%}
+{%- case page.layout -%}
+  {%- when 'tag' -%}
+    {%- assign parent_path = '/tags/' -%}
+    {%- assign parent_label = 'Tags' -%}
+  {%- when 'post' -%}
+    {%- assign category = page.categories | first -%}
+    {%- if category -%}
+      {%- assign category_tab = site.tabs | where: 'category', category | first -%}
+      {%- assign category_archive = category | slugify | url_encode | prepend: '/categories/' | append: '/' -%}
+      {%- assign parent_path = category_tab.url | default: category_archive -%}
+      {%- assign parent_label = category -%}
+    {%- else -%}
+      {%- assign parent_path = '/archives/' -%}
+      {%- assign parent_label = 'Archives' -%}
+    {%- endif -%}
+{%- endcase -%}
+
+{% if parent_path %}
+  <a class="{% if include.icon_only %}workspace-icon-button workspace-back{% else %}workspace-parent-link{% endif %}"
+    href="{{ parent_path | relative_url | escape }}" aria-label="Back to {{ parent_label | escape }}"{% if include.icon_only %} title="Back to {{ parent_label | escape }}"{% endif %}>
+    {% include workspace-icon.html name='chevron' %}{% unless include.icon_only %}{{ parent_label | escape }}{% endunless %}
+  </a>
+{% endif %}

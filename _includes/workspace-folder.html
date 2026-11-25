@@ -12,13 +12,21 @@
 
 <section class="workspace-folder{% if include.show_post_count %} workspace-tag-folder{% endif %}" data-section-index>
   <header class="workspace-folder-header">
+    {% if include.show_post_count %}
+      {% include workspace-parent.html %}
+    {% endif %}
     <h1>
-      {% include workspace-icon.html name='folder' %}<span>{{ page.title | escape }}</span>
       {% if include.show_post_count %}
-        {% assign tag_post_count = section_posts | size %}
-        <span class="workspace-tag-post-count">{{ tag_post_count }} post{% unless tag_post_count == 1 %}s{% endunless %}</span>
+        {% include workspace-icon.html name='tag' class='workspace-tag-outline' %}
+      {% else %}
+        {% include workspace-icon.html name='folder' %}
       {% endif %}
+      <span>{{ page.title | escape }}</span>
     </h1>
+    {% if include.show_post_count %}
+      {% assign tag_post_count = section_posts | size %}
+      <p class="workspace-tag-post-count">{{ tag_post_count }} post{% unless tag_post_count == 1 %}s{% endunless %}</p>
+    {% endif %}
   </header>
 
   {% if section_tags.size > 0 %}

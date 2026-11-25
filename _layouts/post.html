@@ -16,9 +16,13 @@ script_includes:
 
 <article class="workspace-document" data-toc="{{ enable_toc }}">
   <header class="workspace-post-header">
-    {% if page.categories.size > 0 %}
-      <div class="workspace-topic">{% include workspace-categories.html categories=page.categories %}</div>
-    {% endif %}
+    <div class="workspace-topic">
+      {% include workspace-parent.html %}
+      {% if page.categories.size > 1 %}
+        {% assign secondary_categories = page.categories | slice: 1, page.categories.size %}
+        {% include workspace-categories.html categories=secondary_categories %}
+      {% endif %}
+    </div>
 
     <h1 data-toc-skip lang="{{ post_language | escape }}">
       {%- assign title_words = page.title | split: ' ' -%}

@@ -1,0 +1,48 @@
+---
+layout: default
+refactor_content: false
+---
+
+{% assign tags = site.data.workspace_tags %}
+{% assign tag_count = tags | size %}
+<section class="workspace-folder workspace-tags-index" data-tags-index>
+  <header class="workspace-tags-tools">
+    <h1 id="tags-title">Tags</h1>
+    <p class="workspace-tags-count" data-tag-count role="status">{{ tag_count }} tag{% unless tag_count == 1 %}s{% endunless %}</p>
+    <div class="workspace-tag-search" role="search" aria-label="Filter tags">
+      {% include workspace-icon.html name='search' %}
+      <input type="search" aria-label="Filter tags" placeholder="Filter tags..." autocomplete="off" disabled>
+      <button type="button" class="workspace-icon-button" aria-label="Clear tag filter" title="Clear tag filter" hidden>
+        {% include workspace-icon.html name='close' %}
+      </button>
+    </div>
+  </header>
+
+  <table class="workspace-tag-list" aria-labelledby="tags-title">
+    <colgroup><col><col class="workspace-tag-posts-column"></colgroup>
+    <thead>
+      <tr class="workspace-tags-columns">
+        <th scope="col"><button type="button" data-tag-sort="name" aria-label="Name" disabled>Name</button></th>
+        <th scope="col" aria-sort="descending"><button type="button" data-tag-sort="posts" data-direction="desc" aria-label="Posts" disabled>Posts</button></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tag in tags %}
+        <tr class="workspace-tag-row" data-name-order="{{ tag.name_order }}">
+          <td>
+            <a class="workspace-tag-row-link" href="{{ tag.url | relative_url | escape }}" title="{{ tag.name | escape }}">
+              {% include workspace-icon.html name='tag' class='workspace-tag-outline' %}
+              <span class="workspace-tag-name">{{ tag.name | escape }}</span>
+            </a>
+          </td>
+          <td>
+            <span class="workspace-tag-row-count">{{ tag.count }}</span>
+            {% include workspace-icon.html name='chevron' %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="workspace-empty workspace-tags-empty"{% if tag_count > 0 %} hidden{% endif %}>No tags yet</p>
+</section>
+<script type="module" src="{{ '/assets/js/tag-index.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>

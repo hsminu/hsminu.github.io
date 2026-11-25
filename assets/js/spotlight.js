@@ -5,13 +5,10 @@ const status = panel.querySelector('[role="status"]');
 const kinds = { post: 'Post', category: 'Category', page: 'Page' };
 const resultIcons = { post: 'file', category: 'folder', page: 'info' };
 const iconTemplate = panel.querySelector('.spotlight-query > .workspace-icon');
-const isApple = /mac|iphone|ipad/i.test(navigator.userAgentData?.platform || navigator.platform);
 let indexPromise;
 let choices = [];
 let selected = -1;
 let source;
-
-for (const hint of document.querySelectorAll('[data-search-shortcut]')) hint.textContent = isApple ? '⌘ K' : 'Ctrl K';
 
 const normalize = (value = '') => value.normalize('NFKC').toLocaleLowerCase().trim();
 
@@ -138,12 +135,6 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && panel.open) {
     event.preventDefault();
     panel.close();
-    return;
-  }
-  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-    event.preventDefault();
-    if (panel.open) query.focus();
-    else open(document.activeElement);
   }
 });
 

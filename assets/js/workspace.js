@@ -1,4 +1,3 @@
-import './spotlight.js';
 import './workspace-tabs.js';
 import './section-filter.js';
 
